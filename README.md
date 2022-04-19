@@ -1,6 +1,8 @@
 # Computational Modelling of Primary School Segregation (COMPASS)
 This Python implementation tries to model school choice and resulting school segregation based on the work of Schelling (1971) and Stoica & Flache (2014).
 
+**Should note that this is a folk of the original project on GitLab, without uploading any maps and data (due to the GitHub restrictions on file size).**
+
 
 ## Usage
 ### Packages
