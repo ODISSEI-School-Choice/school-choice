@@ -1,0 +1,36 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+safepython = {path = "./local-dependencies/SAFEpython_v0.0.0"}
+gdal = {path = "./local-dependencies/GDAL-3.3.2-cp38-cp38-win_amd64.whl"}
+fiona = {path = "./local-dependencies/Fiona-1.8.20-cp38-cp38-win_amd64.whl"}
+rasterio = {path = "./local-dependencies/rasterio-1.2.10-cp38-cp38-win_amd64.whl"}
+geopandas = "*"
+ordereddict = "*"
+bokeh = "==2.4.2"
+salib = "*"
+tqdm = "*"
+seaborn = "*"
+mesa = "*"
+jupyter = "*"
+wheel = "*"
+contextily = "*"
+openpyxl = "*"
+segregation = "==2.0.0"
+pdoc3 = "*"
+pytest = "*"
+hypothesis = "*"
+shap = "*"
+xgboost = "*"
+matplotlib = "==3.2.2"
+beautifulsoup4 = "*"
+viztracer = "*"
+snakeviz = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
