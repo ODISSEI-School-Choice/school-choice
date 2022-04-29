@@ -29,6 +29,11 @@ matplotlib = "==3.2.2"
 beautifulsoup4 = "*"
 viztracer = "*"
 snakeviz = "*"
+numba = "*"
+mypy = "*"
+gprof2dot = "*"
+graphviz = "*"
+pexpect = "*"
 
 [dev-packages]
 

@@ -18,6 +18,7 @@ from shapely.geometry import Point, box
 from scheduler import ThreeStagedActivation
 from agents_spatial import School, Neighbourhood
 
+# from numba import jit
 
 class CompassModel(Model):
     """
@@ -346,6 +347,21 @@ class CompassModel(Model):
         [household.update_utilities() for household in all_households]
 
 
+    def read_pickle(self, case="Amsterdam"):
+        """
+        Read pickle file and read the contents
+        """
+        dirname = os.path.dirname(__file__)
+        
+        if case.lower()=='ijburg':
+            filename = os.path.join(dirname, 'maps/ijburg/agents_ijburg.pickle')
+            file = open(filename, 'rb')
+        elif case.lower()=='amsterdam':
+            filename = os.path.join(dirname, 'maps/amsterdam/agents_3p.pickle')
+            file = open(filename, 'rb')
+        data = pickle.load(file)
+        return data
+
     def load_agents(self, case='Amsterdam'):
         """
         Load the agents from a pickle.
@@ -360,7 +376,7 @@ class CompassModel(Model):
         dirname = os.path.dirname(__file__)
         
         if case.lower()=='ijburg':
-            filename = os.path.join(dirname, 'maps/ijburg/agents_ijburg.pickle')
+            filename = os.path.join(dirname, 'maps/ijburg/agents_ijburg.pickle') # new pickle file was written with pandas 1.3.5
             file = open(filename, 'rb')
         elif case.lower()=='amsterdam':
             filename = os.path.join(dirname, 'maps/amsterdam/agents_3p.pickle')
@@ -570,6 +586,7 @@ class CompassModel(Model):
             (distances ** (1 - alpha))
 
 
+    # @jit(forceobj=True, nogil=True) # object mode is slower
     def calc_school_rankings(self, households, schools):
         """
         Ranks the schools according to utility.
@@ -584,8 +601,18 @@ class CompassModel(Model):
             n-closest schools for example?
         """
         
+        # numba will fail here, with the following argument:
+        #   Cannot type list element type <class 'agents_spatial.School'>
+        # Arbitrary python objects (School in this case) 
+        # are not supported by numba
         compositions = np.array(
             [school.composition_normalized for school in schools])
+        
+        # def get_school_composition(school):
+        #     return school.composition_normalized
+        # get_compositions = np.frompyfunc(get_school_composition, nin=1, nout=1)
+        # compositions = get_compositions(schools)
+        # compositions = np.array(list(compositions))
 
         for household in households:
             

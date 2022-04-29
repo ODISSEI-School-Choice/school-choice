@@ -4,6 +4,7 @@ This file is used to perform tests while creating the model.
 import sys
 sys.path.insert(0, "compass")
 
+
 import random
 import cProfile
 import numpy as np
@@ -30,11 +31,11 @@ FLAGS.case = 'IJburg'
 FLAGS.max_move_fraction = 0.25
 
 if __name__ == '__main__':
-    import cProfile, pstats
-    profiler = cProfile.Profile()
-    profiler.enable()
+    # import cProfile, pstatsP
+    # profiler = cProfile.Profile()
+    # profiler.enable()
     model = CompassModel(vars(FLAGS), export=True)
     model.simulate()
-    profiler.disable()
-    stats = pstats.Stats(profiler).sort_stats('tottime')
-    stats.print_stats(0.05)
+    # profiler.disable()
+    # stats = pstats.Stats(profiler).sort_stats('tottime')
+    # stats.print_stats(0.05)
