@@ -18,7 +18,8 @@ from shapely.geometry import Point, box
 from scheduler import ThreeStagedActivation
 from agents_spatial import School, Neighbourhood
 
-# from numba import jit
+# packages added by Ji
+from numba import jit
 
 class CompassModel(Model):
     """
@@ -586,7 +587,6 @@ class CompassModel(Model):
             (distances ** (1 - alpha))
 
 
-    # @jit(forceobj=True, nogil=True) # object mode is slower
     def calc_school_rankings(self, households, schools):
         """
         Ranks the schools according to utility.
@@ -601,20 +601,17 @@ class CompassModel(Model):
             n-closest schools for example?
         """
         
-        # numba will fail here, with the following argument:
-        #   Cannot type list element type <class 'agents_spatial.School'>
-        # Arbitrary python objects (School in this case) 
-        # are not supported by numba
         compositions = np.array(
             [school.composition_normalized for school in schools])
         
+        # # rewrite the code above with as an numpy ufunc
         # def get_school_composition(school):
         #     return school.composition_normalized
         # get_compositions = np.frompyfunc(get_school_composition, nin=1, nout=1)
         # compositions = get_compositions(schools)
         # compositions = np.array(list(compositions))
 
-        for household in households:
+        for household in households: # the loop dimension is not optimized
             
             # Get the normalised distance to every school
             category = household.category
