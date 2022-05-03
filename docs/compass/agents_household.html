@@ -1,0 +1,2012 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>compass.agents_household API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>compass.agents_household</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import random
+import numpy as np
+from agents_base import BaseAgent
+from shapely.geometry import Point
+from agents_spatial import Neighbourhood
+
+class Household(BaseAgent):
+    &#34;&#34;&#34;
+    The household object. Creates an expected number of students per
+    household according to the student density, joins the closest
+    neighbourhood.
+
+    Args:
+        unique_id (int): unique identifier of the agent.
+        pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
+        model (CompassModel): CompassModel object.
+        params (Argparser): containing all parameter values.
+        category (int): the category [0,n-1] the agent belongs to.
+
+    Attributes:
+        unique_id (int): unique identifier of the agent.
+        pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
+        model (CompassModel): CompassModel object.
+        params (Argparser): containing all (agent) parameter values.
+        groups (list): containing all group types.
+        attributes (array): array of attributes of the specific agent.
+        composition (array): the sum of the attribute arrays of all Households
+            in the local composition of this household.
+        normalized_composition (array): same as above but normalized.
+        students (list): the student(s) in the household.
+    &#34;&#34;&#34;
+
+    def __init__(self, unique_id, pos, model, params, category,
+                    nhood=None):
+
+        # Store parameters
+        super().__init__(unique_id, pos, model, params)
+        self.groups = []
+        self.utility = 0
+        self.distance = 0
+        self.params = params
+        self.category = category
+        self.school_utility_comp = 0
+        self.shape = Point(pos[0], pos[1])
+        self.attributes = self.attribute_array(category)
+        self.composition = self.new_composition_array()
+        self.composition_normalized = self.new_composition_array()
+
+        # Create students
+        self.students = []
+        for i in range(int(self.params[&#34;student_density&#34;])):
+            self.students.append(Student(self.model.get_agents(&#34;amount&#34;),
+                                                        self, self.groups))
+
+        # Join closest neighbourhood if applicable
+        if self.params[&#34;n_neighbourhoods&#34;]:
+            
+            # Join the given neighbourhood or else the closest
+            if isinstance(nhood, Neighbourhood):
+                self.join_neighbourhood(nhood)
+            else:
+                neighbourhood = self.get_closest_neighbourhood(self.pos)
+                self.join_neighbourhood(neighbourhood)
+
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            str: representing the unique identifier of the agent.
+        &#34;&#34;&#34;
+        return f&#34;&lt;Household object with unique_id: {self.unique_id}&gt;&#34;
+
+
+    def attribute_array(self, category):
+        &#34;&#34;&#34;
+        This function creates the attribute array for the household that is
+        used to calculate the local, neighbourhood and school compositions.
+
+        Args:
+            category (int): the category [0,n-1] the agent belongs to. Should
+                be generalised in the future.
+        &#34;&#34;&#34;
+        attributes = np.zeros(len(self.params[&#39;group_types&#39;][0]))
+        attributes[category] += 1
+        return attributes
+
+
+    def get_data(self, residential):
+        &#34;&#34;&#34;
+        Gets the data of a specific agent for storing purposes in utils.py
+
+        Args:
+            residential (Bool): True if the model is in the residential process
+        &#34;&#34;&#34;
+        # Update variable data only
+        data = np.zeros(9)
+        data[:2] = self.pos
+        data[2:4] = self.composition[:2]
+        data[4] = self.utility
+        data[5] = self.category
+        data[6] = self.unique_id
+        data[7] = self.distance
+
+        if residential:
+            unit = self.neighbourhood.unique_id
+        else:
+            # Only school of first student!!!!
+            unit = self.students[0].school.unique_id
+
+        data[8] = unit
+        return data
+
+
+    def move_to_empty(self, empties, num_considered, ranking_method):
+        &#34;&#34;&#34;
+        Moves agent to a random empty cell, vacating the agent&#39;s old cell.
+
+        Args:
+            empties (list): a list of empty coordinates [(x1,y1),..,(xn,yn)]
+            num_considered (int): how many spots are considered for the ranking
+            ranking_method (str): one of &#39;highest&#39; or &#39;proportional&#39;
+        &#34;&#34;&#34;
+        if len(empties) == 0:
+            raise Exception(&#34;ERROR: No empty cells&#34;)
+
+        # Pick possible empty locations, rank them and move to the chosen one
+        positions = self.random.choices(empties, k=num_considered)
+        new_pos = self.residential_ranking(positions, ranking_method)
+        self.residential_move(old_pos=self.pos, new_pos=new_pos)
+
+
+    def residential_move(self, old_pos=None, new_pos=None):
+        &#34;&#34;&#34;
+        Moves a household from old position to its new position.
+
+        Args:
+            old_pos (tuple): takes a tuple of integers (x,y), x&lt;width, y&lt;height.
+            new_pos (tuple): takes a tuple of integers (x,y), x&lt;width, y&lt;height.
+        &#34;&#34;&#34;
+
+        # Remove the agent from the old neighbourhood and add to the new one
+        self.remove_neighbourhood(self.neighbourhood)
+        self.model.grid.move_agent(self, new_pos)
+
+        # Only remove the old position from the set if the agent actually 
+        # moves to a new position
+        if new_pos!=old_pos:
+            self.model.grid.empties.discard(new_pos)
+            self.model.grid.empties.add(old_pos)
+            
+        neighbourhood = self.get_closest_neighbourhood(self.pos)
+        self.join_neighbourhood(neighbourhood)
+
+        # Switch the attributes to the new location as well.
+        self.model.switch_attrs(old_pos, new_pos)
+
+
+    def update(self, residential=True):
+        &#34;&#34;&#34;
+        Updates the residential or school composition attributes of the 
+        Household/Student.
+        
+        Args:
+            residential (bool): equals True if the model needs to update
+                residential or school parameters (default=False).
+        &#34;&#34;&#34;
+
+        if residential:
+            self.update_residential()
+        else:
+            for student in self.students:
+                self.update_school(student)
+
+
+    def update_utilities(self, residential=True):
+        &#34;&#34;&#34;
+        Updates the residential or school utility attributes of the 
+        Household/Student.
+        
+        Args:
+            residential (bool): equals True if the model needs to update
+                residential or school parameters (default=False).
+        &#34;&#34;&#34;
+
+        if residential:
+            self.utility = self.model.res_utilities[self.array_index]
+        else:
+            self.school_utility_comp = self.model.school_composition_utilities[
+                self.array_index]
+            self.utility = self.model.school_utilities[self.array_index]
+
+
+    def step(self, residential=False, initial_schools=False,
+        move_allowed=True):
+        &#34;&#34;&#34;
+        Steps the agent in the residential or school choice process.
+
+        Args:
+            residential (bool): equals True if the model needs to run a
+                residential or a school step (default=False).
+            initial_schools (bool): equals True if all schools are empty and
+                students need an initial allocation first.
+            move_allowed (True): equals True if the agent belongs to the
+                percentage of agents that is allowed to move.
+
+        Returns:
+            int: boolean integer indicating if an agent was moved, to use in
+                tracking of moved agents
+        &#34;&#34;&#34;
+
+        # Run advancement for regular residential Schelling model
+        if residential:
+
+            # Check if move is allowed
+            if not move_allowed:
+                return 0
+
+            # Check if there are neighbourhoods to choose from
+            if self.params[&#34;n_neighbourhoods&#34;] == 0:
+                print(&#39;There are no neighbourhoods to choose from!&#39;)
+                return 0
+
+            elif self.params[&#39;household_density&#39;] &lt; 1:
+                self.move_to_empty(empties=list(self.model.grid.empties),
+                    num_considered=self.params[&#39;num_considered&#39;],
+                    ranking_method=self.params[&#39;ranking_method&#39;])
+
+            elif self.params[&#39;household_density&#39;] == 1:
+                print(&#39;Future place for switching of agents.&#39;)
+                raise NotImplementedError
+
+            return 1
+
+        else:
+            # Only calculate preferences if they are allowed to move, but
+            # wait with the actual move until all agents have calculated their
+            # preference (actual moving happens with the Allocator)
+
+            # Initial school step
+            if initial_schools:
+                for student in self.students:
+                    ranking = self.school_ranking_initial(student)
+                    student.set_school_preference(ranking)
+                return 0
+
+            # Normal school step
+            for student in self.students:
+                self.school_calculations(student)
+                ranking = self.school_ranking(student)
+                student.set_school_preference(ranking)
+            return 1
+
+
+    def update_residential(self):
+        &#34;&#34;&#34;
+        Computes the composition and utility at the current residential location
+        and sets the attributes to be used in other calculations.
+        &#34;&#34;&#34;
+
+        x, y = self.pos
+        category = self.category
+        array_index = self.array_index
+        self.model.neighbourhood_compositions[array_index] = \
+            self.neighbourhood.composition_normalized[category]
+
+        if self.params[&#39;neighbourhood_mixture&#39;] == 1:
+            # Only neighbourhood composition necessary, for case studies and
+            # non-integer locations (then integer indexing is not possible)
+            self.composition = self.neighbourhood.composition
+        else:
+            self.composition = self.model.compositions[x, y, :]
+            self.model.local_compositions[array_index] = \
+                self.model.normalized_compositions[x, y, :][category]
+        
+
+    def update_school(self, student):
+        &#34;&#34;&#34;
+        Sets the school distance and composition attributes. Note that the 
+        attributes should only be set here, as this method should only be 
+        called when the agent actually moves to the location!
+
+        Args:
+            student (Student): object to calculate for.
+
+        Todo:
+            * Should this be moved to the Student object?
+        &#34;&#34;&#34;
+
+        array_index = self.array_index
+        norm_dist = self.model.get_norm_distances(self.pos)
+        self.model.school_compositions[array_index] = \
+            student.school.composition_normalized[self.category]
+        utility_dist = norm_dist[str(student.school.pos)]
+        self.model.agent_distances[array_index] = self.distance = utility_dist
+
+
+    def residential_utility(self, composition, neighbourhood_composition=[]):
+        &#34;&#34;&#34;
+        Compute residential utility.
+
+        Args:
+            composition (array): normalized local composition counts.
+            neighbourhood_composition (array, optional): normalized
+                neighbourhood composition counts.
+
+        Returns:
+            float: residential utility for a households&#39; current location.
+
+        Note:
+            Ideally these computations are executed in numpy arrays,
+            simultaneously for all agents, but this is not implemented for
+            neighbourhoods yet.
+        &#34;&#34;&#34;
+        params = self.params
+
+        if len(neighbourhood_composition)&gt;0:
+            combined = composition*(1-params[&#34;neighbourhood_mixture&#34;]) + \
+                neighbourhood_composition*params[&#34;neighbourhood_mixture&#34;]
+        else:
+            combined = composition
+
+
+        x = combined[self.category]
+        M = params[&#34;utility_at_max&#34;][0][self.category]
+        f = params[&#34;optimal_fraction&#34;][0][self.category]
+
+        return self.model.calc_comp_utility(x, M, f)
+
+
+    def get_closest_neighbourhood(self, pos):
+        &#34;&#34;&#34;
+        Find the closest neighbourhood object.
+
+        Returns:
+            neighbourhood: the closest (Euclidean) neighbourhood object.
+        &#34;&#34;&#34;
+        location = self.model.closest_neighbourhoods[str(pos)]
+        neighbourhood = self.model.location_to_agent[location]
+        return neighbourhood
+
+
+    def join_neighbourhood(self, neighbourhood):
+        &#34;&#34;&#34;
+        Join the given neighbourhood object.
+
+        Args:
+            neighbourhood (Neighbourhood): a neighbourhood object.
+        &#34;&#34;&#34;
+        self.neighbourhood = neighbourhood
+        neighbourhood.add_household(self)
+
+
+    def get_neighbourhood(self):
+        return self.neighbourhood
+
+
+    def remove_neighbourhood(self, neighbourhood):
+        &#34;&#34;&#34;
+        Leave a neighbourhood.
+
+        Args:
+            neighbourhood (Neighbourhood): a neighbourhood object.
+        &#34;&#34;&#34;
+        neighbourhood.remove_household(self)
+        self.neighbourhood = None
+
+
+    def school_ranking_initial(self, student):
+        &#34;&#34;&#34;
+        Computes a list containing all schools ranked to preference. The initial
+        school ranking is random.
+
+        Args:
+            student (Student): a Student object.
+
+        Returns:
+            list: a randomly ordered list of School objects.
+        &#34;&#34;&#34;
+
+        schools = self.model.get_agents(&#34;schools&#34;)
+        ranking = np.random.choice(schools, len(schools), replace=False)
+        return ranking
+
+
+    def residential_ranking(self, positions, ranking_method):
+        &#34;&#34;&#34;
+        Computes the ranked location prefences of a household.
+
+        Args:
+            positions (list): list of (x, y) tuples that are considered.
+            ranking_method (str): one of &#39;highest&#39; or &#39;proportional&#39; 
+
+        Returns:
+            tuple: new position (x, y) of the household.
+        &#34;&#34;&#34;
+
+        # Append own position
+        summed = 0
+        max_utility = 0
+        params = self.params
+        positions = list(positions) + [self.pos]
+        utilities = np.zeros(len(positions))
+        temperature = params[&#39;temperature&#39;]
+        compositions = self.model.compositions
+        norm_compositions = self.model.normalized_compositions
+
+        for index, pos in enumerate(positions):
+
+            if pos == self.pos:
+                utility = self.utility
+            else:
+                #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
+                x, y = pos
+                composition = compositions[x, y, :]
+                norm_composition =  norm_compositions[x, y, :]
+                neighbourhood = self.get_closest_neighbourhood(pos)
+                utility = self.residential_utility(norm_composition,
+                                        neighbourhood.composition_normalized)
+
+            if utility &gt;= max_utility:
+                max_utility = utility
+                new_pos = [pos]
+
+            utility = np.exp(temperature*utility)
+            summed += utility
+            utilities[index] = utility
+
+        utilities = utilities / summed
+        if ranking_method==&#39;proportional&#39; or ranking_method:
+            new_pos = random.choices(population=positions, 
+                weights=utilities, k=1)
+        return new_pos[0]
+
+
+    def get_student_count(self):
+        &#34;&#34;&#34;
+        Calculates the number of students in a household.
+
+        Returns:
+            int: the amount of students in the household.
+        &#34;&#34;&#34;
+        return len(self.students)
+
+
+    def get_shock(self):
+        &#34;&#34;&#34;&#34; Returns a small random float value &#34;&#34;&#34;
+        return self.model.get_shock()
+
+
+    def get_uniform_shock(self):
+        &#34;&#34;&#34;
+        Returns a random value between 0 and 1.
+        &#34;&#34;&#34;
+        return self.model.get_uniform_shock()
+
+
+class Student(object):
+    &#34;&#34;&#34;
+    Student object that is enrolled into school objects and a Household. Used
+    for measuring segregation in schools and neighbourhoods.
+
+    Args:
+        unique_id (int): unique identifier of the agent.
+        household (Household): Household object.
+        groups (list): containing all group types.
+
+    Attributes:
+        unique_id (int): unique identifier of the agent.
+        household (Household): Household object.
+        groups (list): containing all group types.
+        school_preference ():
+        school (School): School object that the student is enrolled in.
+        satisfied (bool): True if the student is satisfied with current school.
+        school_history (list): all the school objects the student has attended.
+
+    &#34;&#34;&#34;
+
+    def __init__(self, unique_id, household, groups):
+        
+        self.school = None
+        self.groups = groups
+        self.school_history = []
+        self.unique_id = unique_id
+        self.household = household
+        self.school_preference = None
+        # Student does not inherit from BaseAgent, so increment here.
+        self.household.model.increment_agent_count()
+        
+
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            str: representing the unique identifier of the agent.
+        &#34;&#34;&#34;
+        return f&#34;&lt;Student object with unique_id:{self.unique_id}&gt;&#34;
+
+
+    def set_school_preference(self, ranking):
+        &#34;&#34;&#34;
+        Sets school preference to a given ranking.
+
+        Args:
+            ranking (list): a ranking of School objects.
+        &#34;&#34;&#34;
+        self.school_preference = ranking
+
+
+    def new_school(self, school):
+        &#34;&#34;&#34;
+        Enrolls the student in a new school.
+
+        Args:
+            school (School): a School object.
+        &#34;&#34;&#34;
+        if self.school:
+            self.school.remove_student(self)
+        self.school = school
+        self.school_history.append(school)
+        school.add_student(self)
+
+
+    def get_school_id(self):
+        &#34;&#34;&#34;
+        Returns:
+            str: unique id of the school the student is enrolled in.
+        &#34;&#34;&#34;
+        if self.school:
+            return self.school.unique_id
+        else:
+            return -1</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="compass.agents_household.Household"><code class="flex name class">
+<span>class <span class="ident">Household</span></span>
+<span>(</span><span>unique_id, pos, model, params, category, nhood=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The household object. Creates an expected number of students per
+household according to the student density, joins the closest
+neighbourhood.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>unique_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>unique identifier of the agent.</dd>
+<dt><strong><code>pos</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>(x,y) coordinates of the agent in the 2D-grid.</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>CompassModel</code></dt>
+<dd>CompassModel object.</dd>
+<dt><strong><code>params</code></strong> :&ensp;<code>Argparser</code></dt>
+<dd>containing all parameter values.</dd>
+<dt><strong><code>category</code></strong> :&ensp;<code>int</code></dt>
+<dd>the category [0,n-1] the agent belongs to.</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>unique_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>unique identifier of the agent.</dd>
+<dt><strong><code>pos</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>(x,y) coordinates of the agent in the 2D-grid.</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>CompassModel</code></dt>
+<dd>CompassModel object.</dd>
+<dt><strong><code>params</code></strong> :&ensp;<code>Argparser</code></dt>
+<dd>containing all (agent) parameter values.</dd>
+<dt><strong><code>groups</code></strong> :&ensp;<code>list</code></dt>
+<dd>containing all group types.</dd>
+<dt><strong><code>attributes</code></strong> :&ensp;<code>array</code></dt>
+<dd>array of attributes of the specific agent.</dd>
+<dt><strong><code>composition</code></strong> :&ensp;<code>array</code></dt>
+<dd>the sum of the attribute arrays of all Households
+in the local composition of this household.</dd>
+<dt><strong><code>normalized_composition</code></strong> :&ensp;<code>array</code></dt>
+<dd>same as above but normalized.</dd>
+<dt><strong><code>students</code></strong> :&ensp;<code>list</code></dt>
+<dd>the student(s) in the household.</dd>
+</dl>
+<p>Create a new agent.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Household(BaseAgent):
+    &#34;&#34;&#34;
+    The household object. Creates an expected number of students per
+    household according to the student density, joins the closest
+    neighbourhood.
+
+    Args:
+        unique_id (int): unique identifier of the agent.
+        pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
+        model (CompassModel): CompassModel object.
+        params (Argparser): containing all parameter values.
+        category (int): the category [0,n-1] the agent belongs to.
+
+    Attributes:
+        unique_id (int): unique identifier of the agent.
+        pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
+        model (CompassModel): CompassModel object.
+        params (Argparser): containing all (agent) parameter values.
+        groups (list): containing all group types.
+        attributes (array): array of attributes of the specific agent.
+        composition (array): the sum of the attribute arrays of all Households
+            in the local composition of this household.
+        normalized_composition (array): same as above but normalized.
+        students (list): the student(s) in the household.
+    &#34;&#34;&#34;
+
+    def __init__(self, unique_id, pos, model, params, category,
+                    nhood=None):
+
+        # Store parameters
+        super().__init__(unique_id, pos, model, params)
+        self.groups = []
+        self.utility = 0
+        self.distance = 0
+        self.params = params
+        self.category = category
+        self.school_utility_comp = 0
+        self.shape = Point(pos[0], pos[1])
+        self.attributes = self.attribute_array(category)
+        self.composition = self.new_composition_array()
+        self.composition_normalized = self.new_composition_array()
+
+        # Create students
+        self.students = []
+        for i in range(int(self.params[&#34;student_density&#34;])):
+            self.students.append(Student(self.model.get_agents(&#34;amount&#34;),
+                                                        self, self.groups))
+
+        # Join closest neighbourhood if applicable
+        if self.params[&#34;n_neighbourhoods&#34;]:
+            
+            # Join the given neighbourhood or else the closest
+            if isinstance(nhood, Neighbourhood):
+                self.join_neighbourhood(nhood)
+            else:
+                neighbourhood = self.get_closest_neighbourhood(self.pos)
+                self.join_neighbourhood(neighbourhood)
+
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            str: representing the unique identifier of the agent.
+        &#34;&#34;&#34;
+        return f&#34;&lt;Household object with unique_id: {self.unique_id}&gt;&#34;
+
+
+    def attribute_array(self, category):
+        &#34;&#34;&#34;
+        This function creates the attribute array for the household that is
+        used to calculate the local, neighbourhood and school compositions.
+
+        Args:
+            category (int): the category [0,n-1] the agent belongs to. Should
+                be generalised in the future.
+        &#34;&#34;&#34;
+        attributes = np.zeros(len(self.params[&#39;group_types&#39;][0]))
+        attributes[category] += 1
+        return attributes
+
+
+    def get_data(self, residential):
+        &#34;&#34;&#34;
+        Gets the data of a specific agent for storing purposes in utils.py
+
+        Args:
+            residential (Bool): True if the model is in the residential process
+        &#34;&#34;&#34;
+        # Update variable data only
+        data = np.zeros(9)
+        data[:2] = self.pos
+        data[2:4] = self.composition[:2]
+        data[4] = self.utility
+        data[5] = self.category
+        data[6] = self.unique_id
+        data[7] = self.distance
+
+        if residential:
+            unit = self.neighbourhood.unique_id
+        else:
+            # Only school of first student!!!!
+            unit = self.students[0].school.unique_id
+
+        data[8] = unit
+        return data
+
+
+    def move_to_empty(self, empties, num_considered, ranking_method):
+        &#34;&#34;&#34;
+        Moves agent to a random empty cell, vacating the agent&#39;s old cell.
+
+        Args:
+            empties (list): a list of empty coordinates [(x1,y1),..,(xn,yn)]
+            num_considered (int): how many spots are considered for the ranking
+            ranking_method (str): one of &#39;highest&#39; or &#39;proportional&#39;
+        &#34;&#34;&#34;
+        if len(empties) == 0:
+            raise Exception(&#34;ERROR: No empty cells&#34;)
+
+        # Pick possible empty locations, rank them and move to the chosen one
+        positions = self.random.choices(empties, k=num_considered)
+        new_pos = self.residential_ranking(positions, ranking_method)
+        self.residential_move(old_pos=self.pos, new_pos=new_pos)
+
+
+    def residential_move(self, old_pos=None, new_pos=None):
+        &#34;&#34;&#34;
+        Moves a household from old position to its new position.
+
+        Args:
+            old_pos (tuple): takes a tuple of integers (x,y), x&lt;width, y&lt;height.
+            new_pos (tuple): takes a tuple of integers (x,y), x&lt;width, y&lt;height.
+        &#34;&#34;&#34;
+
+        # Remove the agent from the old neighbourhood and add to the new one
+        self.remove_neighbourhood(self.neighbourhood)
+        self.model.grid.move_agent(self, new_pos)
+
+        # Only remove the old position from the set if the agent actually 
+        # moves to a new position
+        if new_pos!=old_pos:
+            self.model.grid.empties.discard(new_pos)
+            self.model.grid.empties.add(old_pos)
+            
+        neighbourhood = self.get_closest_neighbourhood(self.pos)
+        self.join_neighbourhood(neighbourhood)
+
+        # Switch the attributes to the new location as well.
+        self.model.switch_attrs(old_pos, new_pos)
+
+
+    def update(self, residential=True):
+        &#34;&#34;&#34;
+        Updates the residential or school composition attributes of the 
+        Household/Student.
+        
+        Args:
+            residential (bool): equals True if the model needs to update
+                residential or school parameters (default=False).
+        &#34;&#34;&#34;
+
+        if residential:
+            self.update_residential()
+        else:
+            for student in self.students:
+                self.update_school(student)
+
+
+    def update_utilities(self, residential=True):
+        &#34;&#34;&#34;
+        Updates the residential or school utility attributes of the 
+        Household/Student.
+        
+        Args:
+            residential (bool): equals True if the model needs to update
+                residential or school parameters (default=False).
+        &#34;&#34;&#34;
+
+        if residential:
+            self.utility = self.model.res_utilities[self.array_index]
+        else:
+            self.school_utility_comp = self.model.school_composition_utilities[
+                self.array_index]
+            self.utility = self.model.school_utilities[self.array_index]
+
+
+    def step(self, residential=False, initial_schools=False,
+        move_allowed=True):
+        &#34;&#34;&#34;
+        Steps the agent in the residential or school choice process.
+
+        Args:
+            residential (bool): equals True if the model needs to run a
+                residential or a school step (default=False).
+            initial_schools (bool): equals True if all schools are empty and
+                students need an initial allocation first.
+            move_allowed (True): equals True if the agent belongs to the
+                percentage of agents that is allowed to move.
+
+        Returns:
+            int: boolean integer indicating if an agent was moved, to use in
+                tracking of moved agents
+        &#34;&#34;&#34;
+
+        # Run advancement for regular residential Schelling model
+        if residential:
+
+            # Check if move is allowed
+            if not move_allowed:
+                return 0
+
+            # Check if there are neighbourhoods to choose from
+            if self.params[&#34;n_neighbourhoods&#34;] == 0:
+                print(&#39;There are no neighbourhoods to choose from!&#39;)
+                return 0
+
+            elif self.params[&#39;household_density&#39;] &lt; 1:
+                self.move_to_empty(empties=list(self.model.grid.empties),
+                    num_considered=self.params[&#39;num_considered&#39;],
+                    ranking_method=self.params[&#39;ranking_method&#39;])
+
+            elif self.params[&#39;household_density&#39;] == 1:
+                print(&#39;Future place for switching of agents.&#39;)
+                raise NotImplementedError
+
+            return 1
+
+        else:
+            # Only calculate preferences if they are allowed to move, but
+            # wait with the actual move until all agents have calculated their
+            # preference (actual moving happens with the Allocator)
+
+            # Initial school step
+            if initial_schools:
+                for student in self.students:
+                    ranking = self.school_ranking_initial(student)
+                    student.set_school_preference(ranking)
+                return 0
+
+            # Normal school step
+            for student in self.students:
+                self.school_calculations(student)
+                ranking = self.school_ranking(student)
+                student.set_school_preference(ranking)
+            return 1
+
+
+    def update_residential(self):
+        &#34;&#34;&#34;
+        Computes the composition and utility at the current residential location
+        and sets the attributes to be used in other calculations.
+        &#34;&#34;&#34;
+
+        x, y = self.pos
+        category = self.category
+        array_index = self.array_index
+        self.model.neighbourhood_compositions[array_index] = \
+            self.neighbourhood.composition_normalized[category]
+
+        if self.params[&#39;neighbourhood_mixture&#39;] == 1:
+            # Only neighbourhood composition necessary, for case studies and
+            # non-integer locations (then integer indexing is not possible)
+            self.composition = self.neighbourhood.composition
+        else:
+            self.composition = self.model.compositions[x, y, :]
+            self.model.local_compositions[array_index] = \
+                self.model.normalized_compositions[x, y, :][category]
+        
+
+    def update_school(self, student):
+        &#34;&#34;&#34;
+        Sets the school distance and composition attributes. Note that the 
+        attributes should only be set here, as this method should only be 
+        called when the agent actually moves to the location!
+
+        Args:
+            student (Student): object to calculate for.
+
+        Todo:
+            * Should this be moved to the Student object?
+        &#34;&#34;&#34;
+
+        array_index = self.array_index
+        norm_dist = self.model.get_norm_distances(self.pos)
+        self.model.school_compositions[array_index] = \
+            student.school.composition_normalized[self.category]
+        utility_dist = norm_dist[str(student.school.pos)]
+        self.model.agent_distances[array_index] = self.distance = utility_dist
+
+
+    def residential_utility(self, composition, neighbourhood_composition=[]):
+        &#34;&#34;&#34;
+        Compute residential utility.
+
+        Args:
+            composition (array): normalized local composition counts.
+            neighbourhood_composition (array, optional): normalized
+                neighbourhood composition counts.
+
+        Returns:
+            float: residential utility for a households&#39; current location.
+
+        Note:
+            Ideally these computations are executed in numpy arrays,
+            simultaneously for all agents, but this is not implemented for
+            neighbourhoods yet.
+        &#34;&#34;&#34;
+        params = self.params
+
+        if len(neighbourhood_composition)&gt;0:
+            combined = composition*(1-params[&#34;neighbourhood_mixture&#34;]) + \
+                neighbourhood_composition*params[&#34;neighbourhood_mixture&#34;]
+        else:
+            combined = composition
+
+
+        x = combined[self.category]
+        M = params[&#34;utility_at_max&#34;][0][self.category]
+        f = params[&#34;optimal_fraction&#34;][0][self.category]
+
+        return self.model.calc_comp_utility(x, M, f)
+
+
+    def get_closest_neighbourhood(self, pos):
+        &#34;&#34;&#34;
+        Find the closest neighbourhood object.
+
+        Returns:
+            neighbourhood: the closest (Euclidean) neighbourhood object.
+        &#34;&#34;&#34;
+        location = self.model.closest_neighbourhoods[str(pos)]
+        neighbourhood = self.model.location_to_agent[location]
+        return neighbourhood
+
+
+    def join_neighbourhood(self, neighbourhood):
+        &#34;&#34;&#34;
+        Join the given neighbourhood object.
+
+        Args:
+            neighbourhood (Neighbourhood): a neighbourhood object.
+        &#34;&#34;&#34;
+        self.neighbourhood = neighbourhood
+        neighbourhood.add_household(self)
+
+
+    def get_neighbourhood(self):
+        return self.neighbourhood
+
+
+    def remove_neighbourhood(self, neighbourhood):
+        &#34;&#34;&#34;
+        Leave a neighbourhood.
+
+        Args:
+            neighbourhood (Neighbourhood): a neighbourhood object.
+        &#34;&#34;&#34;
+        neighbourhood.remove_household(self)
+        self.neighbourhood = None
+
+
+    def school_ranking_initial(self, student):
+        &#34;&#34;&#34;
+        Computes a list containing all schools ranked to preference. The initial
+        school ranking is random.
+
+        Args:
+            student (Student): a Student object.
+
+        Returns:
+            list: a randomly ordered list of School objects.
+        &#34;&#34;&#34;
+
+        schools = self.model.get_agents(&#34;schools&#34;)
+        ranking = np.random.choice(schools, len(schools), replace=False)
+        return ranking
+
+
+    def residential_ranking(self, positions, ranking_method):
+        &#34;&#34;&#34;
+        Computes the ranked location prefences of a household.
+
+        Args:
+            positions (list): list of (x, y) tuples that are considered.
+            ranking_method (str): one of &#39;highest&#39; or &#39;proportional&#39; 
+
+        Returns:
+            tuple: new position (x, y) of the household.
+        &#34;&#34;&#34;
+
+        # Append own position
+        summed = 0
+        max_utility = 0
+        params = self.params
+        positions = list(positions) + [self.pos]
+        utilities = np.zeros(len(positions))
+        temperature = params[&#39;temperature&#39;]
+        compositions = self.model.compositions
+        norm_compositions = self.model.normalized_compositions
+
+        for index, pos in enumerate(positions):
+
+            if pos == self.pos:
+                utility = self.utility
+            else:
+                #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
+                x, y = pos
+                composition = compositions[x, y, :]
+                norm_composition =  norm_compositions[x, y, :]
+                neighbourhood = self.get_closest_neighbourhood(pos)
+                utility = self.residential_utility(norm_composition,
+                                        neighbourhood.composition_normalized)
+
+            if utility &gt;= max_utility:
+                max_utility = utility
+                new_pos = [pos]
+
+            utility = np.exp(temperature*utility)
+            summed += utility
+            utilities[index] = utility
+
+        utilities = utilities / summed
+        if ranking_method==&#39;proportional&#39; or ranking_method:
+            new_pos = random.choices(population=positions, 
+                weights=utilities, k=1)
+        return new_pos[0]
+
+
+    def get_student_count(self):
+        &#34;&#34;&#34;
+        Calculates the number of students in a household.
+
+        Returns:
+            int: the amount of students in the household.
+        &#34;&#34;&#34;
+        return len(self.students)
+
+
+    def get_shock(self):
+        &#34;&#34;&#34;&#34; Returns a small random float value &#34;&#34;&#34;
+        return self.model.get_shock()
+
+
+    def get_uniform_shock(self):
+        &#34;&#34;&#34;
+        Returns a random value between 0 and 1.
+        &#34;&#34;&#34;
+        return self.model.get_uniform_shock()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>agents_base.BaseAgent</li>
+<li>mesa.agent.Agent</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="compass.agents_household.Household.attribute_array"><code class="name flex">
+<span>def <span class="ident">attribute_array</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function creates the attribute array for the household that is
+used to calculate the local, neighbourhood and school compositions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>int</code></dt>
+<dd>the category [0,n-1] the agent belongs to. Should
+be generalised in the future.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def attribute_array(self, category):
+    &#34;&#34;&#34;
+    This function creates the attribute array for the household that is
+    used to calculate the local, neighbourhood and school compositions.
+
+    Args:
+        category (int): the category [0,n-1] the agent belongs to. Should
+            be generalised in the future.
+    &#34;&#34;&#34;
+    attributes = np.zeros(len(self.params[&#39;group_types&#39;][0]))
+    attributes[category] += 1
+    return attributes</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.get_closest_neighbourhood"><code class="name flex">
+<span>def <span class="ident">get_closest_neighbourhood</span></span>(<span>self, pos)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Find the closest neighbourhood object.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>neighbourhood</code></dt>
+<dd>the closest (Euclidean) neighbourhood object.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_closest_neighbourhood(self, pos):
+    &#34;&#34;&#34;
+    Find the closest neighbourhood object.
+
+    Returns:
+        neighbourhood: the closest (Euclidean) neighbourhood object.
+    &#34;&#34;&#34;
+    location = self.model.closest_neighbourhoods[str(pos)]
+    neighbourhood = self.model.location_to_agent[location]
+    return neighbourhood</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.get_data"><code class="name flex">
+<span>def <span class="ident">get_data</span></span>(<span>self, residential)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the data of a specific agent for storing purposes in utils.py</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>residential</code></strong> :&ensp;<code>Bool</code></dt>
+<dd>True if the model is in the residential process</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data(self, residential):
+    &#34;&#34;&#34;
+    Gets the data of a specific agent for storing purposes in utils.py
+
+    Args:
+        residential (Bool): True if the model is in the residential process
+    &#34;&#34;&#34;
+    # Update variable data only
+    data = np.zeros(9)
+    data[:2] = self.pos
+    data[2:4] = self.composition[:2]
+    data[4] = self.utility
+    data[5] = self.category
+    data[6] = self.unique_id
+    data[7] = self.distance
+
+    if residential:
+        unit = self.neighbourhood.unique_id
+    else:
+        # Only school of first student!!!!
+        unit = self.students[0].school.unique_id
+
+    data[8] = unit
+    return data</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.get_neighbourhood"><code class="name flex">
+<span>def <span class="ident">get_neighbourhood</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_neighbourhood(self):
+    return self.neighbourhood</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.get_shock"><code class="name flex">
+<span>def <span class="ident">get_shock</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>" Returns a small random float value</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_shock(self):
+    &#34;&#34;&#34;&#34; Returns a small random float value &#34;&#34;&#34;
+    return self.model.get_shock()</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.get_student_count"><code class="name flex">
+<span>def <span class="ident">get_student_count</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculates the number of students in a household.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>the amount of students in the household.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_student_count(self):
+    &#34;&#34;&#34;
+    Calculates the number of students in a household.
+
+    Returns:
+        int: the amount of students in the household.
+    &#34;&#34;&#34;
+    return len(self.students)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.get_uniform_shock"><code class="name flex">
+<span>def <span class="ident">get_uniform_shock</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a random value between 0 and 1.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_uniform_shock(self):
+    &#34;&#34;&#34;
+    Returns a random value between 0 and 1.
+    &#34;&#34;&#34;
+    return self.model.get_uniform_shock()</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.join_neighbourhood"><code class="name flex">
+<span>def <span class="ident">join_neighbourhood</span></span>(<span>self, neighbourhood)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Join the given neighbourhood object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>neighbourhood</code></strong> :&ensp;<code>Neighbourhood</code></dt>
+<dd>a neighbourhood object.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def join_neighbourhood(self, neighbourhood):
+    &#34;&#34;&#34;
+    Join the given neighbourhood object.
+
+    Args:
+        neighbourhood (Neighbourhood): a neighbourhood object.
+    &#34;&#34;&#34;
+    self.neighbourhood = neighbourhood
+    neighbourhood.add_household(self)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.move_to_empty"><code class="name flex">
+<span>def <span class="ident">move_to_empty</span></span>(<span>self, empties, num_considered, ranking_method)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Moves agent to a random empty cell, vacating the agent's old cell.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>empties</code></strong> :&ensp;<code>list</code></dt>
+<dd>a list of empty coordinates [(x1,y1),..,(xn,yn)]</dd>
+<dt><strong><code>num_considered</code></strong> :&ensp;<code>int</code></dt>
+<dd>how many spots are considered for the ranking</dd>
+<dt><strong><code>ranking_method</code></strong> :&ensp;<code>str</code></dt>
+<dd>one of 'highest' or 'proportional'</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def move_to_empty(self, empties, num_considered, ranking_method):
+    &#34;&#34;&#34;
+    Moves agent to a random empty cell, vacating the agent&#39;s old cell.
+
+    Args:
+        empties (list): a list of empty coordinates [(x1,y1),..,(xn,yn)]
+        num_considered (int): how many spots are considered for the ranking
+        ranking_method (str): one of &#39;highest&#39; or &#39;proportional&#39;
+    &#34;&#34;&#34;
+    if len(empties) == 0:
+        raise Exception(&#34;ERROR: No empty cells&#34;)
+
+    # Pick possible empty locations, rank them and move to the chosen one
+    positions = self.random.choices(empties, k=num_considered)
+    new_pos = self.residential_ranking(positions, ranking_method)
+    self.residential_move(old_pos=self.pos, new_pos=new_pos)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.remove_neighbourhood"><code class="name flex">
+<span>def <span class="ident">remove_neighbourhood</span></span>(<span>self, neighbourhood)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Leave a neighbourhood.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>neighbourhood</code></strong> :&ensp;<code>Neighbourhood</code></dt>
+<dd>a neighbourhood object.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_neighbourhood(self, neighbourhood):
+    &#34;&#34;&#34;
+    Leave a neighbourhood.
+
+    Args:
+        neighbourhood (Neighbourhood): a neighbourhood object.
+    &#34;&#34;&#34;
+    neighbourhood.remove_household(self)
+    self.neighbourhood = None</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.residential_move"><code class="name flex">
+<span>def <span class="ident">residential_move</span></span>(<span>self, old_pos=None, new_pos=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Moves a household from old position to its new position.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>old_pos</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>takes a tuple of integers (x,y), x&lt;width, y&lt;height.</dd>
+<dt><strong><code>new_pos</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>takes a tuple of integers (x,y), x&lt;width, y&lt;height.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def residential_move(self, old_pos=None, new_pos=None):
+    &#34;&#34;&#34;
+    Moves a household from old position to its new position.
+
+    Args:
+        old_pos (tuple): takes a tuple of integers (x,y), x&lt;width, y&lt;height.
+        new_pos (tuple): takes a tuple of integers (x,y), x&lt;width, y&lt;height.
+    &#34;&#34;&#34;
+
+    # Remove the agent from the old neighbourhood and add to the new one
+    self.remove_neighbourhood(self.neighbourhood)
+    self.model.grid.move_agent(self, new_pos)
+
+    # Only remove the old position from the set if the agent actually 
+    # moves to a new position
+    if new_pos!=old_pos:
+        self.model.grid.empties.discard(new_pos)
+        self.model.grid.empties.add(old_pos)
+        
+    neighbourhood = self.get_closest_neighbourhood(self.pos)
+    self.join_neighbourhood(neighbourhood)
+
+    # Switch the attributes to the new location as well.
+    self.model.switch_attrs(old_pos, new_pos)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.residential_ranking"><code class="name flex">
+<span>def <span class="ident">residential_ranking</span></span>(<span>self, positions, ranking_method)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Computes the ranked location prefences of a household.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>positions</code></strong> :&ensp;<code>list</code></dt>
+<dd>list of (x, y) tuples that are considered.</dd>
+<dt><strong><code>ranking_method</code></strong> :&ensp;<code>str</code></dt>
+<dd>one of 'highest' or 'proportional' </dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>new position (x, y) of the household.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def residential_ranking(self, positions, ranking_method):
+    &#34;&#34;&#34;
+    Computes the ranked location prefences of a household.
+
+    Args:
+        positions (list): list of (x, y) tuples that are considered.
+        ranking_method (str): one of &#39;highest&#39; or &#39;proportional&#39; 
+
+    Returns:
+        tuple: new position (x, y) of the household.
+    &#34;&#34;&#34;
+
+    # Append own position
+    summed = 0
+    max_utility = 0
+    params = self.params
+    positions = list(positions) + [self.pos]
+    utilities = np.zeros(len(positions))
+    temperature = params[&#39;temperature&#39;]
+    compositions = self.model.compositions
+    norm_compositions = self.model.normalized_compositions
+
+    for index, pos in enumerate(positions):
+
+        if pos == self.pos:
+            utility = self.utility
+        else:
+            #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
+            x, y = pos
+            composition = compositions[x, y, :]
+            norm_composition =  norm_compositions[x, y, :]
+            neighbourhood = self.get_closest_neighbourhood(pos)
+            utility = self.residential_utility(norm_composition,
+                                    neighbourhood.composition_normalized)
+
+        if utility &gt;= max_utility:
+            max_utility = utility
+            new_pos = [pos]
+
+        utility = np.exp(temperature*utility)
+        summed += utility
+        utilities[index] = utility
+
+    utilities = utilities / summed
+    if ranking_method==&#39;proportional&#39; or ranking_method:
+        new_pos = random.choices(population=positions, 
+            weights=utilities, k=1)
+    return new_pos[0]</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.residential_utility"><code class="name flex">
+<span>def <span class="ident">residential_utility</span></span>(<span>self, composition, neighbourhood_composition=[])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute residential utility.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>composition</code></strong> :&ensp;<code>array</code></dt>
+<dd>normalized local composition counts.</dd>
+<dt><strong><code>neighbourhood_composition</code></strong> :&ensp;<code>array</code>, optional</dt>
+<dd>normalized
+neighbourhood composition counts.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>residential utility for a households' current location.</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>Ideally these computations are executed in numpy arrays,
+simultaneously for all agents, but this is not implemented for
+neighbourhoods yet.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def residential_utility(self, composition, neighbourhood_composition=[]):
+    &#34;&#34;&#34;
+    Compute residential utility.
+
+    Args:
+        composition (array): normalized local composition counts.
+        neighbourhood_composition (array, optional): normalized
+            neighbourhood composition counts.
+
+    Returns:
+        float: residential utility for a households&#39; current location.
+
+    Note:
+        Ideally these computations are executed in numpy arrays,
+        simultaneously for all agents, but this is not implemented for
+        neighbourhoods yet.
+    &#34;&#34;&#34;
+    params = self.params
+
+    if len(neighbourhood_composition)&gt;0:
+        combined = composition*(1-params[&#34;neighbourhood_mixture&#34;]) + \
+            neighbourhood_composition*params[&#34;neighbourhood_mixture&#34;]
+    else:
+        combined = composition
+
+
+    x = combined[self.category]
+    M = params[&#34;utility_at_max&#34;][0][self.category]
+    f = params[&#34;optimal_fraction&#34;][0][self.category]
+
+    return self.model.calc_comp_utility(x, M, f)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.school_ranking_initial"><code class="name flex">
+<span>def <span class="ident">school_ranking_initial</span></span>(<span>self, student)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Computes a list containing all schools ranked to preference. The initial
+school ranking is random.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>student</code></strong> :&ensp;<code><a title="compass.agents_household.Student" href="#compass.agents_household.Student">Student</a></code></dt>
+<dd>a Student object.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>a randomly ordered list of School objects.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def school_ranking_initial(self, student):
+    &#34;&#34;&#34;
+    Computes a list containing all schools ranked to preference. The initial
+    school ranking is random.
+
+    Args:
+        student (Student): a Student object.
+
+    Returns:
+        list: a randomly ordered list of School objects.
+    &#34;&#34;&#34;
+
+    schools = self.model.get_agents(&#34;schools&#34;)
+    ranking = np.random.choice(schools, len(schools), replace=False)
+    return ranking</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.step"><code class="name flex">
+<span>def <span class="ident">step</span></span>(<span>self, residential=False, initial_schools=False, move_allowed=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Steps the agent in the residential or school choice process.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>residential</code></strong> :&ensp;<code>bool</code></dt>
+<dd>equals True if the model needs to run a
+residential or a school step (default=False).</dd>
+<dt><strong><code>initial_schools</code></strong> :&ensp;<code>bool</code></dt>
+<dd>equals True if all schools are empty and
+students need an initial allocation first.</dd>
+<dt><strong><code>move_allowed</code></strong> :&ensp;<code>True</code></dt>
+<dd>equals True if the agent belongs to the
+percentage of agents that is allowed to move.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>boolean integer indicating if an agent was moved, to use in
+tracking of moved agents</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def step(self, residential=False, initial_schools=False,
+    move_allowed=True):
+    &#34;&#34;&#34;
+    Steps the agent in the residential or school choice process.
+
+    Args:
+        residential (bool): equals True if the model needs to run a
+            residential or a school step (default=False).
+        initial_schools (bool): equals True if all schools are empty and
+            students need an initial allocation first.
+        move_allowed (True): equals True if the agent belongs to the
+            percentage of agents that is allowed to move.
+
+    Returns:
+        int: boolean integer indicating if an agent was moved, to use in
+            tracking of moved agents
+    &#34;&#34;&#34;
+
+    # Run advancement for regular residential Schelling model
+    if residential:
+
+        # Check if move is allowed
+        if not move_allowed:
+            return 0
+
+        # Check if there are neighbourhoods to choose from
+        if self.params[&#34;n_neighbourhoods&#34;] == 0:
+            print(&#39;There are no neighbourhoods to choose from!&#39;)
+            return 0
+
+        elif self.params[&#39;household_density&#39;] &lt; 1:
+            self.move_to_empty(empties=list(self.model.grid.empties),
+                num_considered=self.params[&#39;num_considered&#39;],
+                ranking_method=self.params[&#39;ranking_method&#39;])
+
+        elif self.params[&#39;household_density&#39;] == 1:
+            print(&#39;Future place for switching of agents.&#39;)
+            raise NotImplementedError
+
+        return 1
+
+    else:
+        # Only calculate preferences if they are allowed to move, but
+        # wait with the actual move until all agents have calculated their
+        # preference (actual moving happens with the Allocator)
+
+        # Initial school step
+        if initial_schools:
+            for student in self.students:
+                ranking = self.school_ranking_initial(student)
+                student.set_school_preference(ranking)
+            return 0
+
+        # Normal school step
+        for student in self.students:
+            self.school_calculations(student)
+            ranking = self.school_ranking(student)
+            student.set_school_preference(ranking)
+        return 1</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, residential=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates the residential or school composition attributes of the
+Household/Student.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>residential</code></strong> :&ensp;<code>bool</code></dt>
+<dd>equals True if the model needs to update
+residential or school parameters (default=False).</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self, residential=True):
+    &#34;&#34;&#34;
+    Updates the residential or school composition attributes of the 
+    Household/Student.
+    
+    Args:
+        residential (bool): equals True if the model needs to update
+            residential or school parameters (default=False).
+    &#34;&#34;&#34;
+
+    if residential:
+        self.update_residential()
+    else:
+        for student in self.students:
+            self.update_school(student)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.update_residential"><code class="name flex">
+<span>def <span class="ident">update_residential</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Computes the composition and utility at the current residential location
+and sets the attributes to be used in other calculations.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_residential(self):
+    &#34;&#34;&#34;
+    Computes the composition and utility at the current residential location
+    and sets the attributes to be used in other calculations.
+    &#34;&#34;&#34;
+
+    x, y = self.pos
+    category = self.category
+    array_index = self.array_index
+    self.model.neighbourhood_compositions[array_index] = \
+        self.neighbourhood.composition_normalized[category]
+
+    if self.params[&#39;neighbourhood_mixture&#39;] == 1:
+        # Only neighbourhood composition necessary, for case studies and
+        # non-integer locations (then integer indexing is not possible)
+        self.composition = self.neighbourhood.composition
+    else:
+        self.composition = self.model.compositions[x, y, :]
+        self.model.local_compositions[array_index] = \
+            self.model.normalized_compositions[x, y, :][category]</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.update_school"><code class="name flex">
+<span>def <span class="ident">update_school</span></span>(<span>self, student)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the school distance and composition attributes. Note that the
+attributes should only be set here, as this method should only be
+called when the agent actually moves to the location!</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>student</code></strong> :&ensp;<code><a title="compass.agents_household.Student" href="#compass.agents_household.Student">Student</a></code></dt>
+<dd>object to calculate for.</dd>
+</dl>
+<h2 id="todo">Todo</h2>
+<ul>
+<li>Should this be moved to the Student object?</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_school(self, student):
+    &#34;&#34;&#34;
+    Sets the school distance and composition attributes. Note that the 
+    attributes should only be set here, as this method should only be 
+    called when the agent actually moves to the location!
+
+    Args:
+        student (Student): object to calculate for.
+
+    Todo:
+        * Should this be moved to the Student object?
+    &#34;&#34;&#34;
+
+    array_index = self.array_index
+    norm_dist = self.model.get_norm_distances(self.pos)
+    self.model.school_compositions[array_index] = \
+        student.school.composition_normalized[self.category]
+    utility_dist = norm_dist[str(student.school.pos)]
+    self.model.agent_distances[array_index] = self.distance = utility_dist</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Household.update_utilities"><code class="name flex">
+<span>def <span class="ident">update_utilities</span></span>(<span>self, residential=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates the residential or school utility attributes of the
+Household/Student.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>residential</code></strong> :&ensp;<code>bool</code></dt>
+<dd>equals True if the model needs to update
+residential or school parameters (default=False).</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_utilities(self, residential=True):
+    &#34;&#34;&#34;
+    Updates the residential or school utility attributes of the 
+    Household/Student.
+    
+    Args:
+        residential (bool): equals True if the model needs to update
+            residential or school parameters (default=False).
+    &#34;&#34;&#34;
+
+    if residential:
+        self.utility = self.model.res_utilities[self.array_index]
+    else:
+        self.school_utility_comp = self.model.school_composition_utilities[
+            self.array_index]
+        self.utility = self.model.school_utilities[self.array_index]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="compass.agents_household.Student"><code class="flex name class">
+<span>class <span class="ident">Student</span></span>
+<span>(</span><span>unique_id, household, groups)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Student object that is enrolled into school objects and a Household. Used
+for measuring segregation in schools and neighbourhoods.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>unique_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>unique identifier of the agent.</dd>
+<dt><strong><code>household</code></strong> :&ensp;<code><a title="compass.agents_household.Household" href="#compass.agents_household.Household">Household</a></code></dt>
+<dd>Household object.</dd>
+<dt><strong><code>groups</code></strong> :&ensp;<code>list</code></dt>
+<dd>containing all group types.</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>unique_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>unique identifier of the agent.</dd>
+<dt><strong><code>household</code></strong> :&ensp;<code><a title="compass.agents_household.Household" href="#compass.agents_household.Household">Household</a></code></dt>
+<dd>Household object.</dd>
+<dt><strong><code>groups</code></strong> :&ensp;<code>list</code></dt>
+<dd>containing all group types.</dd>
+<dt>school_preference ():</dt>
+<dt><strong><code>school</code></strong> :&ensp;<code>School</code></dt>
+<dd>School object that the student is enrolled in.</dd>
+<dt><strong><code>satisfied</code></strong> :&ensp;<code>bool</code></dt>
+<dd>True if the student is satisfied with current school.</dd>
+<dt><strong><code>school_history</code></strong> :&ensp;<code>list</code></dt>
+<dd>all the school objects the student has attended.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Student(object):
+    &#34;&#34;&#34;
+    Student object that is enrolled into school objects and a Household. Used
+    for measuring segregation in schools and neighbourhoods.
+
+    Args:
+        unique_id (int): unique identifier of the agent.
+        household (Household): Household object.
+        groups (list): containing all group types.
+
+    Attributes:
+        unique_id (int): unique identifier of the agent.
+        household (Household): Household object.
+        groups (list): containing all group types.
+        school_preference ():
+        school (School): School object that the student is enrolled in.
+        satisfied (bool): True if the student is satisfied with current school.
+        school_history (list): all the school objects the student has attended.
+
+    &#34;&#34;&#34;
+
+    def __init__(self, unique_id, household, groups):
+        
+        self.school = None
+        self.groups = groups
+        self.school_history = []
+        self.unique_id = unique_id
+        self.household = household
+        self.school_preference = None
+        # Student does not inherit from BaseAgent, so increment here.
+        self.household.model.increment_agent_count()
+        
+
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            str: representing the unique identifier of the agent.
+        &#34;&#34;&#34;
+        return f&#34;&lt;Student object with unique_id:{self.unique_id}&gt;&#34;
+
+
+    def set_school_preference(self, ranking):
+        &#34;&#34;&#34;
+        Sets school preference to a given ranking.
+
+        Args:
+            ranking (list): a ranking of School objects.
+        &#34;&#34;&#34;
+        self.school_preference = ranking
+
+
+    def new_school(self, school):
+        &#34;&#34;&#34;
+        Enrolls the student in a new school.
+
+        Args:
+            school (School): a School object.
+        &#34;&#34;&#34;
+        if self.school:
+            self.school.remove_student(self)
+        self.school = school
+        self.school_history.append(school)
+        school.add_student(self)
+
+
+    def get_school_id(self):
+        &#34;&#34;&#34;
+        Returns:
+            str: unique id of the school the student is enrolled in.
+        &#34;&#34;&#34;
+        if self.school:
+            return self.school.unique_id
+        else:
+            return -1</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="compass.agents_household.Student.get_school_id"><code class="name flex">
+<span>def <span class="ident">get_school_id</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>unique id of the school the student is enrolled in.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_school_id(self):
+    &#34;&#34;&#34;
+    Returns:
+        str: unique id of the school the student is enrolled in.
+    &#34;&#34;&#34;
+    if self.school:
+        return self.school.unique_id
+    else:
+        return -1</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Student.new_school"><code class="name flex">
+<span>def <span class="ident">new_school</span></span>(<span>self, school)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enrolls the student in a new school.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>school</code></strong> :&ensp;<code>School</code></dt>
+<dd>a School object.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def new_school(self, school):
+    &#34;&#34;&#34;
+    Enrolls the student in a new school.
+
+    Args:
+        school (School): a School object.
+    &#34;&#34;&#34;
+    if self.school:
+        self.school.remove_student(self)
+    self.school = school
+    self.school_history.append(school)
+    school.add_student(self)</code></pre>
+</details>
+</dd>
+<dt id="compass.agents_household.Student.set_school_preference"><code class="name flex">
+<span>def <span class="ident">set_school_preference</span></span>(<span>self, ranking)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets school preference to a given ranking.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>ranking</code></strong> :&ensp;<code>list</code></dt>
+<dd>a ranking of School objects.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_school_preference(self, ranking):
+    &#34;&#34;&#34;
+    Sets school preference to a given ranking.
+
+    Args:
+        ranking (list): a ranking of School objects.
+    &#34;&#34;&#34;
+    self.school_preference = ranking</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="compass" href="index.html">compass</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="compass.agents_household.Household" href="#compass.agents_household.Household">Household</a></code></h4>
+<ul class="">
+<li><code><a title="compass.agents_household.Household.attribute_array" href="#compass.agents_household.Household.attribute_array">attribute_array</a></code></li>
+<li><code><a title="compass.agents_household.Household.get_closest_neighbourhood" href="#compass.agents_household.Household.get_closest_neighbourhood">get_closest_neighbourhood</a></code></li>
+<li><code><a title="compass.agents_household.Household.get_data" href="#compass.agents_household.Household.get_data">get_data</a></code></li>
+<li><code><a title="compass.agents_household.Household.get_neighbourhood" href="#compass.agents_household.Household.get_neighbourhood">get_neighbourhood</a></code></li>
+<li><code><a title="compass.agents_household.Household.get_shock" href="#compass.agents_household.Household.get_shock">get_shock</a></code></li>
+<li><code><a title="compass.agents_household.Household.get_student_count" href="#compass.agents_household.Household.get_student_count">get_student_count</a></code></li>
+<li><code><a title="compass.agents_household.Household.get_uniform_shock" href="#compass.agents_household.Household.get_uniform_shock">get_uniform_shock</a></code></li>
+<li><code><a title="compass.agents_household.Household.join_neighbourhood" href="#compass.agents_household.Household.join_neighbourhood">join_neighbourhood</a></code></li>
+<li><code><a title="compass.agents_household.Household.move_to_empty" href="#compass.agents_household.Household.move_to_empty">move_to_empty</a></code></li>
+<li><code><a title="compass.agents_household.Household.remove_neighbourhood" href="#compass.agents_household.Household.remove_neighbourhood">remove_neighbourhood</a></code></li>
+<li><code><a title="compass.agents_household.Household.residential_move" href="#compass.agents_household.Household.residential_move">residential_move</a></code></li>
+<li><code><a title="compass.agents_household.Household.residential_ranking" href="#compass.agents_household.Household.residential_ranking">residential_ranking</a></code></li>
+<li><code><a title="compass.agents_household.Household.residential_utility" href="#compass.agents_household.Household.residential_utility">residential_utility</a></code></li>
+<li><code><a title="compass.agents_household.Household.school_ranking_initial" href="#compass.agents_household.Household.school_ranking_initial">school_ranking_initial</a></code></li>
+<li><code><a title="compass.agents_household.Household.step" href="#compass.agents_household.Household.step">step</a></code></li>
+<li><code><a title="compass.agents_household.Household.update" href="#compass.agents_household.Household.update">update</a></code></li>
+<li><code><a title="compass.agents_household.Household.update_residential" href="#compass.agents_household.Household.update_residential">update_residential</a></code></li>
+<li><code><a title="compass.agents_household.Household.update_school" href="#compass.agents_household.Household.update_school">update_school</a></code></li>
+<li><code><a title="compass.agents_household.Household.update_utilities" href="#compass.agents_household.Household.update_utilities">update_utilities</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="compass.agents_household.Student" href="#compass.agents_household.Student">Student</a></code></h4>
+<ul class="">
+<li><code><a title="compass.agents_household.Student.get_school_id" href="#compass.agents_household.Student.get_school_id">get_school_id</a></code></li>
+<li><code><a title="compass.agents_household.Student.new_school" href="#compass.agents_household.Student.new_school">new_school</a></code></li>
+<li><code><a title="compass.agents_household.Student.set_school_preference" href="#compass.agents_household.Student.set_school_preference">set_school_preference</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

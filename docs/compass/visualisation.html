@@ -1,0 +1,2639 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>compass.visualisation API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>compass.visualisation</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import math
+import time
+import logging
+import numpy as np
+from tornado import gen
+from functools import partial
+from os.path import dirname, join
+from concurrent.futures import ThreadPoolExecutor
+
+# Bokeh imports
+from bokeh.server.server import Server
+from bokeh.application import Application
+from bokeh.plotting import curdoc, figure
+from bokeh.tile_providers import get_provider
+from bokeh.transform import linear_cmap, dodge
+from bokeh.layouts import row, column, gridplot
+from bokeh.document import without_document_lock
+from bokeh.application.handlers.function import FunctionHandler
+from bokeh.models import (ColumnDataSource, Button, Select, Slider,
+    CDSView, BooleanFilter, HoverTool, Dropdown, Div, Band, WheelZoomTool)
+
+# Compass imports
+from parameters import FLAGS
+from model import CompassModel
+
+
+class BokehServer():
+    &#34;&#34;&#34;
+    Class to run the Bokeh server for visualisation.
+
+    Args:
+        doc: a Bokeh Document instance
+
+    Attributes:
+        grid_plot: initiates the plot for the grid
+        line_plot: initiates one line plot
+        update: updates the plots with every time step
+        visualise_model: starts the whole visualisation
+        grid_values: obtains all the grid values from Mesa.grid
+    &#34;&#34;&#34;
+
+    def __init__(self, doc):
+
+        # This is important! Save curdoc() to make sure all threads
+        # see the same document.
+        self.doc = doc
+
+        # Initialise a CompassModel model with the default setting.
+        self.model = CompassModel(vars(FLAGS))
+        self.params = self.model.params
+        self.res_ended = False
+        self.school_ended = False
+        self.executor = ThreadPoolExecutor(max_workers=2)
+
+        # Initialise layout and populate the plots with the initial
+        # configuration
+        self.reset_data()
+        self.layout()
+        print(&#39;Visualisation running...&#39;)
+
+
+    def agent_filter(self, source, agent_type):
+        &#34;&#34;&#34;
+        This function creates a boolean agent filter view for the Bokeh
+        visualisation instance.
+
+        Args:
+            source (CDS): ColumnDataSource from Bokeh.
+            agent_type (str): the agent type to be filtered.
+
+        Returns:
+            view: the view that can be used in plots.
+        &#34;&#34;&#34;
+
+        filter = [True if agent == agent_type else False \
+                    for agent in source.data[&#39;agent_type&#39;]]
+        view = CDSView(source=source, filters=[BooleanFilter(filter)])
+        return view
+
+
+    def customise_grid(self):
+        &#34;&#34;&#34;
+        Grid customisation; agent colors, neighbourhood boundaries and schools.
+
+        Todo:
+            size should come from a parameter, as they do not scale properly
+            with grid size.
+        &#34;&#34;&#34;
+
+        # Agent colours, agent tooltips and grid initialisation
+        mapper = linear_cmap(field_name=&#39;group1&#39;, palette=[&#39;blue&#39;,&#39;red&#39;],
+                                low=0 ,high=1)
+        TOOLTIPS = [(&#34;Residential utility&#34;, &#34;@res_utility&#34;),
+                    (&#39;Local composition&#39;, &#39;@local_comp&#39;),
+                    (&#39;Neighbourhood composition&#39;, &#39;@n_comp&#39;),
+                    (&#34;School utility&#34;, &#34;@school_utility&#34;),
+                    (&#39;Distance&#39;, &#39;@dist_school&#39;),
+                    (&#39;School composition&#39;, &#39;@s_comp&#39;),
+                    (&#39;School composition utility&#39;, &#39;@school_comp_utility&#39;)]
+        hover = HoverTool(names=[&#34;households&#34;, &#34;schools&#34;], tooltips=TOOLTIPS)
+        self.grid = figure(
+            x_range=(self.model.grid.x_min, self.model.grid.x_max),
+            y_range=(self.model.grid.y_min, self.model.grid.y_max),
+            tools=[hover, &#39;tap&#39;, &#39;pan&#39;, WheelZoomTool()],
+            tooltips=TOOLTIPS)   
+        
+        # Set WheelZoomTool active by default if not lattice
+        if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+            self.grid.toolbar.active_scroll=self.grid.select_one(WheelZoomTool)
+
+
+        # Add a background map using OpenStreetMap (Google Maps is too 
+        # computationally expensive and cannot zoom properly)
+        if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+            self.grid.add_tile(get_provider(&#39;OSM&#39;))
+     
+        self.grid.axis.visible = False
+        self.grid.grid.visible = False
+        # Function to highlight all households that are currently enrolled in
+        # the same school.
+        self.source.selected.on_change(&#34;indices&#34;, self.select_households)
+
+        # Plot households
+        self.grid.circle(x=&#34;x&#34;, y=&#34;y&#34;, size=5,
+                        view=self.household_view, source=self.source, 
+                        fill_color=mapper, line_color=&#39;black&#39;, alpha=0.8, 
+                        nonselection_fill_alpha=0.2, selection_fill_alpha=1,
+                        name=&#39;households&#39;)
+
+        # Plot schools
+        self.grid.circle(x=&#34;x&#34;, y=&#34;y&#34;, size=7, source=self.source,
+                            view=self.school_view, fill_color=&#39;yellow&#39;,
+                            line_color=&#39;black&#39;, name=&#39;schools&#39;)
+        
+        # Plot neighbourhoods
+        self.grid.patches(&#39;x&#39;, &#39;y&#39;, source=self.source,
+                view=self.neighbourhood_view, fill_color=None,
+                line_color=&#34;black&#34;, line_width=2, hover_alpha=0,
+                hover_line_color=None, name=&#39;neighbourhoods&#39;,
+                selection_fill_alpha=0) 
+
+        
+    def init_grid_plot(self):
+        &#34;&#34;&#34;
+        Initiates the grid plot for the visualisation.
+        &#34;&#34;&#34;
+
+        # Create filters to plot households and schools sequentially
+        self.household_view = self.agent_filter(self.source, &#39;household&#39;)
+        self.school_view = self.agent_filter(self.source, &#39;school&#39;)
+        self.neighbourhood_view = self.agent_filter(self.source, &#39;neighbourhood&#39;)
+        self.customise_grid()
+
+
+    def select_households(self, attr, old, new):
+        &#34;&#34;&#34;
+        This function selects all households that are in the same school.
+
+        Args:
+            attr: -
+            old: -
+            new (list): indices that are clicked (can be multiple)
+        &#34;&#34;&#34;
+        index = new[0]
+        school_id = self.data.iloc[index].school_id
+        # List all agents that have the same school id
+        same_school = self.data[self.data.school_id == school_id].index
+        self.source.selected.indices = list(same_school)
+
+
+    def dropdown_select(self, event):
+        &#34;&#34;&#34;
+        This function creates a dropdown of all schools.
+
+        Args:
+            event (str): the selected school
+        &#34;&#34;&#34;
+        
+        school_id = int(event.item)
+        same_school = self.data[self.data.school_id == school_id].index
+        self.source.selected.indices = list(same_school)
+
+
+    def school_dropdown_func(self, width=100):
+        &#34;&#34;&#34;
+        Event listener for the dropdown of all schools.
+        &#34;&#34;&#34;
+        schools = self.data[self.data.agent_type == &#39;school&#39;]
+        school_locs = [str(num) for num in range(len(schools))]
+        self.school_dropdown = Dropdown(label=&#39;Select School&#39;,
+            menu=school_locs, width=width)
+        self.school_dropdown.on_click(self.dropdown_select)
+
+
+    def init_line_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the line plot for the server.
+        &#34;&#34;&#34;
+
+        # Create a ColumnDataSource that can be updated at every step.
+        TOOLTIPS = [(&#34;Residential utility&#34;, &#34;@res_utility&#34;),
+                    (&#34;Residential segregation&#34;, &#34;@res_seg&#34;),
+                    (&#34;School utility&#34;, &#34;@school_utility&#34;),
+                    (&#34;School segregation&#34;, &#34;@school_seg&#34;),]
+        self.plot = figure(tooltips=TOOLTIPS, y_range=(0, 1), 
+            plot_height=300, plot_width=width,
+            title=&#34;Neighbourhood/school utility/segregation&#34;)
+
+        plot_pars = {&#39;Residential utility&#39;:
+                        {&#39;y&#39;:&#39;res_utility&#39;, &#39;color&#39;:&#39;green&#39;, 
+                        &#39;lower&#39;:&#39;res_q5&#39;, &#39;upper&#39;:&#39;res_q95&#39;},
+                    &#39;Residential segregation&#39;:
+                        {&#39;y&#39;:&#39;res_seg&#39;, &#39;color&#39;:&#39;blue&#39;, 
+                        &#39;lower&#39;:None, &#39;upper&#39;:None},
+                    &#39;School utility&#39;:
+                        {&#39;y&#39;:&#39;school_utility&#39;, &#39;color&#39;:&#39;orange&#39;, 
+                        &#39;lower&#39;:&#39;school_q5&#39;, &#39;upper&#39;:&#39;school_q95&#39;},
+                    &#39;School segregation&#39;:
+                        {&#39;y&#39;:&#39;school_seg&#39;, &#39;color&#39;:&#39;purple&#39;, 
+                        &#39;lower&#39;:None, &#39;upper&#39;:None}}
+
+        # Plot lines, markers and bands (for utility only)
+        for label in plot_pars.keys():
+            y = plot_pars[label][&#39;y&#39;]
+            color = plot_pars[label][&#39;color&#39;]
+            lower = plot_pars[label][&#39;lower&#39;]
+            upper = plot_pars[label][&#39;upper&#39;]
+            self.plot.line(x=&#39;time&#39;, y=y, source=self.line_source,
+                line_width=2, color=color, legend_label=label)
+            self.plot.circle(x=&#39;time&#39;, y=y, source=self.line_source,
+                size=5, color=color, legend_label=label)
+            
+            if lower!=None:
+                band = Band(base=&#39;time&#39;, lower=lower, upper=upper,
+                    source=self.line_source, fill_alpha=0.2, fill_color=color)
+            self.plot.add_layout(band)
+
+        self.plot.legend.location = &#39;top_left&#39;
+
+
+    def composition_data(self, agent_type=&#39;school&#39;):
+        &#34;&#34;&#34;
+        Calculates the composition data for schools or neighbourhoods.
+
+        Args:
+            agent_type (str): either &#39;school&#39; or &#39;neighbourhood&#39;
+
+        Returns:
+            DataFrame of fraction blues and reds per agent.
+        &#34;&#34;&#34;
+
+        # Loop over all schools to get the locations and compositions
+        count = 0
+        data = self.data[self.data.agent_type==agent_type]
+        reds = [0]*data.shape[0]
+        blues = [0]*data.shape[0]
+
+        for index, row in data.iterrows():
+
+            total = row.group0 + row.group1
+
+            if total==0:
+                total = 1
+
+            blues[count] = row.group0 / total
+            reds[count] = row.group1 / total
+            count += 1
+
+        composition_data = {&#39;blues&#39;:blues, &#39;reds&#39;:reds}
+
+        return composition_data
+    
+
+    def init_school_composition_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the school composition plot.
+        &#34;&#34;&#34;
+        
+        self.school_composition_quads = {}
+        self.school_composition_plot = figure(title=&#34;School composition&#34;,
+            x_range=(0, 1), plot_height=300, plot_width=width)
+
+        fractions = self.composition_data(agent_type=&#39;school&#39;)
+        for group in fractions.keys():
+            
+            hist, edges = np.histogram(fractions[group], density=True, bins=20)
+            self.school_composition_quads[group] = self.school_composition_plot.quad(
+                top=hist, bottom=0, left=edges[:-1], right=edges[1:], 
+                fill_color=group[:-1], line_color=&#34;white&#34;, alpha=0.7, 
+                legend_label=group)
+
+
+    def init_neighbourhood_composition_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the neighbourhood composition plot.
+        &#34;&#34;&#34;
+        self.neighbourhood_composition_quads = {}
+        self.neighbourhood_composition_plot = figure(title=&#34;Neighbourhood composition&#34;,
+            x_range=(0, 1), plot_height=300, plot_width=width)
+
+        fractions = self.composition_data(agent_type=&#39;neighbourhood&#39;)
+        for group in fractions.keys():
+            
+            hist, edges = np.histogram(fractions[group], density=True, bins=20)
+            self.neighbourhood_composition_quads[group] = \
+                self.neighbourhood_composition_plot.quad(
+                top=hist, bottom=0, left=edges[:-1], right=edges[1:], 
+                fill_color=group[:-1], line_color=&#34;white&#34;, alpha=0.7, 
+                legend_label=group)
+        
+
+
+    def init_distribution_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the distribution plots for residential and school utility.
+        &#34;&#34;&#34;
+
+        self.distribution_plot = figure(title=&#34;Utility distributions&#34;,
+            x_range=(0, 1), plot_height=300, plot_width=width)
+
+        hist_data = self.data[self.data.agent_type==&#39;household&#39;][[&#39;res_utility&#39;,
+            &#39;school_utility&#39;]]
+
+        # Residential utility
+        hist, edges = np.histogram(hist_data.res_utility, density=True, bins=50)
+        self.res_quads = self.distribution_plot.quad(top=hist, bottom=0,
+            left=edges[:-1], right=edges[1:], fill_color=&#34;green&#34;,
+            line_color=&#34;white&#34;, alpha=0.7, legend_label=&#39;Residential utility&#39;)
+
+        # School utility
+        if not self.residential:
+            hist, edges = np.histogram(hist_data.school_utility, density=True,
+                                        bins=50)
+        # Do not show school utilities yet as they are all zero!
+        hist = np.zeros(len(hist))
+        self.school_quads = self.distribution_plot.quad(top=hist, bottom=0,
+            left=edges[:-1], right=edges[1:], fill_color=&#34;orange&#34;,
+            line_color=&#34;white&#34;, alpha=0.7, legend_label=&#39;School utility&#39;)
+
+
+    def update_filters(self):
+        &#34;&#34;&#34;
+        Updates the view filters for households, schools and neighbourhoods as
+        they can change when reset is clicked (i.e., new model instance).
+        &#34;&#34;&#34;
+
+        # Update household filter
+        household_filter = [True if agent == &#39;household&#39; else False for agent \
+            in self.source.data[&#39;agent_type&#39;]]
+        self.household_view.filters[0] = BooleanFilter(household_filter)
+
+        # Update neighbourhood filter
+        neighbourhood_filter = [True if agent == &#39;neighbourhood&#39; else False for\
+            agent in self.source.data[&#39;agent_type&#39;]]
+        self.neighbourhood_view.filters[0] = BooleanFilter(neighbourhood_filter)
+
+        # Update school filter
+        school_filter = [True if agent == &#39;school&#39; else False for agent in \
+            self.source.data[&#39;agent_type&#39;]]
+        self.school_view.filters[0] = BooleanFilter(school_filter)
+
+
+    def reset_data(self):
+        &#34;&#34;&#34;
+        Resets the data, could be the initial reset (new sources need to be 
+        created) or a subsequent one (only update the data).
+        &#34;&#34;&#34;
+
+        # Callback object to run, step and reset the model properly.
+        self.residential = True
+        self.callback_obj = None
+        self.data = self.model.measurements.get_bokeh_vis_data()
+        
+        # Check if it&#39;s the initial reset (create new sources) or a reset button
+        # click (update .data only)
+        try:
+            self.source.data = self.data
+            self.line_source.data = self.data[self.data.agent_type == &#39;system&#39;]            
+            self.update_filters()
+            self.update_data()
+
+        # Reset is clicked --&gt; update .data only
+        except AttributeError:
+            self.source = ColumnDataSource(self.data)
+            self.line_source = ColumnDataSource(
+                self.data[self.data.agent_type==&#39;system&#39;])
+
+
+    def update_data(self):
+        &#34;&#34;&#34;
+        Updates all data sources.
+        &#34;&#34;&#34;
+
+        # Update all plots in the figure
+        self.data = self.model.measurements.get_bokeh_vis_data()
+        self.source.stream(self.data, len(self.data))
+        self.line_source.stream(self.data[self.data.agent_type == &#39;system&#39;])
+        self.school_dropdown_func()
+
+        # Update the utility histograms
+        hist_data = self.data[self.data.agent_type==&#39;household&#39;][[&#39;res_utility&#39;,
+            &#39;school_utility&#39;]]
+        hist, edges = np.histogram(hist_data.res_utility, density=True, bins=50)
+        self.res_quads.data_source.data[&#39;top&#39;] = hist
+        self.res_quads.data_source.data[&#39;left&#39;] = edges[:-1]
+        self.res_quads.data_source.data[&#39;right&#39;] = edges[1:]
+
+        # Only start to show school utilities when the residential process is 
+        # finished
+        if not self.residential:
+            hist, edges = np.histogram(hist_data.school_utility, 
+                density=True, bins=50)
+        else:
+            hist = np.zeros(len(hist))
+
+        self.school_quads.data_source.data[&#39;top&#39;] = hist
+        self.school_quads.data_source.data[&#39;left&#39;] = edges[:-1]
+        self.school_quads.data_source.data[&#39;right&#39;] = edges[1:]
+
+        # Update the composition histograms
+        for quads in [self.neighbourhood_composition_quads, self.school_composition_quads]:
+
+            # Grab the new data
+            if quads==self.neighbourhood_composition_quads:
+                hist_data = self.composition_data(agent_type=&#39;neighbourhood&#39;)
+            else:
+                hist_data = self.composition_data(agent_type=&#39;school&#39;)
+
+            # Update the bars and edges
+            for group in hist_data.keys():
+
+                hist, edges = np.histogram(hist_data[group], density=True, bins=20)
+
+                # Update histogram
+                quads[group].data_source.data[&#39;top&#39;] = hist
+                quads[group].data_source.data[&#39;left&#39;] = edges[:-1]
+                quads[group].data_source.data[&#39;right&#39;] = edges[1:]
+
+
+    def blocking_task(self):
+        time.sleep(0.1)
+
+
+    @gen.coroutine
+    @without_document_lock
+    def unlocked_task(self):
+        &#34;&#34;&#34;
+        Needed to make sure that if the reset button is clicked it can go 
+        inbetween events, otherwise it can be quite slow.
+        &#34;&#34;&#34;
+        yield self.executor.submit(self.blocking_task)
+        self.doc.add_next_tick_callback(partial(self.step_button))
+
+
+    def run_button(self):
+        &#34;&#34;&#34;
+        Handles the run button clicks, coloring and starts the simulation.
+        &#34;&#34;&#34;
+        if self.run.label == &#39;Run&#39;:
+            self.run.label = &#39;Stop&#39;
+            self.run.button_type=&#39;danger&#39;
+            self.callback_obj = self.doc.add_periodic_callback(
+                self.unlocked_task, 100)
+
+        else:
+            self.run.label = &#39;Run&#39;
+            self.run.button_type = &#39;success&#39;
+            self.doc.remove_periodic_callback(self.callback_obj)
+
+
+    def step_button(self):
+        &#34;&#34;&#34;
+        Checks which process need to be stepped and execute the step. The 
+        simulate function of the Model instance cannot be used as we need to
+        visualise every step.
+        &#34;&#34;&#34;
+
+        # Plus 1 because the first time step is already plotted
+        max_res_steps = self.params[&#39;max_res_steps&#39;]
+        max_school_steps = self.params[&#39;max_school_steps&#39;]
+        school_time = self.model.scheduler.get_time(&#39;school&#39;)
+        residential_time = self.model.scheduler.get_time(&#39;residential&#39;) + 1
+
+        # If residential is not converged yet or below max steps, do a step
+        if (residential_time &lt;= max_res_steps and not self.res_ended):
+            self.res_ended = self.model.convergence_check()
+            if not self.res_ended:
+                self.model.step(residential=True)
+            else: print(&#39;Residential process ended.&#39;)
+
+        # Initial school step needs to be executed
+        elif school_time==0:
+            self.residential = False
+            self.model.step(residential=False, initial_schools=True)
+
+        # Normal school steps
+        elif (school_time &lt; max_school_steps and not self.school_ended):
+            self.school_ended = self.model.convergence_check()
+            if not self.school_ended:
+                self.model.step(residential=False, initial_schools=False)
+            else: print(&#39;School process ended.&#39;)
+
+        # Both processes are done/converged
+        else:
+            self.run_button()
+            return
+        
+        self.update_data()
+    
+
+    def reset_button(self):
+        &#34;&#34;&#34;
+        Resets the model and takes the (possible) new parameter values into
+        account.
+        &#34;&#34;&#34;
+
+        # Update the parameter values and start a new model
+        self.time_series = []
+        self.res_ended = False
+        self.school_ended = False
+        self.model = CompassModel(self.update_pars())
+
+        # Stop the model when it is still running while reset is clicked.
+        if self.run.label == &#39;Stop&#39; and self.callback_obj != None:
+            self.doc.remove_periodic_callback(self.callback_obj)
+            self.run.label = &#39;Run&#39;
+            self.run.button_type = &#39;success&#39;
+
+        self.reset_data()
+        self.doc.clear()
+        self.layout()
+
+
+    def layout(self):
+        &#34;&#34;&#34;
+        Sets up the whole layout; widgets and all plots.
+        &#34;&#34;&#34;
+
+        # Initialise all plots and widgets
+        widgets = self.widgets(width=200)
+
+        plot_width=300
+        self.init_grid_plot()
+        self.init_line_plot(width=plot_width)
+        self.init_distribution_plot(width=plot_width)
+        self.init_school_composition_plot(width=plot_width)
+        self.init_neighbourhood_composition_plot(width=plot_width)
+        
+        # Fit them in a grid with appropriate sizing modes
+        grid = column([self.grid], sizing_mode=&#34;scale_both&#34;)
+        plots = column([
+            row([self.plot, self.distribution_plot]), 
+            row([self.neighbourhood_composition_plot, self.school_composition_plot])],
+            sizing_mode=&#39;fixed&#39;)
+
+        desc = Div(text=open(join(dirname(__file__),
+            &#34;description.html&#34;)).read(), margin=0)
+
+        first_col = column([desc,
+                                row([
+                                    column([column(self.buttons(width=200)), 
+                                            column(widgets[:13])], width=210, 
+                                            sizing_mode=&#39;fixed&#39;),
+                                    column(widgets[13:], width=210), 
+                                    grid])])
+            
+        layout = gridplot([[first_col, plots]],
+            sizing_mode=&#39;stretch_width&#39;, toolbar_location=&#39;right&#39;)
+
+        self.doc.add_root(layout)
+        self.doc.title = &#34;COMPASS&#34;
+
+
+    def buttons(self, width=100):
+        self.run = Button(label=&#34;Run&#34;, button_type=&#39;success&#39;, width=width)
+        self.run.on_click(self.run_button)
+        self.step = Button(label=&#34;Step&#34;, button_type=&#39;primary&#39;, width=width)
+        self.step.on_click(self.step_button)
+        self.reset = Button(label=&#34;Reset&#34;, button_type=&#39;warning&#39;, width=width)
+        self.reset.on_click(self.reset_button)
+        buttons = [self.run, self.step, self.reset]
+        return buttons
+
+
+    def widgets(self, width=100):
+        &#34;&#34;&#34;
+        Hardcodes all widgets.
+        &#34;&#34;&#34;
+
+        header_size = &#39;&lt;h3&gt;&#39;
+
+        # Simulation
+        self.sleep = Slider(start=0, end=1, value=0.1, step=0.1,
+            title=&#39;Time between steps&#39;, width=width)
+        self.max_move_fraction = Slider(start=0, end=1,
+            value=self.params[&#39;max_move_fraction&#39;], step=.05,
+            title=&#34;Fraction moving&#34;, width=width)
+        self.max_res_steps = Slider(start=0, end=1000,
+            value=self.params[&#39;max_res_steps&#39;], step=10, 
+            title=&#34;Residential steps&#34;, width=width)
+        self.max_school_steps = Slider(start=0, end=1000,
+            value=self.params[&#39;max_school_steps&#39;], step=10, 
+            title=&#34;School steps&#34;, width=width)
+        self.threshold = Select(title=&#34;Convergence threshold&#34;,
+            options=[&#39;0.001&#39;, &#39;0.005&#39;, &#39;0.01&#39;, &#39;0.02&#39;],
+            value=str(self.params[&#39;conv_threshold&#39;]), width=width)
+        self.homophily_std = Select(title=&#34;Std. of optimal fraction&#34;,
+            options=[str(x / 100.) for x in range(11)],
+            value=str(self.params[&#39;homophily_std&#39;]), width=width)
+        self.temperature = Slider(start=0, end=500, step=1, 
+            title=&#34;Temperature&#34;,
+            value=self.params[&#39;temperature&#39;], width=width)
+        self.window_size = Slider(start=10, end=50,
+            value=self.params[&#39;window_size&#39;], step=10, 
+            title=&#34;Convergence window size&#34;, width=width)
+        self.case = Select(title=&#39;Case&#39;, 
+            options=[&#39;Amsterdam&#39;, &#39;IJburg&#39;, &#39;Lattice&#39;],
+            value=str(self.params[&#39;case&#39;]), width=width)
+
+        text = header_size + &#39;Simulation&#39; + header_size
+        simulation_div = Div(text=text, width=width)
+        simulation = [simulation_div, self.max_move_fraction, self.max_res_steps,
+            self.max_school_steps, self.threshold, self.homophily_std, 
+            self.window_size, self.temperature, self.case]
+
+        if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+            simulation = [self.max_move_fraction, self.max_school_steps, 
+            self.threshold, self.homophily_std, self.window_size, 
+            self.temperature, self.case]
+
+        # Grid
+        self.size = Select(title=&#34;Size&#34;,
+            options=[str(x * 10) for x in range(1, 11)],
+            value=str(self.params[&#39;width&#39;]), width=width)
+        self.n_neighbourhoods = Select(title=&#34;Number of neighbourhoods&#34;,
+            options=[str(x ** 2) for x in range(1, 11)],
+            value=str(self.params[&#39;n_neighbourhoods&#39;]), width=width)
+        self.n_schools = Select(title=&#34;Number of schools&#34;,
+            options=[str(x ** 2) for x in range(1, 11)],
+            value=str(self.params[&#39;n_schools&#39;]), width=width)
+        self.schools_placement = Select(title=&#34;School placement&#34;,
+            options=[&#39;evenly_spaced&#39;, &#39;random&#39;, &#39;random_per_neighbourhood&#39;],
+            value=str(self.params[&#39;schools_placement&#39;]), width=width)
+        self.household_density = Slider(start=0, end=1,
+            value=self.params[&#39;household_density&#39;], step=.05, title=&#34;Density&#34;,
+            width=width)
+        self.group_dist = Slider(start=0, end=1,
+            value=self.params[&#39;group_dist&#39;][0][0], step=.05, title=&#34;Share blue&#34;,
+            width=width)
+        self.torus = Select(title=&#34;Torus&#34;, options=[&#39;True&#39;, &#39;False&#39;],
+            value=str(self.params[&#39;torus&#39;]), width=width)
+
+        if self.params[&#39;scheduling&#39;]==0:
+            scheduling = &#39;replacement&#39;
+        else: scheduling = &#39;without_replacement&#39;
+        self.scheduling = Select(title=&#34;Scheduling method&#34;,
+            options=[&#39;replacement&#39;, &#39;without_replacement&#39;],
+            value=scheduling, width=width)
+
+        text = header_size + &#39;Environment&#39; + header_size
+        environment_div = Div(text=text, width=width)
+        grid = [environment_div, self.size, self.n_neighbourhoods,
+            self.n_schools, self.household_density, self.group_dist,
+            self.scheduling, self.torus, self.schools_placement]
+        
+        if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+            grid = [self.scheduling]
+
+        # School
+        self.school_capacity = Slider(start=0, end=3,
+            value=self.params[&#39;school_capacity&#39;], step=.1,
+            title=&#34;School capacity&#34;, width=width)
+        self.school_dropdown_func(width=width)
+        text = header_size + &#39;Schools&#39; + header_size
+        school_div = Div(text=text, width=width)
+        school = [self.school_capacity, self.school_dropdown]
+
+        # Household
+        self.alpha = Slider(start=0, end=1, value=self.params[&#39;alpha&#39;],
+            step=.05, title=&#34;Alpha&#34;, width=width)
+        # self.bounded_neighbourhood = Select(title=&#34;Bounded Neighbourhood&#34;,
+        #     options=[&#39;True&#39;, &#39;False&#39;],
+        #     value=str(self.params[&#39;bounded_neighbourhood&#39;]))
+        self.utility_at_max = Slider(start=0, end=1,
+            value=self.params[&#39;utility_at_max&#39;][0][0], step=.05,
+            title=&#34;Utility at homogeneity&#34;, width=width)
+        self.optimal_fraction = Slider(start=0, end=1,
+            value=self.params[&#39;optimal_fraction&#39;][0][0], step=.05,
+            title=&#34;Optimal fraction&#34;, width=width)
+        # self.satisfaction = Slider(start=0, end=1,
+        #     value=self.params[&#39;category_thresholds&#39;][0][0], step=.05,
+        #     title=&#34;Satisfaction Threshold&#34;)
+        self.radius = Select(title=&#34;Radius&#34;,
+            options=[str(x) for x in range(1, 11)],
+            value=str(self.params[&#39;radius&#39;]), width=width)
+        # self.moore = Select(title=&#34;Moore&#34;, options=[&#39;True&#39;, &#39;False&#39;],
+        #                     value=str(self.params[&#39;moore&#39;]))
+        self.neighbourhood_mixture = Slider(start=0, end=1,
+            value=self.params[&#39;neighbourhood_mixture&#39;], step=.05,
+            title=&#34;Neighbourhood Mixture&#34;, width=width)
+        self.num_considered = Slider(start=1, end=10,
+            value=self.params[&#39;num_considered&#39;], step=1,
+            title=&#34;Considered spots&#34;, width=width)
+        self.ranking_method = Select(title=&#34;Ranking method&#34;,
+            options=[&#39;highest&#39;, &#39;proportional&#39;],
+            value=self.params[&#39;ranking_method&#39;], width=width)
+
+        text = header_size + &#39;Households&#39; + header_size
+        household_div = Div(text=text, width=width)
+        household = [household_div, self.alpha,
+            self.utility_at_max, self.optimal_fraction, self.radius,
+            self.neighbourhood_mixture, self.num_considered, self.ranking_method]
+
+        if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+            household = [self.alpha, self.utility_at_max, 
+            self.optimal_fraction, self.ranking_method]
+
+        widgets = simulation + grid + school + household
+
+        return widgets
+
+
+    def update_pars(self):
+        &#34;&#34;&#34;
+        Updates the parameters.
+        &#34;&#34;&#34;
+
+        self.params[&#39;alpha&#39;] = self.alpha.value
+        self.params[&#39;max_move_fraction&#39;] = self.max_move_fraction.value
+        self.params[&#39;max_school_steps&#39;]= self.max_school_steps.value
+        self.params[&#39;conv_threshold&#39;] = float(self.threshold.value)
+        self.params[&#39;utility_at_max&#39;] = [[self.utility_at_max.value,
+            self.utility_at_max.value]]
+        self.params[&#39;optimal_fraction&#39;] = [[self.optimal_fraction.value,
+            self.optimal_fraction.value]]
+        self.params[&#39;school_capacity&#39;] = self.school_capacity.value
+        self.params[&#39;neighbourhood_mixture&#39;] = self.neighbourhood_mixture.value
+        self.params[&#39;temperature&#39;] = self.temperature.value
+        self.params[&#39;homophily_std&#39;] = float(self.homophily_std.value)
+        self.params[&#39;window_size&#39;] = int(self.window_size.value)
+        self.params[&#39;num_considered&#39;] = int(self.num_considered.value)
+        self.params[&#39;ranking_method&#39;] = self.ranking_method.value
+        self.params[&#39;case&#39;] = self.case.value
+            
+        if self.scheduling.value==&#39;replacement&#39;:
+            self.params[&#39;scheduling&#39;] = 0 
+        else:
+            self.params[&#39;scheduling&#39;] = 1
+
+        if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+            self.params[&#39;max_res_steps&#39;] = 0
+            return self.params
+
+        self.params[&#39;width&#39;] = int(self.size.value)
+        self.params[&#39;height&#39;] = int(self.size.value)
+        self.grid.x_range.end = self.params[&#39;width&#39;]
+        self.grid.y_range.end = self.params[&#39;height&#39;]
+        self.params[&#39;torus&#39;] = eval(self.torus.value)
+        self.params[&#39;household_density&#39;] = self.household_density.value
+        self.params[&#39;max_res_steps&#39;]= self.max_res_steps.value
+        self.params[&#39;n_neighbourhoods&#39;] = int(self.n_neighbourhoods.value)
+        self.params[&#39;n_schools&#39;] = int(self.n_schools.value)
+        self.params[&#39;schools_placement&#39;] = self.schools_placement.value
+        self.params[&#39;group_dist&#39;] = [[self.group_dist.value,
+            1-self.group_dist.value]]
+
+        return self.params
+
+    
+    def run_visualisation(self):
+
+        apps = {&#39;/&#39;: Application(FunctionHandler(BokehServer))}
+
+        server = Server(apps, port=5004)
+        # To avoid bokeh&#39;s logger spamming
+        log = logging.getLogger(&#39;bokeh&#39;)
+        log.setLevel(&#39;ERROR&#39;)
+        server.io_loop.add_callback(server.show, &#34;/&#34;)
+        server.io_loop.start()
+
+        </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="compass.visualisation.BokehServer"><code class="flex name class">
+<span>class <span class="ident">BokehServer</span></span>
+<span>(</span><span>doc)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to run the Bokeh server for visualisation.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>doc</code></strong></dt>
+<dd>a Bokeh Document instance</dd>
+</dl>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>grid_plot</code></strong></dt>
+<dd>initiates the plot for the grid</dd>
+<dt><strong><code>line_plot</code></strong></dt>
+<dd>initiates one line plot</dd>
+<dt><strong><code>update</code></strong></dt>
+<dd>updates the plots with every time step</dd>
+<dt><strong><code>visualise_model</code></strong></dt>
+<dd>starts the whole visualisation</dd>
+<dt><strong><code>grid_values</code></strong></dt>
+<dd>obtains all the grid values from Mesa.grid</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BokehServer():
+    &#34;&#34;&#34;
+    Class to run the Bokeh server for visualisation.
+
+    Args:
+        doc: a Bokeh Document instance
+
+    Attributes:
+        grid_plot: initiates the plot for the grid
+        line_plot: initiates one line plot
+        update: updates the plots with every time step
+        visualise_model: starts the whole visualisation
+        grid_values: obtains all the grid values from Mesa.grid
+    &#34;&#34;&#34;
+
+    def __init__(self, doc):
+
+        # This is important! Save curdoc() to make sure all threads
+        # see the same document.
+        self.doc = doc
+
+        # Initialise a CompassModel model with the default setting.
+        self.model = CompassModel(vars(FLAGS))
+        self.params = self.model.params
+        self.res_ended = False
+        self.school_ended = False
+        self.executor = ThreadPoolExecutor(max_workers=2)
+
+        # Initialise layout and populate the plots with the initial
+        # configuration
+        self.reset_data()
+        self.layout()
+        print(&#39;Visualisation running...&#39;)
+
+
+    def agent_filter(self, source, agent_type):
+        &#34;&#34;&#34;
+        This function creates a boolean agent filter view for the Bokeh
+        visualisation instance.
+
+        Args:
+            source (CDS): ColumnDataSource from Bokeh.
+            agent_type (str): the agent type to be filtered.
+
+        Returns:
+            view: the view that can be used in plots.
+        &#34;&#34;&#34;
+
+        filter = [True if agent == agent_type else False \
+                    for agent in source.data[&#39;agent_type&#39;]]
+        view = CDSView(source=source, filters=[BooleanFilter(filter)])
+        return view
+
+
+    def customise_grid(self):
+        &#34;&#34;&#34;
+        Grid customisation; agent colors, neighbourhood boundaries and schools.
+
+        Todo:
+            size should come from a parameter, as they do not scale properly
+            with grid size.
+        &#34;&#34;&#34;
+
+        # Agent colours, agent tooltips and grid initialisation
+        mapper = linear_cmap(field_name=&#39;group1&#39;, palette=[&#39;blue&#39;,&#39;red&#39;],
+                                low=0 ,high=1)
+        TOOLTIPS = [(&#34;Residential utility&#34;, &#34;@res_utility&#34;),
+                    (&#39;Local composition&#39;, &#39;@local_comp&#39;),
+                    (&#39;Neighbourhood composition&#39;, &#39;@n_comp&#39;),
+                    (&#34;School utility&#34;, &#34;@school_utility&#34;),
+                    (&#39;Distance&#39;, &#39;@dist_school&#39;),
+                    (&#39;School composition&#39;, &#39;@s_comp&#39;),
+                    (&#39;School composition utility&#39;, &#39;@school_comp_utility&#39;)]
+        hover = HoverTool(names=[&#34;households&#34;, &#34;schools&#34;], tooltips=TOOLTIPS)
+        self.grid = figure(
+            x_range=(self.model.grid.x_min, self.model.grid.x_max),
+            y_range=(self.model.grid.y_min, self.model.grid.y_max),
+            tools=[hover, &#39;tap&#39;, &#39;pan&#39;, WheelZoomTool()],
+            tooltips=TOOLTIPS)   
+        
+        # Set WheelZoomTool active by default if not lattice
+        if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+            self.grid.toolbar.active_scroll=self.grid.select_one(WheelZoomTool)
+
+
+        # Add a background map using OpenStreetMap (Google Maps is too 
+        # computationally expensive and cannot zoom properly)
+        if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+            self.grid.add_tile(get_provider(&#39;OSM&#39;))
+     
+        self.grid.axis.visible = False
+        self.grid.grid.visible = False
+        # Function to highlight all households that are currently enrolled in
+        # the same school.
+        self.source.selected.on_change(&#34;indices&#34;, self.select_households)
+
+        # Plot households
+        self.grid.circle(x=&#34;x&#34;, y=&#34;y&#34;, size=5,
+                        view=self.household_view, source=self.source, 
+                        fill_color=mapper, line_color=&#39;black&#39;, alpha=0.8, 
+                        nonselection_fill_alpha=0.2, selection_fill_alpha=1,
+                        name=&#39;households&#39;)
+
+        # Plot schools
+        self.grid.circle(x=&#34;x&#34;, y=&#34;y&#34;, size=7, source=self.source,
+                            view=self.school_view, fill_color=&#39;yellow&#39;,
+                            line_color=&#39;black&#39;, name=&#39;schools&#39;)
+        
+        # Plot neighbourhoods
+        self.grid.patches(&#39;x&#39;, &#39;y&#39;, source=self.source,
+                view=self.neighbourhood_view, fill_color=None,
+                line_color=&#34;black&#34;, line_width=2, hover_alpha=0,
+                hover_line_color=None, name=&#39;neighbourhoods&#39;,
+                selection_fill_alpha=0) 
+
+        
+    def init_grid_plot(self):
+        &#34;&#34;&#34;
+        Initiates the grid plot for the visualisation.
+        &#34;&#34;&#34;
+
+        # Create filters to plot households and schools sequentially
+        self.household_view = self.agent_filter(self.source, &#39;household&#39;)
+        self.school_view = self.agent_filter(self.source, &#39;school&#39;)
+        self.neighbourhood_view = self.agent_filter(self.source, &#39;neighbourhood&#39;)
+        self.customise_grid()
+
+
+    def select_households(self, attr, old, new):
+        &#34;&#34;&#34;
+        This function selects all households that are in the same school.
+
+        Args:
+            attr: -
+            old: -
+            new (list): indices that are clicked (can be multiple)
+        &#34;&#34;&#34;
+        index = new[0]
+        school_id = self.data.iloc[index].school_id
+        # List all agents that have the same school id
+        same_school = self.data[self.data.school_id == school_id].index
+        self.source.selected.indices = list(same_school)
+
+
+    def dropdown_select(self, event):
+        &#34;&#34;&#34;
+        This function creates a dropdown of all schools.
+
+        Args:
+            event (str): the selected school
+        &#34;&#34;&#34;
+        
+        school_id = int(event.item)
+        same_school = self.data[self.data.school_id == school_id].index
+        self.source.selected.indices = list(same_school)
+
+
+    def school_dropdown_func(self, width=100):
+        &#34;&#34;&#34;
+        Event listener for the dropdown of all schools.
+        &#34;&#34;&#34;
+        schools = self.data[self.data.agent_type == &#39;school&#39;]
+        school_locs = [str(num) for num in range(len(schools))]
+        self.school_dropdown = Dropdown(label=&#39;Select School&#39;,
+            menu=school_locs, width=width)
+        self.school_dropdown.on_click(self.dropdown_select)
+
+
+    def init_line_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the line plot for the server.
+        &#34;&#34;&#34;
+
+        # Create a ColumnDataSource that can be updated at every step.
+        TOOLTIPS = [(&#34;Residential utility&#34;, &#34;@res_utility&#34;),
+                    (&#34;Residential segregation&#34;, &#34;@res_seg&#34;),
+                    (&#34;School utility&#34;, &#34;@school_utility&#34;),
+                    (&#34;School segregation&#34;, &#34;@school_seg&#34;),]
+        self.plot = figure(tooltips=TOOLTIPS, y_range=(0, 1), 
+            plot_height=300, plot_width=width,
+            title=&#34;Neighbourhood/school utility/segregation&#34;)
+
+        plot_pars = {&#39;Residential utility&#39;:
+                        {&#39;y&#39;:&#39;res_utility&#39;, &#39;color&#39;:&#39;green&#39;, 
+                        &#39;lower&#39;:&#39;res_q5&#39;, &#39;upper&#39;:&#39;res_q95&#39;},
+                    &#39;Residential segregation&#39;:
+                        {&#39;y&#39;:&#39;res_seg&#39;, &#39;color&#39;:&#39;blue&#39;, 
+                        &#39;lower&#39;:None, &#39;upper&#39;:None},
+                    &#39;School utility&#39;:
+                        {&#39;y&#39;:&#39;school_utility&#39;, &#39;color&#39;:&#39;orange&#39;, 
+                        &#39;lower&#39;:&#39;school_q5&#39;, &#39;upper&#39;:&#39;school_q95&#39;},
+                    &#39;School segregation&#39;:
+                        {&#39;y&#39;:&#39;school_seg&#39;, &#39;color&#39;:&#39;purple&#39;, 
+                        &#39;lower&#39;:None, &#39;upper&#39;:None}}
+
+        # Plot lines, markers and bands (for utility only)
+        for label in plot_pars.keys():
+            y = plot_pars[label][&#39;y&#39;]
+            color = plot_pars[label][&#39;color&#39;]
+            lower = plot_pars[label][&#39;lower&#39;]
+            upper = plot_pars[label][&#39;upper&#39;]
+            self.plot.line(x=&#39;time&#39;, y=y, source=self.line_source,
+                line_width=2, color=color, legend_label=label)
+            self.plot.circle(x=&#39;time&#39;, y=y, source=self.line_source,
+                size=5, color=color, legend_label=label)
+            
+            if lower!=None:
+                band = Band(base=&#39;time&#39;, lower=lower, upper=upper,
+                    source=self.line_source, fill_alpha=0.2, fill_color=color)
+            self.plot.add_layout(band)
+
+        self.plot.legend.location = &#39;top_left&#39;
+
+
+    def composition_data(self, agent_type=&#39;school&#39;):
+        &#34;&#34;&#34;
+        Calculates the composition data for schools or neighbourhoods.
+
+        Args:
+            agent_type (str): either &#39;school&#39; or &#39;neighbourhood&#39;
+
+        Returns:
+            DataFrame of fraction blues and reds per agent.
+        &#34;&#34;&#34;
+
+        # Loop over all schools to get the locations and compositions
+        count = 0
+        data = self.data[self.data.agent_type==agent_type]
+        reds = [0]*data.shape[0]
+        blues = [0]*data.shape[0]
+
+        for index, row in data.iterrows():
+
+            total = row.group0 + row.group1
+
+            if total==0:
+                total = 1
+
+            blues[count] = row.group0 / total
+            reds[count] = row.group1 / total
+            count += 1
+
+        composition_data = {&#39;blues&#39;:blues, &#39;reds&#39;:reds}
+
+        return composition_data
+    
+
+    def init_school_composition_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the school composition plot.
+        &#34;&#34;&#34;
+        
+        self.school_composition_quads = {}
+        self.school_composition_plot = figure(title=&#34;School composition&#34;,
+            x_range=(0, 1), plot_height=300, plot_width=width)
+
+        fractions = self.composition_data(agent_type=&#39;school&#39;)
+        for group in fractions.keys():
+            
+            hist, edges = np.histogram(fractions[group], density=True, bins=20)
+            self.school_composition_quads[group] = self.school_composition_plot.quad(
+                top=hist, bottom=0, left=edges[:-1], right=edges[1:], 
+                fill_color=group[:-1], line_color=&#34;white&#34;, alpha=0.7, 
+                legend_label=group)
+
+
+    def init_neighbourhood_composition_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the neighbourhood composition plot.
+        &#34;&#34;&#34;
+        self.neighbourhood_composition_quads = {}
+        self.neighbourhood_composition_plot = figure(title=&#34;Neighbourhood composition&#34;,
+            x_range=(0, 1), plot_height=300, plot_width=width)
+
+        fractions = self.composition_data(agent_type=&#39;neighbourhood&#39;)
+        for group in fractions.keys():
+            
+            hist, edges = np.histogram(fractions[group], density=True, bins=20)
+            self.neighbourhood_composition_quads[group] = \
+                self.neighbourhood_composition_plot.quad(
+                top=hist, bottom=0, left=edges[:-1], right=edges[1:], 
+                fill_color=group[:-1], line_color=&#34;white&#34;, alpha=0.7, 
+                legend_label=group)
+        
+
+
+    def init_distribution_plot(self, width=200):
+        &#34;&#34;&#34;
+        Initiates the distribution plots for residential and school utility.
+        &#34;&#34;&#34;
+
+        self.distribution_plot = figure(title=&#34;Utility distributions&#34;,
+            x_range=(0, 1), plot_height=300, plot_width=width)
+
+        hist_data = self.data[self.data.agent_type==&#39;household&#39;][[&#39;res_utility&#39;,
+            &#39;school_utility&#39;]]
+
+        # Residential utility
+        hist, edges = np.histogram(hist_data.res_utility, density=True, bins=50)
+        self.res_quads = self.distribution_plot.quad(top=hist, bottom=0,
+            left=edges[:-1], right=edges[1:], fill_color=&#34;green&#34;,
+            line_color=&#34;white&#34;, alpha=0.7, legend_label=&#39;Residential utility&#39;)
+
+        # School utility
+        if not self.residential:
+            hist, edges = np.histogram(hist_data.school_utility, density=True,
+                                        bins=50)
+        # Do not show school utilities yet as they are all zero!
+        hist = np.zeros(len(hist))
+        self.school_quads = self.distribution_plot.quad(top=hist, bottom=0,
+            left=edges[:-1], right=edges[1:], fill_color=&#34;orange&#34;,
+            line_color=&#34;white&#34;, alpha=0.7, legend_label=&#39;School utility&#39;)
+
+
+    def update_filters(self):
+        &#34;&#34;&#34;
+        Updates the view filters for households, schools and neighbourhoods as
+        they can change when reset is clicked (i.e., new model instance).
+        &#34;&#34;&#34;
+
+        # Update household filter
+        household_filter = [True if agent == &#39;household&#39; else False for agent \
+            in self.source.data[&#39;agent_type&#39;]]
+        self.household_view.filters[0] = BooleanFilter(household_filter)
+
+        # Update neighbourhood filter
+        neighbourhood_filter = [True if agent == &#39;neighbourhood&#39; else False for\
+            agent in self.source.data[&#39;agent_type&#39;]]
+        self.neighbourhood_view.filters[0] = BooleanFilter(neighbourhood_filter)
+
+        # Update school filter
+        school_filter = [True if agent == &#39;school&#39; else False for agent in \
+            self.source.data[&#39;agent_type&#39;]]
+        self.school_view.filters[0] = BooleanFilter(school_filter)
+
+
+    def reset_data(self):
+        &#34;&#34;&#34;
+        Resets the data, could be the initial reset (new sources need to be 
+        created) or a subsequent one (only update the data).
+        &#34;&#34;&#34;
+
+        # Callback object to run, step and reset the model properly.
+        self.residential = True
+        self.callback_obj = None
+        self.data = self.model.measurements.get_bokeh_vis_data()
+        
+        # Check if it&#39;s the initial reset (create new sources) or a reset button
+        # click (update .data only)
+        try:
+            self.source.data = self.data
+            self.line_source.data = self.data[self.data.agent_type == &#39;system&#39;]            
+            self.update_filters()
+            self.update_data()
+
+        # Reset is clicked --&gt; update .data only
+        except AttributeError:
+            self.source = ColumnDataSource(self.data)
+            self.line_source = ColumnDataSource(
+                self.data[self.data.agent_type==&#39;system&#39;])
+
+
+    def update_data(self):
+        &#34;&#34;&#34;
+        Updates all data sources.
+        &#34;&#34;&#34;
+
+        # Update all plots in the figure
+        self.data = self.model.measurements.get_bokeh_vis_data()
+        self.source.stream(self.data, len(self.data))
+        self.line_source.stream(self.data[self.data.agent_type == &#39;system&#39;])
+        self.school_dropdown_func()
+
+        # Update the utility histograms
+        hist_data = self.data[self.data.agent_type==&#39;household&#39;][[&#39;res_utility&#39;,
+            &#39;school_utility&#39;]]
+        hist, edges = np.histogram(hist_data.res_utility, density=True, bins=50)
+        self.res_quads.data_source.data[&#39;top&#39;] = hist
+        self.res_quads.data_source.data[&#39;left&#39;] = edges[:-1]
+        self.res_quads.data_source.data[&#39;right&#39;] = edges[1:]
+
+        # Only start to show school utilities when the residential process is 
+        # finished
+        if not self.residential:
+            hist, edges = np.histogram(hist_data.school_utility, 
+                density=True, bins=50)
+        else:
+            hist = np.zeros(len(hist))
+
+        self.school_quads.data_source.data[&#39;top&#39;] = hist
+        self.school_quads.data_source.data[&#39;left&#39;] = edges[:-1]
+        self.school_quads.data_source.data[&#39;right&#39;] = edges[1:]
+
+        # Update the composition histograms
+        for quads in [self.neighbourhood_composition_quads, self.school_composition_quads]:
+
+            # Grab the new data
+            if quads==self.neighbourhood_composition_quads:
+                hist_data = self.composition_data(agent_type=&#39;neighbourhood&#39;)
+            else:
+                hist_data = self.composition_data(agent_type=&#39;school&#39;)
+
+            # Update the bars and edges
+            for group in hist_data.keys():
+
+                hist, edges = np.histogram(hist_data[group], density=True, bins=20)
+
+                # Update histogram
+                quads[group].data_source.data[&#39;top&#39;] = hist
+                quads[group].data_source.data[&#39;left&#39;] = edges[:-1]
+                quads[group].data_source.data[&#39;right&#39;] = edges[1:]
+
+
+    def blocking_task(self):
+        time.sleep(0.1)
+
+
+    @gen.coroutine
+    @without_document_lock
+    def unlocked_task(self):
+        &#34;&#34;&#34;
+        Needed to make sure that if the reset button is clicked it can go 
+        inbetween events, otherwise it can be quite slow.
+        &#34;&#34;&#34;
+        yield self.executor.submit(self.blocking_task)
+        self.doc.add_next_tick_callback(partial(self.step_button))
+
+
+    def run_button(self):
+        &#34;&#34;&#34;
+        Handles the run button clicks, coloring and starts the simulation.
+        &#34;&#34;&#34;
+        if self.run.label == &#39;Run&#39;:
+            self.run.label = &#39;Stop&#39;
+            self.run.button_type=&#39;danger&#39;
+            self.callback_obj = self.doc.add_periodic_callback(
+                self.unlocked_task, 100)
+
+        else:
+            self.run.label = &#39;Run&#39;
+            self.run.button_type = &#39;success&#39;
+            self.doc.remove_periodic_callback(self.callback_obj)
+
+
+    def step_button(self):
+        &#34;&#34;&#34;
+        Checks which process need to be stepped and execute the step. The 
+        simulate function of the Model instance cannot be used as we need to
+        visualise every step.
+        &#34;&#34;&#34;
+
+        # Plus 1 because the first time step is already plotted
+        max_res_steps = self.params[&#39;max_res_steps&#39;]
+        max_school_steps = self.params[&#39;max_school_steps&#39;]
+        school_time = self.model.scheduler.get_time(&#39;school&#39;)
+        residential_time = self.model.scheduler.get_time(&#39;residential&#39;) + 1
+
+        # If residential is not converged yet or below max steps, do a step
+        if (residential_time &lt;= max_res_steps and not self.res_ended):
+            self.res_ended = self.model.convergence_check()
+            if not self.res_ended:
+                self.model.step(residential=True)
+            else: print(&#39;Residential process ended.&#39;)
+
+        # Initial school step needs to be executed
+        elif school_time==0:
+            self.residential = False
+            self.model.step(residential=False, initial_schools=True)
+
+        # Normal school steps
+        elif (school_time &lt; max_school_steps and not self.school_ended):
+            self.school_ended = self.model.convergence_check()
+            if not self.school_ended:
+                self.model.step(residential=False, initial_schools=False)
+            else: print(&#39;School process ended.&#39;)
+
+        # Both processes are done/converged
+        else:
+            self.run_button()
+            return
+        
+        self.update_data()
+    
+
+    def reset_button(self):
+        &#34;&#34;&#34;
+        Resets the model and takes the (possible) new parameter values into
+        account.
+        &#34;&#34;&#34;
+
+        # Update the parameter values and start a new model
+        self.time_series = []
+        self.res_ended = False
+        self.school_ended = False
+        self.model = CompassModel(self.update_pars())
+
+        # Stop the model when it is still running while reset is clicked.
+        if self.run.label == &#39;Stop&#39; and self.callback_obj != None:
+            self.doc.remove_periodic_callback(self.callback_obj)
+            self.run.label = &#39;Run&#39;
+            self.run.button_type = &#39;success&#39;
+
+        self.reset_data()
+        self.doc.clear()
+        self.layout()
+
+
+    def layout(self):
+        &#34;&#34;&#34;
+        Sets up the whole layout; widgets and all plots.
+        &#34;&#34;&#34;
+
+        # Initialise all plots and widgets
+        widgets = self.widgets(width=200)
+
+        plot_width=300
+        self.init_grid_plot()
+        self.init_line_plot(width=plot_width)
+        self.init_distribution_plot(width=plot_width)
+        self.init_school_composition_plot(width=plot_width)
+        self.init_neighbourhood_composition_plot(width=plot_width)
+        
+        # Fit them in a grid with appropriate sizing modes
+        grid = column([self.grid], sizing_mode=&#34;scale_both&#34;)
+        plots = column([
+            row([self.plot, self.distribution_plot]), 
+            row([self.neighbourhood_composition_plot, self.school_composition_plot])],
+            sizing_mode=&#39;fixed&#39;)
+
+        desc = Div(text=open(join(dirname(__file__),
+            &#34;description.html&#34;)).read(), margin=0)
+
+        first_col = column([desc,
+                                row([
+                                    column([column(self.buttons(width=200)), 
+                                            column(widgets[:13])], width=210, 
+                                            sizing_mode=&#39;fixed&#39;),
+                                    column(widgets[13:], width=210), 
+                                    grid])])
+            
+        layout = gridplot([[first_col, plots]],
+            sizing_mode=&#39;stretch_width&#39;, toolbar_location=&#39;right&#39;)
+
+        self.doc.add_root(layout)
+        self.doc.title = &#34;COMPASS&#34;
+
+
+    def buttons(self, width=100):
+        self.run = Button(label=&#34;Run&#34;, button_type=&#39;success&#39;, width=width)
+        self.run.on_click(self.run_button)
+        self.step = Button(label=&#34;Step&#34;, button_type=&#39;primary&#39;, width=width)
+        self.step.on_click(self.step_button)
+        self.reset = Button(label=&#34;Reset&#34;, button_type=&#39;warning&#39;, width=width)
+        self.reset.on_click(self.reset_button)
+        buttons = [self.run, self.step, self.reset]
+        return buttons
+
+
+    def widgets(self, width=100):
+        &#34;&#34;&#34;
+        Hardcodes all widgets.
+        &#34;&#34;&#34;
+
+        header_size = &#39;&lt;h3&gt;&#39;
+
+        # Simulation
+        self.sleep = Slider(start=0, end=1, value=0.1, step=0.1,
+            title=&#39;Time between steps&#39;, width=width)
+        self.max_move_fraction = Slider(start=0, end=1,
+            value=self.params[&#39;max_move_fraction&#39;], step=.05,
+            title=&#34;Fraction moving&#34;, width=width)
+        self.max_res_steps = Slider(start=0, end=1000,
+            value=self.params[&#39;max_res_steps&#39;], step=10, 
+            title=&#34;Residential steps&#34;, width=width)
+        self.max_school_steps = Slider(start=0, end=1000,
+            value=self.params[&#39;max_school_steps&#39;], step=10, 
+            title=&#34;School steps&#34;, width=width)
+        self.threshold = Select(title=&#34;Convergence threshold&#34;,
+            options=[&#39;0.001&#39;, &#39;0.005&#39;, &#39;0.01&#39;, &#39;0.02&#39;],
+            value=str(self.params[&#39;conv_threshold&#39;]), width=width)
+        self.homophily_std = Select(title=&#34;Std. of optimal fraction&#34;,
+            options=[str(x / 100.) for x in range(11)],
+            value=str(self.params[&#39;homophily_std&#39;]), width=width)
+        self.temperature = Slider(start=0, end=500, step=1, 
+            title=&#34;Temperature&#34;,
+            value=self.params[&#39;temperature&#39;], width=width)
+        self.window_size = Slider(start=10, end=50,
+            value=self.params[&#39;window_size&#39;], step=10, 
+            title=&#34;Convergence window size&#34;, width=width)
+        self.case = Select(title=&#39;Case&#39;, 
+            options=[&#39;Amsterdam&#39;, &#39;IJburg&#39;, &#39;Lattice&#39;],
+            value=str(self.params[&#39;case&#39;]), width=width)
+
+        text = header_size + &#39;Simulation&#39; + header_size
+        simulation_div = Div(text=text, width=width)
+        simulation = [simulation_div, self.max_move_fraction, self.max_res_steps,
+            self.max_school_steps, self.threshold, self.homophily_std, 
+            self.window_size, self.temperature, self.case]
+
+        if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+            simulation = [self.max_move_fraction, self.max_school_steps, 
+            self.threshold, self.homophily_std, self.window_size, 
+            self.temperature, self.case]
+
+        # Grid
+        self.size = Select(title=&#34;Size&#34;,
+            options=[str(x * 10) for x in range(1, 11)],
+            value=str(self.params[&#39;width&#39;]), width=width)
+        self.n_neighbourhoods = Select(title=&#34;Number of neighbourhoods&#34;,
+            options=[str(x ** 2) for x in range(1, 11)],
+            value=str(self.params[&#39;n_neighbourhoods&#39;]), width=width)
+        self.n_schools = Select(title=&#34;Number of schools&#34;,
+            options=[str(x ** 2) for x in range(1, 11)],
+            value=str(self.params[&#39;n_schools&#39;]), width=width)
+        self.schools_placement = Select(title=&#34;School placement&#34;,
+            options=[&#39;evenly_spaced&#39;, &#39;random&#39;, &#39;random_per_neighbourhood&#39;],
+            value=str(self.params[&#39;schools_placement&#39;]), width=width)
+        self.household_density = Slider(start=0, end=1,
+            value=self.params[&#39;household_density&#39;], step=.05, title=&#34;Density&#34;,
+            width=width)
+        self.group_dist = Slider(start=0, end=1,
+            value=self.params[&#39;group_dist&#39;][0][0], step=.05, title=&#34;Share blue&#34;,
+            width=width)
+        self.torus = Select(title=&#34;Torus&#34;, options=[&#39;True&#39;, &#39;False&#39;],
+            value=str(self.params[&#39;torus&#39;]), width=width)
+
+        if self.params[&#39;scheduling&#39;]==0:
+            scheduling = &#39;replacement&#39;
+        else: scheduling = &#39;without_replacement&#39;
+        self.scheduling = Select(title=&#34;Scheduling method&#34;,
+            options=[&#39;replacement&#39;, &#39;without_replacement&#39;],
+            value=scheduling, width=width)
+
+        text = header_size + &#39;Environment&#39; + header_size
+        environment_div = Div(text=text, width=width)
+        grid = [environment_div, self.size, self.n_neighbourhoods,
+            self.n_schools, self.household_density, self.group_dist,
+            self.scheduling, self.torus, self.schools_placement]
+        
+        if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+            grid = [self.scheduling]
+
+        # School
+        self.school_capacity = Slider(start=0, end=3,
+            value=self.params[&#39;school_capacity&#39;], step=.1,
+            title=&#34;School capacity&#34;, width=width)
+        self.school_dropdown_func(width=width)
+        text = header_size + &#39;Schools&#39; + header_size
+        school_div = Div(text=text, width=width)
+        school = [self.school_capacity, self.school_dropdown]
+
+        # Household
+        self.alpha = Slider(start=0, end=1, value=self.params[&#39;alpha&#39;],
+            step=.05, title=&#34;Alpha&#34;, width=width)
+        # self.bounded_neighbourhood = Select(title=&#34;Bounded Neighbourhood&#34;,
+        #     options=[&#39;True&#39;, &#39;False&#39;],
+        #     value=str(self.params[&#39;bounded_neighbourhood&#39;]))
+        self.utility_at_max = Slider(start=0, end=1,
+            value=self.params[&#39;utility_at_max&#39;][0][0], step=.05,
+            title=&#34;Utility at homogeneity&#34;, width=width)
+        self.optimal_fraction = Slider(start=0, end=1,
+            value=self.params[&#39;optimal_fraction&#39;][0][0], step=.05,
+            title=&#34;Optimal fraction&#34;, width=width)
+        # self.satisfaction = Slider(start=0, end=1,
+        #     value=self.params[&#39;category_thresholds&#39;][0][0], step=.05,
+        #     title=&#34;Satisfaction Threshold&#34;)
+        self.radius = Select(title=&#34;Radius&#34;,
+            options=[str(x) for x in range(1, 11)],
+            value=str(self.params[&#39;radius&#39;]), width=width)
+        # self.moore = Select(title=&#34;Moore&#34;, options=[&#39;True&#39;, &#39;False&#39;],
+        #                     value=str(self.params[&#39;moore&#39;]))
+        self.neighbourhood_mixture = Slider(start=0, end=1,
+            value=self.params[&#39;neighbourhood_mixture&#39;], step=.05,
+            title=&#34;Neighbourhood Mixture&#34;, width=width)
+        self.num_considered = Slider(start=1, end=10,
+            value=self.params[&#39;num_considered&#39;], step=1,
+            title=&#34;Considered spots&#34;, width=width)
+        self.ranking_method = Select(title=&#34;Ranking method&#34;,
+            options=[&#39;highest&#39;, &#39;proportional&#39;],
+            value=self.params[&#39;ranking_method&#39;], width=width)
+
+        text = header_size + &#39;Households&#39; + header_size
+        household_div = Div(text=text, width=width)
+        household = [household_div, self.alpha,
+            self.utility_at_max, self.optimal_fraction, self.radius,
+            self.neighbourhood_mixture, self.num_considered, self.ranking_method]
+
+        if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+            household = [self.alpha, self.utility_at_max, 
+            self.optimal_fraction, self.ranking_method]
+
+        widgets = simulation + grid + school + household
+
+        return widgets
+
+
+    def update_pars(self):
+        &#34;&#34;&#34;
+        Updates the parameters.
+        &#34;&#34;&#34;
+
+        self.params[&#39;alpha&#39;] = self.alpha.value
+        self.params[&#39;max_move_fraction&#39;] = self.max_move_fraction.value
+        self.params[&#39;max_school_steps&#39;]= self.max_school_steps.value
+        self.params[&#39;conv_threshold&#39;] = float(self.threshold.value)
+        self.params[&#39;utility_at_max&#39;] = [[self.utility_at_max.value,
+            self.utility_at_max.value]]
+        self.params[&#39;optimal_fraction&#39;] = [[self.optimal_fraction.value,
+            self.optimal_fraction.value]]
+        self.params[&#39;school_capacity&#39;] = self.school_capacity.value
+        self.params[&#39;neighbourhood_mixture&#39;] = self.neighbourhood_mixture.value
+        self.params[&#39;temperature&#39;] = self.temperature.value
+        self.params[&#39;homophily_std&#39;] = float(self.homophily_std.value)
+        self.params[&#39;window_size&#39;] = int(self.window_size.value)
+        self.params[&#39;num_considered&#39;] = int(self.num_considered.value)
+        self.params[&#39;ranking_method&#39;] = self.ranking_method.value
+        self.params[&#39;case&#39;] = self.case.value
+            
+        if self.scheduling.value==&#39;replacement&#39;:
+            self.params[&#39;scheduling&#39;] = 0 
+        else:
+            self.params[&#39;scheduling&#39;] = 1
+
+        if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+            self.params[&#39;max_res_steps&#39;] = 0
+            return self.params
+
+        self.params[&#39;width&#39;] = int(self.size.value)
+        self.params[&#39;height&#39;] = int(self.size.value)
+        self.grid.x_range.end = self.params[&#39;width&#39;]
+        self.grid.y_range.end = self.params[&#39;height&#39;]
+        self.params[&#39;torus&#39;] = eval(self.torus.value)
+        self.params[&#39;household_density&#39;] = self.household_density.value
+        self.params[&#39;max_res_steps&#39;]= self.max_res_steps.value
+        self.params[&#39;n_neighbourhoods&#39;] = int(self.n_neighbourhoods.value)
+        self.params[&#39;n_schools&#39;] = int(self.n_schools.value)
+        self.params[&#39;schools_placement&#39;] = self.schools_placement.value
+        self.params[&#39;group_dist&#39;] = [[self.group_dist.value,
+            1-self.group_dist.value]]
+
+        return self.params
+
+    
+    def run_visualisation(self):
+
+        apps = {&#39;/&#39;: Application(FunctionHandler(BokehServer))}
+
+        server = Server(apps, port=5004)
+        # To avoid bokeh&#39;s logger spamming
+        log = logging.getLogger(&#39;bokeh&#39;)
+        log.setLevel(&#39;ERROR&#39;)
+        server.io_loop.add_callback(server.show, &#34;/&#34;)
+        server.io_loop.start()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="compass.visualisation.BokehServer.agent_filter"><code class="name flex">
+<span>def <span class="ident">agent_filter</span></span>(<span>self, source, agent_type)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function creates a boolean agent filter view for the Bokeh
+visualisation instance.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source</code></strong> :&ensp;<code>CDS</code></dt>
+<dd>ColumnDataSource from Bokeh.</dd>
+<dt><strong><code>agent_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the agent type to be filtered.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>view</code></dt>
+<dd>the view that can be used in plots.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agent_filter(self, source, agent_type):
+    &#34;&#34;&#34;
+    This function creates a boolean agent filter view for the Bokeh
+    visualisation instance.
+
+    Args:
+        source (CDS): ColumnDataSource from Bokeh.
+        agent_type (str): the agent type to be filtered.
+
+    Returns:
+        view: the view that can be used in plots.
+    &#34;&#34;&#34;
+
+    filter = [True if agent == agent_type else False \
+                for agent in source.data[&#39;agent_type&#39;]]
+    view = CDSView(source=source, filters=[BooleanFilter(filter)])
+    return view</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.blocking_task"><code class="name flex">
+<span>def <span class="ident">blocking_task</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def blocking_task(self):
+    time.sleep(0.1)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.buttons"><code class="name flex">
+<span>def <span class="ident">buttons</span></span>(<span>self, width=100)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def buttons(self, width=100):
+    self.run = Button(label=&#34;Run&#34;, button_type=&#39;success&#39;, width=width)
+    self.run.on_click(self.run_button)
+    self.step = Button(label=&#34;Step&#34;, button_type=&#39;primary&#39;, width=width)
+    self.step.on_click(self.step_button)
+    self.reset = Button(label=&#34;Reset&#34;, button_type=&#39;warning&#39;, width=width)
+    self.reset.on_click(self.reset_button)
+    buttons = [self.run, self.step, self.reset]
+    return buttons</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.composition_data"><code class="name flex">
+<span>def <span class="ident">composition_data</span></span>(<span>self, agent_type='school')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculates the composition data for schools or neighbourhoods.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>agent_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>either 'school' or 'neighbourhood'</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>DataFrame of fraction blues and reds per agent.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def composition_data(self, agent_type=&#39;school&#39;):
+    &#34;&#34;&#34;
+    Calculates the composition data for schools or neighbourhoods.
+
+    Args:
+        agent_type (str): either &#39;school&#39; or &#39;neighbourhood&#39;
+
+    Returns:
+        DataFrame of fraction blues and reds per agent.
+    &#34;&#34;&#34;
+
+    # Loop over all schools to get the locations and compositions
+    count = 0
+    data = self.data[self.data.agent_type==agent_type]
+    reds = [0]*data.shape[0]
+    blues = [0]*data.shape[0]
+
+    for index, row in data.iterrows():
+
+        total = row.group0 + row.group1
+
+        if total==0:
+            total = 1
+
+        blues[count] = row.group0 / total
+        reds[count] = row.group1 / total
+        count += 1
+
+    composition_data = {&#39;blues&#39;:blues, &#39;reds&#39;:reds}
+
+    return composition_data</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.customise_grid"><code class="name flex">
+<span>def <span class="ident">customise_grid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Grid customisation; agent colors, neighbourhood boundaries and schools.</p>
+<h2 id="todo">Todo</h2>
+<p>size should come from a parameter, as they do not scale properly
+with grid size.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def customise_grid(self):
+    &#34;&#34;&#34;
+    Grid customisation; agent colors, neighbourhood boundaries and schools.
+
+    Todo:
+        size should come from a parameter, as they do not scale properly
+        with grid size.
+    &#34;&#34;&#34;
+
+    # Agent colours, agent tooltips and grid initialisation
+    mapper = linear_cmap(field_name=&#39;group1&#39;, palette=[&#39;blue&#39;,&#39;red&#39;],
+                            low=0 ,high=1)
+    TOOLTIPS = [(&#34;Residential utility&#34;, &#34;@res_utility&#34;),
+                (&#39;Local composition&#39;, &#39;@local_comp&#39;),
+                (&#39;Neighbourhood composition&#39;, &#39;@n_comp&#39;),
+                (&#34;School utility&#34;, &#34;@school_utility&#34;),
+                (&#39;Distance&#39;, &#39;@dist_school&#39;),
+                (&#39;School composition&#39;, &#39;@s_comp&#39;),
+                (&#39;School composition utility&#39;, &#39;@school_comp_utility&#39;)]
+    hover = HoverTool(names=[&#34;households&#34;, &#34;schools&#34;], tooltips=TOOLTIPS)
+    self.grid = figure(
+        x_range=(self.model.grid.x_min, self.model.grid.x_max),
+        y_range=(self.model.grid.y_min, self.model.grid.y_max),
+        tools=[hover, &#39;tap&#39;, &#39;pan&#39;, WheelZoomTool()],
+        tooltips=TOOLTIPS)   
+    
+    # Set WheelZoomTool active by default if not lattice
+    if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+        self.grid.toolbar.active_scroll=self.grid.select_one(WheelZoomTool)
+
+
+    # Add a background map using OpenStreetMap (Google Maps is too 
+    # computationally expensive and cannot zoom properly)
+    if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+        self.grid.add_tile(get_provider(&#39;OSM&#39;))
+ 
+    self.grid.axis.visible = False
+    self.grid.grid.visible = False
+    # Function to highlight all households that are currently enrolled in
+    # the same school.
+    self.source.selected.on_change(&#34;indices&#34;, self.select_households)
+
+    # Plot households
+    self.grid.circle(x=&#34;x&#34;, y=&#34;y&#34;, size=5,
+                    view=self.household_view, source=self.source, 
+                    fill_color=mapper, line_color=&#39;black&#39;, alpha=0.8, 
+                    nonselection_fill_alpha=0.2, selection_fill_alpha=1,
+                    name=&#39;households&#39;)
+
+    # Plot schools
+    self.grid.circle(x=&#34;x&#34;, y=&#34;y&#34;, size=7, source=self.source,
+                        view=self.school_view, fill_color=&#39;yellow&#39;,
+                        line_color=&#39;black&#39;, name=&#39;schools&#39;)
+    
+    # Plot neighbourhoods
+    self.grid.patches(&#39;x&#39;, &#39;y&#39;, source=self.source,
+            view=self.neighbourhood_view, fill_color=None,
+            line_color=&#34;black&#34;, line_width=2, hover_alpha=0,
+            hover_line_color=None, name=&#39;neighbourhoods&#39;,
+            selection_fill_alpha=0) </code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.dropdown_select"><code class="name flex">
+<span>def <span class="ident">dropdown_select</span></span>(<span>self, event)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function creates a dropdown of all schools.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong> :&ensp;<code>str</code></dt>
+<dd>the selected school</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dropdown_select(self, event):
+    &#34;&#34;&#34;
+    This function creates a dropdown of all schools.
+
+    Args:
+        event (str): the selected school
+    &#34;&#34;&#34;
+    
+    school_id = int(event.item)
+    same_school = self.data[self.data.school_id == school_id].index
+    self.source.selected.indices = list(same_school)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.init_distribution_plot"><code class="name flex">
+<span>def <span class="ident">init_distribution_plot</span></span>(<span>self, width=200)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initiates the distribution plots for residential and school utility.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_distribution_plot(self, width=200):
+    &#34;&#34;&#34;
+    Initiates the distribution plots for residential and school utility.
+    &#34;&#34;&#34;
+
+    self.distribution_plot = figure(title=&#34;Utility distributions&#34;,
+        x_range=(0, 1), plot_height=300, plot_width=width)
+
+    hist_data = self.data[self.data.agent_type==&#39;household&#39;][[&#39;res_utility&#39;,
+        &#39;school_utility&#39;]]
+
+    # Residential utility
+    hist, edges = np.histogram(hist_data.res_utility, density=True, bins=50)
+    self.res_quads = self.distribution_plot.quad(top=hist, bottom=0,
+        left=edges[:-1], right=edges[1:], fill_color=&#34;green&#34;,
+        line_color=&#34;white&#34;, alpha=0.7, legend_label=&#39;Residential utility&#39;)
+
+    # School utility
+    if not self.residential:
+        hist, edges = np.histogram(hist_data.school_utility, density=True,
+                                    bins=50)
+    # Do not show school utilities yet as they are all zero!
+    hist = np.zeros(len(hist))
+    self.school_quads = self.distribution_plot.quad(top=hist, bottom=0,
+        left=edges[:-1], right=edges[1:], fill_color=&#34;orange&#34;,
+        line_color=&#34;white&#34;, alpha=0.7, legend_label=&#39;School utility&#39;)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.init_grid_plot"><code class="name flex">
+<span>def <span class="ident">init_grid_plot</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initiates the grid plot for the visualisation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_grid_plot(self):
+    &#34;&#34;&#34;
+    Initiates the grid plot for the visualisation.
+    &#34;&#34;&#34;
+
+    # Create filters to plot households and schools sequentially
+    self.household_view = self.agent_filter(self.source, &#39;household&#39;)
+    self.school_view = self.agent_filter(self.source, &#39;school&#39;)
+    self.neighbourhood_view = self.agent_filter(self.source, &#39;neighbourhood&#39;)
+    self.customise_grid()</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.init_line_plot"><code class="name flex">
+<span>def <span class="ident">init_line_plot</span></span>(<span>self, width=200)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initiates the line plot for the server.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_line_plot(self, width=200):
+    &#34;&#34;&#34;
+    Initiates the line plot for the server.
+    &#34;&#34;&#34;
+
+    # Create a ColumnDataSource that can be updated at every step.
+    TOOLTIPS = [(&#34;Residential utility&#34;, &#34;@res_utility&#34;),
+                (&#34;Residential segregation&#34;, &#34;@res_seg&#34;),
+                (&#34;School utility&#34;, &#34;@school_utility&#34;),
+                (&#34;School segregation&#34;, &#34;@school_seg&#34;),]
+    self.plot = figure(tooltips=TOOLTIPS, y_range=(0, 1), 
+        plot_height=300, plot_width=width,
+        title=&#34;Neighbourhood/school utility/segregation&#34;)
+
+    plot_pars = {&#39;Residential utility&#39;:
+                    {&#39;y&#39;:&#39;res_utility&#39;, &#39;color&#39;:&#39;green&#39;, 
+                    &#39;lower&#39;:&#39;res_q5&#39;, &#39;upper&#39;:&#39;res_q95&#39;},
+                &#39;Residential segregation&#39;:
+                    {&#39;y&#39;:&#39;res_seg&#39;, &#39;color&#39;:&#39;blue&#39;, 
+                    &#39;lower&#39;:None, &#39;upper&#39;:None},
+                &#39;School utility&#39;:
+                    {&#39;y&#39;:&#39;school_utility&#39;, &#39;color&#39;:&#39;orange&#39;, 
+                    &#39;lower&#39;:&#39;school_q5&#39;, &#39;upper&#39;:&#39;school_q95&#39;},
+                &#39;School segregation&#39;:
+                    {&#39;y&#39;:&#39;school_seg&#39;, &#39;color&#39;:&#39;purple&#39;, 
+                    &#39;lower&#39;:None, &#39;upper&#39;:None}}
+
+    # Plot lines, markers and bands (for utility only)
+    for label in plot_pars.keys():
+        y = plot_pars[label][&#39;y&#39;]
+        color = plot_pars[label][&#39;color&#39;]
+        lower = plot_pars[label][&#39;lower&#39;]
+        upper = plot_pars[label][&#39;upper&#39;]
+        self.plot.line(x=&#39;time&#39;, y=y, source=self.line_source,
+            line_width=2, color=color, legend_label=label)
+        self.plot.circle(x=&#39;time&#39;, y=y, source=self.line_source,
+            size=5, color=color, legend_label=label)
+        
+        if lower!=None:
+            band = Band(base=&#39;time&#39;, lower=lower, upper=upper,
+                source=self.line_source, fill_alpha=0.2, fill_color=color)
+        self.plot.add_layout(band)
+
+    self.plot.legend.location = &#39;top_left&#39;</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.init_neighbourhood_composition_plot"><code class="name flex">
+<span>def <span class="ident">init_neighbourhood_composition_plot</span></span>(<span>self, width=200)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initiates the neighbourhood composition plot.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_neighbourhood_composition_plot(self, width=200):
+    &#34;&#34;&#34;
+    Initiates the neighbourhood composition plot.
+    &#34;&#34;&#34;
+    self.neighbourhood_composition_quads = {}
+    self.neighbourhood_composition_plot = figure(title=&#34;Neighbourhood composition&#34;,
+        x_range=(0, 1), plot_height=300, plot_width=width)
+
+    fractions = self.composition_data(agent_type=&#39;neighbourhood&#39;)
+    for group in fractions.keys():
+        
+        hist, edges = np.histogram(fractions[group], density=True, bins=20)
+        self.neighbourhood_composition_quads[group] = \
+            self.neighbourhood_composition_plot.quad(
+            top=hist, bottom=0, left=edges[:-1], right=edges[1:], 
+            fill_color=group[:-1], line_color=&#34;white&#34;, alpha=0.7, 
+            legend_label=group)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.init_school_composition_plot"><code class="name flex">
+<span>def <span class="ident">init_school_composition_plot</span></span>(<span>self, width=200)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initiates the school composition plot.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_school_composition_plot(self, width=200):
+    &#34;&#34;&#34;
+    Initiates the school composition plot.
+    &#34;&#34;&#34;
+    
+    self.school_composition_quads = {}
+    self.school_composition_plot = figure(title=&#34;School composition&#34;,
+        x_range=(0, 1), plot_height=300, plot_width=width)
+
+    fractions = self.composition_data(agent_type=&#39;school&#39;)
+    for group in fractions.keys():
+        
+        hist, edges = np.histogram(fractions[group], density=True, bins=20)
+        self.school_composition_quads[group] = self.school_composition_plot.quad(
+            top=hist, bottom=0, left=edges[:-1], right=edges[1:], 
+            fill_color=group[:-1], line_color=&#34;white&#34;, alpha=0.7, 
+            legend_label=group)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.layout"><code class="name flex">
+<span>def <span class="ident">layout</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets up the whole layout; widgets and all plots.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def layout(self):
+    &#34;&#34;&#34;
+    Sets up the whole layout; widgets and all plots.
+    &#34;&#34;&#34;
+
+    # Initialise all plots and widgets
+    widgets = self.widgets(width=200)
+
+    plot_width=300
+    self.init_grid_plot()
+    self.init_line_plot(width=plot_width)
+    self.init_distribution_plot(width=plot_width)
+    self.init_school_composition_plot(width=plot_width)
+    self.init_neighbourhood_composition_plot(width=plot_width)
+    
+    # Fit them in a grid with appropriate sizing modes
+    grid = column([self.grid], sizing_mode=&#34;scale_both&#34;)
+    plots = column([
+        row([self.plot, self.distribution_plot]), 
+        row([self.neighbourhood_composition_plot, self.school_composition_plot])],
+        sizing_mode=&#39;fixed&#39;)
+
+    desc = Div(text=open(join(dirname(__file__),
+        &#34;description.html&#34;)).read(), margin=0)
+
+    first_col = column([desc,
+                            row([
+                                column([column(self.buttons(width=200)), 
+                                        column(widgets[:13])], width=210, 
+                                        sizing_mode=&#39;fixed&#39;),
+                                column(widgets[13:], width=210), 
+                                grid])])
+        
+    layout = gridplot([[first_col, plots]],
+        sizing_mode=&#39;stretch_width&#39;, toolbar_location=&#39;right&#39;)
+
+    self.doc.add_root(layout)
+    self.doc.title = &#34;COMPASS&#34;</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.reset_button"><code class="name flex">
+<span>def <span class="ident">reset_button</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Resets the model and takes the (possible) new parameter values into
+account.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_button(self):
+    &#34;&#34;&#34;
+    Resets the model and takes the (possible) new parameter values into
+    account.
+    &#34;&#34;&#34;
+
+    # Update the parameter values and start a new model
+    self.time_series = []
+    self.res_ended = False
+    self.school_ended = False
+    self.model = CompassModel(self.update_pars())
+
+    # Stop the model when it is still running while reset is clicked.
+    if self.run.label == &#39;Stop&#39; and self.callback_obj != None:
+        self.doc.remove_periodic_callback(self.callback_obj)
+        self.run.label = &#39;Run&#39;
+        self.run.button_type = &#39;success&#39;
+
+    self.reset_data()
+    self.doc.clear()
+    self.layout()</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.reset_data"><code class="name flex">
+<span>def <span class="ident">reset_data</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Resets the data, could be the initial reset (new sources need to be
+created) or a subsequent one (only update the data).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_data(self):
+    &#34;&#34;&#34;
+    Resets the data, could be the initial reset (new sources need to be 
+    created) or a subsequent one (only update the data).
+    &#34;&#34;&#34;
+
+    # Callback object to run, step and reset the model properly.
+    self.residential = True
+    self.callback_obj = None
+    self.data = self.model.measurements.get_bokeh_vis_data()
+    
+    # Check if it&#39;s the initial reset (create new sources) or a reset button
+    # click (update .data only)
+    try:
+        self.source.data = self.data
+        self.line_source.data = self.data[self.data.agent_type == &#39;system&#39;]            
+        self.update_filters()
+        self.update_data()
+
+    # Reset is clicked --&gt; update .data only
+    except AttributeError:
+        self.source = ColumnDataSource(self.data)
+        self.line_source = ColumnDataSource(
+            self.data[self.data.agent_type==&#39;system&#39;])</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.run_button"><code class="name flex">
+<span>def <span class="ident">run_button</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles the run button clicks, coloring and starts the simulation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_button(self):
+    &#34;&#34;&#34;
+    Handles the run button clicks, coloring and starts the simulation.
+    &#34;&#34;&#34;
+    if self.run.label == &#39;Run&#39;:
+        self.run.label = &#39;Stop&#39;
+        self.run.button_type=&#39;danger&#39;
+        self.callback_obj = self.doc.add_periodic_callback(
+            self.unlocked_task, 100)
+
+    else:
+        self.run.label = &#39;Run&#39;
+        self.run.button_type = &#39;success&#39;
+        self.doc.remove_periodic_callback(self.callback_obj)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.run_visualisation"><code class="name flex">
+<span>def <span class="ident">run_visualisation</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_visualisation(self):
+
+    apps = {&#39;/&#39;: Application(FunctionHandler(BokehServer))}
+
+    server = Server(apps, port=5004)
+    # To avoid bokeh&#39;s logger spamming
+    log = logging.getLogger(&#39;bokeh&#39;)
+    log.setLevel(&#39;ERROR&#39;)
+    server.io_loop.add_callback(server.show, &#34;/&#34;)
+    server.io_loop.start()</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.school_dropdown_func"><code class="name flex">
+<span>def <span class="ident">school_dropdown_func</span></span>(<span>self, width=100)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Event listener for the dropdown of all schools.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def school_dropdown_func(self, width=100):
+    &#34;&#34;&#34;
+    Event listener for the dropdown of all schools.
+    &#34;&#34;&#34;
+    schools = self.data[self.data.agent_type == &#39;school&#39;]
+    school_locs = [str(num) for num in range(len(schools))]
+    self.school_dropdown = Dropdown(label=&#39;Select School&#39;,
+        menu=school_locs, width=width)
+    self.school_dropdown.on_click(self.dropdown_select)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.select_households"><code class="name flex">
+<span>def <span class="ident">select_households</span></span>(<span>self, attr, old, new)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function selects all households that are in the same school.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>attr</code></strong></dt>
+<dd>-</dd>
+<dt><strong><code>old</code></strong></dt>
+<dd>-</dd>
+<dt><strong><code>new</code></strong> :&ensp;<code>list</code></dt>
+<dd>indices that are clicked (can be multiple)</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def select_households(self, attr, old, new):
+    &#34;&#34;&#34;
+    This function selects all households that are in the same school.
+
+    Args:
+        attr: -
+        old: -
+        new (list): indices that are clicked (can be multiple)
+    &#34;&#34;&#34;
+    index = new[0]
+    school_id = self.data.iloc[index].school_id
+    # List all agents that have the same school id
+    same_school = self.data[self.data.school_id == school_id].index
+    self.source.selected.indices = list(same_school)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.step_button"><code class="name flex">
+<span>def <span class="ident">step_button</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks which process need to be stepped and execute the step. The
+simulate function of the Model instance cannot be used as we need to
+visualise every step.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def step_button(self):
+    &#34;&#34;&#34;
+    Checks which process need to be stepped and execute the step. The 
+    simulate function of the Model instance cannot be used as we need to
+    visualise every step.
+    &#34;&#34;&#34;
+
+    # Plus 1 because the first time step is already plotted
+    max_res_steps = self.params[&#39;max_res_steps&#39;]
+    max_school_steps = self.params[&#39;max_school_steps&#39;]
+    school_time = self.model.scheduler.get_time(&#39;school&#39;)
+    residential_time = self.model.scheduler.get_time(&#39;residential&#39;) + 1
+
+    # If residential is not converged yet or below max steps, do a step
+    if (residential_time &lt;= max_res_steps and not self.res_ended):
+        self.res_ended = self.model.convergence_check()
+        if not self.res_ended:
+            self.model.step(residential=True)
+        else: print(&#39;Residential process ended.&#39;)
+
+    # Initial school step needs to be executed
+    elif school_time==0:
+        self.residential = False
+        self.model.step(residential=False, initial_schools=True)
+
+    # Normal school steps
+    elif (school_time &lt; max_school_steps and not self.school_ended):
+        self.school_ended = self.model.convergence_check()
+        if not self.school_ended:
+            self.model.step(residential=False, initial_schools=False)
+        else: print(&#39;School process ended.&#39;)
+
+    # Both processes are done/converged
+    else:
+        self.run_button()
+        return
+    
+    self.update_data()</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.unlocked_task"><code class="name flex">
+<span>def <span class="ident">unlocked_task</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Needed to make sure that if the reset button is clicked it can go
+inbetween events, otherwise it can be quite slow.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@gen.coroutine
+@without_document_lock
+def unlocked_task(self):
+    &#34;&#34;&#34;
+    Needed to make sure that if the reset button is clicked it can go 
+    inbetween events, otherwise it can be quite slow.
+    &#34;&#34;&#34;
+    yield self.executor.submit(self.blocking_task)
+    self.doc.add_next_tick_callback(partial(self.step_button))</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.update_data"><code class="name flex">
+<span>def <span class="ident">update_data</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates all data sources.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_data(self):
+    &#34;&#34;&#34;
+    Updates all data sources.
+    &#34;&#34;&#34;
+
+    # Update all plots in the figure
+    self.data = self.model.measurements.get_bokeh_vis_data()
+    self.source.stream(self.data, len(self.data))
+    self.line_source.stream(self.data[self.data.agent_type == &#39;system&#39;])
+    self.school_dropdown_func()
+
+    # Update the utility histograms
+    hist_data = self.data[self.data.agent_type==&#39;household&#39;][[&#39;res_utility&#39;,
+        &#39;school_utility&#39;]]
+    hist, edges = np.histogram(hist_data.res_utility, density=True, bins=50)
+    self.res_quads.data_source.data[&#39;top&#39;] = hist
+    self.res_quads.data_source.data[&#39;left&#39;] = edges[:-1]
+    self.res_quads.data_source.data[&#39;right&#39;] = edges[1:]
+
+    # Only start to show school utilities when the residential process is 
+    # finished
+    if not self.residential:
+        hist, edges = np.histogram(hist_data.school_utility, 
+            density=True, bins=50)
+    else:
+        hist = np.zeros(len(hist))
+
+    self.school_quads.data_source.data[&#39;top&#39;] = hist
+    self.school_quads.data_source.data[&#39;left&#39;] = edges[:-1]
+    self.school_quads.data_source.data[&#39;right&#39;] = edges[1:]
+
+    # Update the composition histograms
+    for quads in [self.neighbourhood_composition_quads, self.school_composition_quads]:
+
+        # Grab the new data
+        if quads==self.neighbourhood_composition_quads:
+            hist_data = self.composition_data(agent_type=&#39;neighbourhood&#39;)
+        else:
+            hist_data = self.composition_data(agent_type=&#39;school&#39;)
+
+        # Update the bars and edges
+        for group in hist_data.keys():
+
+            hist, edges = np.histogram(hist_data[group], density=True, bins=20)
+
+            # Update histogram
+            quads[group].data_source.data[&#39;top&#39;] = hist
+            quads[group].data_source.data[&#39;left&#39;] = edges[:-1]
+            quads[group].data_source.data[&#39;right&#39;] = edges[1:]</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.update_filters"><code class="name flex">
+<span>def <span class="ident">update_filters</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates the view filters for households, schools and neighbourhoods as
+they can change when reset is clicked (i.e., new model instance).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_filters(self):
+    &#34;&#34;&#34;
+    Updates the view filters for households, schools and neighbourhoods as
+    they can change when reset is clicked (i.e., new model instance).
+    &#34;&#34;&#34;
+
+    # Update household filter
+    household_filter = [True if agent == &#39;household&#39; else False for agent \
+        in self.source.data[&#39;agent_type&#39;]]
+    self.household_view.filters[0] = BooleanFilter(household_filter)
+
+    # Update neighbourhood filter
+    neighbourhood_filter = [True if agent == &#39;neighbourhood&#39; else False for\
+        agent in self.source.data[&#39;agent_type&#39;]]
+    self.neighbourhood_view.filters[0] = BooleanFilter(neighbourhood_filter)
+
+    # Update school filter
+    school_filter = [True if agent == &#39;school&#39; else False for agent in \
+        self.source.data[&#39;agent_type&#39;]]
+    self.school_view.filters[0] = BooleanFilter(school_filter)</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.update_pars"><code class="name flex">
+<span>def <span class="ident">update_pars</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates the parameters.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_pars(self):
+    &#34;&#34;&#34;
+    Updates the parameters.
+    &#34;&#34;&#34;
+
+    self.params[&#39;alpha&#39;] = self.alpha.value
+    self.params[&#39;max_move_fraction&#39;] = self.max_move_fraction.value
+    self.params[&#39;max_school_steps&#39;]= self.max_school_steps.value
+    self.params[&#39;conv_threshold&#39;] = float(self.threshold.value)
+    self.params[&#39;utility_at_max&#39;] = [[self.utility_at_max.value,
+        self.utility_at_max.value]]
+    self.params[&#39;optimal_fraction&#39;] = [[self.optimal_fraction.value,
+        self.optimal_fraction.value]]
+    self.params[&#39;school_capacity&#39;] = self.school_capacity.value
+    self.params[&#39;neighbourhood_mixture&#39;] = self.neighbourhood_mixture.value
+    self.params[&#39;temperature&#39;] = self.temperature.value
+    self.params[&#39;homophily_std&#39;] = float(self.homophily_std.value)
+    self.params[&#39;window_size&#39;] = int(self.window_size.value)
+    self.params[&#39;num_considered&#39;] = int(self.num_considered.value)
+    self.params[&#39;ranking_method&#39;] = self.ranking_method.value
+    self.params[&#39;case&#39;] = self.case.value
+        
+    if self.scheduling.value==&#39;replacement&#39;:
+        self.params[&#39;scheduling&#39;] = 0 
+    else:
+        self.params[&#39;scheduling&#39;] = 1
+
+    if self.params[&#39;case&#39;].lower()!=&#39;lattice&#39;:
+        self.params[&#39;max_res_steps&#39;] = 0
+        return self.params
+
+    self.params[&#39;width&#39;] = int(self.size.value)
+    self.params[&#39;height&#39;] = int(self.size.value)
+    self.grid.x_range.end = self.params[&#39;width&#39;]
+    self.grid.y_range.end = self.params[&#39;height&#39;]
+    self.params[&#39;torus&#39;] = eval(self.torus.value)
+    self.params[&#39;household_density&#39;] = self.household_density.value
+    self.params[&#39;max_res_steps&#39;]= self.max_res_steps.value
+    self.params[&#39;n_neighbourhoods&#39;] = int(self.n_neighbourhoods.value)
+    self.params[&#39;n_schools&#39;] = int(self.n_schools.value)
+    self.params[&#39;schools_placement&#39;] = self.schools_placement.value
+    self.params[&#39;group_dist&#39;] = [[self.group_dist.value,
+        1-self.group_dist.value]]
+
+    return self.params</code></pre>
+</details>
+</dd>
+<dt id="compass.visualisation.BokehServer.widgets"><code class="name flex">
+<span>def <span class="ident">widgets</span></span>(<span>self, width=100)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Hardcodes all widgets.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def widgets(self, width=100):
+    &#34;&#34;&#34;
+    Hardcodes all widgets.
+    &#34;&#34;&#34;
+
+    header_size = &#39;&lt;h3&gt;&#39;
+
+    # Simulation
+    self.sleep = Slider(start=0, end=1, value=0.1, step=0.1,
+        title=&#39;Time between steps&#39;, width=width)
+    self.max_move_fraction = Slider(start=0, end=1,
+        value=self.params[&#39;max_move_fraction&#39;], step=.05,
+        title=&#34;Fraction moving&#34;, width=width)
+    self.max_res_steps = Slider(start=0, end=1000,
+        value=self.params[&#39;max_res_steps&#39;], step=10, 
+        title=&#34;Residential steps&#34;, width=width)
+    self.max_school_steps = Slider(start=0, end=1000,
+        value=self.params[&#39;max_school_steps&#39;], step=10, 
+        title=&#34;School steps&#34;, width=width)
+    self.threshold = Select(title=&#34;Convergence threshold&#34;,
+        options=[&#39;0.001&#39;, &#39;0.005&#39;, &#39;0.01&#39;, &#39;0.02&#39;],
+        value=str(self.params[&#39;conv_threshold&#39;]), width=width)
+    self.homophily_std = Select(title=&#34;Std. of optimal fraction&#34;,
+        options=[str(x / 100.) for x in range(11)],
+        value=str(self.params[&#39;homophily_std&#39;]), width=width)
+    self.temperature = Slider(start=0, end=500, step=1, 
+        title=&#34;Temperature&#34;,
+        value=self.params[&#39;temperature&#39;], width=width)
+    self.window_size = Slider(start=10, end=50,
+        value=self.params[&#39;window_size&#39;], step=10, 
+        title=&#34;Convergence window size&#34;, width=width)
+    self.case = Select(title=&#39;Case&#39;, 
+        options=[&#39;Amsterdam&#39;, &#39;IJburg&#39;, &#39;Lattice&#39;],
+        value=str(self.params[&#39;case&#39;]), width=width)
+
+    text = header_size + &#39;Simulation&#39; + header_size
+    simulation_div = Div(text=text, width=width)
+    simulation = [simulation_div, self.max_move_fraction, self.max_res_steps,
+        self.max_school_steps, self.threshold, self.homophily_std, 
+        self.window_size, self.temperature, self.case]
+
+    if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+        simulation = [self.max_move_fraction, self.max_school_steps, 
+        self.threshold, self.homophily_std, self.window_size, 
+        self.temperature, self.case]
+
+    # Grid
+    self.size = Select(title=&#34;Size&#34;,
+        options=[str(x * 10) for x in range(1, 11)],
+        value=str(self.params[&#39;width&#39;]), width=width)
+    self.n_neighbourhoods = Select(title=&#34;Number of neighbourhoods&#34;,
+        options=[str(x ** 2) for x in range(1, 11)],
+        value=str(self.params[&#39;n_neighbourhoods&#39;]), width=width)
+    self.n_schools = Select(title=&#34;Number of schools&#34;,
+        options=[str(x ** 2) for x in range(1, 11)],
+        value=str(self.params[&#39;n_schools&#39;]), width=width)
+    self.schools_placement = Select(title=&#34;School placement&#34;,
+        options=[&#39;evenly_spaced&#39;, &#39;random&#39;, &#39;random_per_neighbourhood&#39;],
+        value=str(self.params[&#39;schools_placement&#39;]), width=width)
+    self.household_density = Slider(start=0, end=1,
+        value=self.params[&#39;household_density&#39;], step=.05, title=&#34;Density&#34;,
+        width=width)
+    self.group_dist = Slider(start=0, end=1,
+        value=self.params[&#39;group_dist&#39;][0][0], step=.05, title=&#34;Share blue&#34;,
+        width=width)
+    self.torus = Select(title=&#34;Torus&#34;, options=[&#39;True&#39;, &#39;False&#39;],
+        value=str(self.params[&#39;torus&#39;]), width=width)
+
+    if self.params[&#39;scheduling&#39;]==0:
+        scheduling = &#39;replacement&#39;
+    else: scheduling = &#39;without_replacement&#39;
+    self.scheduling = Select(title=&#34;Scheduling method&#34;,
+        options=[&#39;replacement&#39;, &#39;without_replacement&#39;],
+        value=scheduling, width=width)
+
+    text = header_size + &#39;Environment&#39; + header_size
+    environment_div = Div(text=text, width=width)
+    grid = [environment_div, self.size, self.n_neighbourhoods,
+        self.n_schools, self.household_density, self.group_dist,
+        self.scheduling, self.torus, self.schools_placement]
+    
+    if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+        grid = [self.scheduling]
+
+    # School
+    self.school_capacity = Slider(start=0, end=3,
+        value=self.params[&#39;school_capacity&#39;], step=.1,
+        title=&#34;School capacity&#34;, width=width)
+    self.school_dropdown_func(width=width)
+    text = header_size + &#39;Schools&#39; + header_size
+    school_div = Div(text=text, width=width)
+    school = [self.school_capacity, self.school_dropdown]
+
+    # Household
+    self.alpha = Slider(start=0, end=1, value=self.params[&#39;alpha&#39;],
+        step=.05, title=&#34;Alpha&#34;, width=width)
+    # self.bounded_neighbourhood = Select(title=&#34;Bounded Neighbourhood&#34;,
+    #     options=[&#39;True&#39;, &#39;False&#39;],
+    #     value=str(self.params[&#39;bounded_neighbourhood&#39;]))
+    self.utility_at_max = Slider(start=0, end=1,
+        value=self.params[&#39;utility_at_max&#39;][0][0], step=.05,
+        title=&#34;Utility at homogeneity&#34;, width=width)
+    self.optimal_fraction = Slider(start=0, end=1,
+        value=self.params[&#39;optimal_fraction&#39;][0][0], step=.05,
+        title=&#34;Optimal fraction&#34;, width=width)
+    # self.satisfaction = Slider(start=0, end=1,
+    #     value=self.params[&#39;category_thresholds&#39;][0][0], step=.05,
+    #     title=&#34;Satisfaction Threshold&#34;)
+    self.radius = Select(title=&#34;Radius&#34;,
+        options=[str(x) for x in range(1, 11)],
+        value=str(self.params[&#39;radius&#39;]), width=width)
+    # self.moore = Select(title=&#34;Moore&#34;, options=[&#39;True&#39;, &#39;False&#39;],
+    #                     value=str(self.params[&#39;moore&#39;]))
+    self.neighbourhood_mixture = Slider(start=0, end=1,
+        value=self.params[&#39;neighbourhood_mixture&#39;], step=.05,
+        title=&#34;Neighbourhood Mixture&#34;, width=width)
+    self.num_considered = Slider(start=1, end=10,
+        value=self.params[&#39;num_considered&#39;], step=1,
+        title=&#34;Considered spots&#34;, width=width)
+    self.ranking_method = Select(title=&#34;Ranking method&#34;,
+        options=[&#39;highest&#39;, &#39;proportional&#39;],
+        value=self.params[&#39;ranking_method&#39;], width=width)
+
+    text = header_size + &#39;Households&#39; + header_size
+    household_div = Div(text=text, width=width)
+    household = [household_div, self.alpha,
+        self.utility_at_max, self.optimal_fraction, self.radius,
+        self.neighbourhood_mixture, self.num_considered, self.ranking_method]
+
+    if self.params[&#39;case&#39;].lower() != &#39;lattice&#39;:
+        household = [self.alpha, self.utility_at_max, 
+        self.optimal_fraction, self.ranking_method]
+
+    widgets = simulation + grid + school + household
+
+    return widgets</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="compass" href="index.html">compass</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="compass.visualisation.BokehServer" href="#compass.visualisation.BokehServer">BokehServer</a></code></h4>
+<ul class="">
+<li><code><a title="compass.visualisation.BokehServer.agent_filter" href="#compass.visualisation.BokehServer.agent_filter">agent_filter</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.blocking_task" href="#compass.visualisation.BokehServer.blocking_task">blocking_task</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.buttons" href="#compass.visualisation.BokehServer.buttons">buttons</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.composition_data" href="#compass.visualisation.BokehServer.composition_data">composition_data</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.customise_grid" href="#compass.visualisation.BokehServer.customise_grid">customise_grid</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.dropdown_select" href="#compass.visualisation.BokehServer.dropdown_select">dropdown_select</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.init_distribution_plot" href="#compass.visualisation.BokehServer.init_distribution_plot">init_distribution_plot</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.init_grid_plot" href="#compass.visualisation.BokehServer.init_grid_plot">init_grid_plot</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.init_line_plot" href="#compass.visualisation.BokehServer.init_line_plot">init_line_plot</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.init_neighbourhood_composition_plot" href="#compass.visualisation.BokehServer.init_neighbourhood_composition_plot">init_neighbourhood_composition_plot</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.init_school_composition_plot" href="#compass.visualisation.BokehServer.init_school_composition_plot">init_school_composition_plot</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.layout" href="#compass.visualisation.BokehServer.layout">layout</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.reset_button" href="#compass.visualisation.BokehServer.reset_button">reset_button</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.reset_data" href="#compass.visualisation.BokehServer.reset_data">reset_data</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.run_button" href="#compass.visualisation.BokehServer.run_button">run_button</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.run_visualisation" href="#compass.visualisation.BokehServer.run_visualisation">run_visualisation</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.school_dropdown_func" href="#compass.visualisation.BokehServer.school_dropdown_func">school_dropdown_func</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.select_households" href="#compass.visualisation.BokehServer.select_households">select_households</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.step_button" href="#compass.visualisation.BokehServer.step_button">step_button</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.unlocked_task" href="#compass.visualisation.BokehServer.unlocked_task">unlocked_task</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.update_data" href="#compass.visualisation.BokehServer.update_data">update_data</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.update_filters" href="#compass.visualisation.BokehServer.update_filters">update_filters</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.update_pars" href="#compass.visualisation.BokehServer.update_pars">update_pars</a></code></li>
+<li><code><a title="compass.visualisation.BokehServer.widgets" href="#compass.visualisation.BokehServer.widgets">widgets</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
