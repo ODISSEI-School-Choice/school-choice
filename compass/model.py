@@ -354,12 +354,12 @@ class CompassModel(Model):
         
         dirname = os.path.dirname(__file__)
         if case.lower()=='amsterdam':
-            path = dirname + '\\maps\\amsterdam'
+            path = dirname + '/maps/amsterdam'
 
         # Load GeoDataFrames
-        school_frame = gpd.read_file(path + '\\schools.geojson')
-        household_frame = gpd.read_file(path + '\\households.geojson')
-        neighbourhood_frame = gpd.read_file(path + '\\neighbourhoods.geojson')
+        school_frame = gpd.read_file(path + '/schools.geojson')
+        household_frame = gpd.read_file(path + '/households.geojson')
+        neighbourhood_frame = gpd.read_file(path + '/neighbourhoods.geojson')
 
         # Create grid
         self.params["torus"] = 0
@@ -371,7 +371,7 @@ class CompassModel(Model):
 
         # In the file more households could be available to sample from,
         # but only use the actual amount
-        data = np.load(path + '\\distances_perc_of_actual.npz')
+        data = np.load(path + '/distances_perc_of_actual.npz')
         perc_of_actual = data['perc_of_actual']
         self.all_distances = data['distances']
         

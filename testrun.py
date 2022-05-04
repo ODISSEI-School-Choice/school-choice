@@ -26,17 +26,17 @@ FLAGS.height = size
 FLAGS.conv_threshold = 0.01
 FLAGS.window_size = 30
 FLAGS.loglevel = 'DEBUG'
-FLAGS.case = 'lattice'
+FLAGS.case = 'Amsterdam'
 FLAGS.max_move_fraction = 0.05
 FLAGS.verbose = True
 FLAGS.random_residential = False
 
 if __name__ == '__main__':
-    import cProfile, pstats
-    profiler = cProfile.Profile()
-    profiler.enable()
+    # import cProfile, pstats
+    # profiler = cProfile.Profile()
+    # profiler.enable()
     model = CompassModel(vars(FLAGS), export=True)
     model.simulate()
-    profiler.disable()
-    stats = pstats.Stats(profiler).sort_stats('tottime')
-    stats.print_stats(0.05)
+    # profiler.disable()
+    # stats = pstats.Stats(profiler).sort_stats('tottime')
+    # stats.print_stats(0.05)
