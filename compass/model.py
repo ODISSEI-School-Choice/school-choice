@@ -1,9 +1,11 @@
 """
 The Model class which initialises the system and all of its components.
 """
+from datetime import datetime
 import os
 import sys
 import random
+# from typing import final
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -18,6 +20,15 @@ from mesa.space import ContinuousSpace
 from shapely.geometry import Point, box
 from scheduler import ThreeStagedActivation
 from agents_spatial import School, Neighbourhood
+
+import contextlib
+@contextlib.contextmanager
+def record_time():
+    try:
+        start_time = datetime.now()
+        yield
+    finally:
+        print("T: %f" % (datetime.now() - start_time).total_seconds())
 
 
 class CompassModel(Model):

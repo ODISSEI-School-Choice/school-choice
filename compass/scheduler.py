@@ -163,16 +163,14 @@ class ThreeStagedActivation:
                 
                 # Initial allocation for EVERY household
                 # Set initial preferences
-                self.model.compute_school_distances()
+                # self.model.compute_school_distances()
                 if self.params['case'].lower() == 'lattice':
                     p = self.params['p']
                     q = self.params['q']
                     self.model.distance_utilities = 1. / (1 + (self.model.all_distances / p)**q)
 
                 for household in all_households:
-                    [student.set_school_preference(
-                        household.school_ranking_initial()) \
-                            for student in household.students]
+                    [student.set_school_preference(household.school_ranking_initial()) for student in household.students]
 
                 # Allocate students after all initial preferences have been set
                 self.allocate_schools(all_households, initial_schools)
