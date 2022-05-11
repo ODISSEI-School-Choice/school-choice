@@ -2,6 +2,7 @@
 The Utils and Measurements class.
 """
 
+from re import L
 import sys
 import numpy as np
 import pandas as pd
@@ -100,7 +101,7 @@ class Measurements:
         """
 
         self.households[time, :, :] = [household.get_data(residential) \
-            for household in self.agents['households']]
+            for household in self.agents['households']]    
 
 
     def neighbourhood_data(self, time):

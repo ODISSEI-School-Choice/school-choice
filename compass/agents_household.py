@@ -4,6 +4,7 @@ from agents_base import BaseAgent
 from shapely.geometry import Point
 from agents_spatial import Neighbourhood
 
+
 class Household(BaseAgent):
     """
     The household object. Creates an expected number of students per
@@ -93,24 +94,36 @@ class Household(BaseAgent):
         Notes:
             Only the school of the first student is used!
         """
-        # Update variable data only
-        data = np.zeros(9)
-        data[:2] = self.pos
-        data[2:4] = self.composition[:2]
-        data[4] = self.utility
-        data[5] = self.category
-        data[6] = self.unique_id
-        data[7] = self.distance
+        # # Update variable data only
+        # data = np.empty(9)
+        # data[:2] = self.pos
+        # data[2:4] = self.composition[:2]
+        # data[4] = self.utility
+        # data[5] = self.category
+        # data[6] = self.unique_id
+        # data[7] = self.distance
 
-        # Check which unit the household belongs to (depends on the process)
-        if residential:
-            unit = self.neighbourhood.unique_id
-        else:
-            # Only school of first student!!!!
-            unit = self.students[0].school.unique_id
+        # # Check which unit the household belongs to (depends on the process)
+        # if residential:
+        #     unit = self.neighbourhood.unique_id
+        # else:
+        #     # Only school of first student!!!!
+        #     unit = self.students[0].school.unique_id
 
-        data[8] = unit
-        return data
+        # data[8] = unit
+
+        data =  [
+            self.pos[0], self.pos[1], 
+            self.composition[0], self.composition[1], 
+            self.utility, 
+            self.category, 
+            self.unique_id, 
+            self.distance, 
+            self.neighbourhood.unique_id if residential \
+                else self.students[0].school.unique_id, 
+        ]
+
+        return np.array(data, dtype=float)
 
 
     def move_to_empty(self, empties, num_considered, ranking_method):
