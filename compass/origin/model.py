@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import sys
 import random
+from matplotlib.pyplot import axis
 # from typing import final
 import numpy as np
 import pandas as pd
@@ -21,14 +22,18 @@ from shapely.geometry import Point, box
 from scheduler import ThreeStagedActivation
 from agents_spatial import School, Neighbourhood
 
+# added by Ji
+from numba import jit
+from scipy.sparse import issparse
+
 import contextlib
 @contextlib.contextmanager
-def record_time():
+def record_time(name):
     try:
         start_time = datetime.now()
         yield
     finally:
-        print("T: %f" % (datetime.now() - start_time).total_seconds())
+        print("\n%s: %f" % (name, (datetime.now() - start_time).total_seconds()))
 
 
 class CompassModel(Model):
@@ -627,7 +632,6 @@ class CompassModel(Model):
             Schools can differ per household if we only want to look at the 
             n-closest schools for example?
         """
-        
         compositions = np.array(
             [school.composition_normalized for school in schools], dtype="float32")
         
@@ -640,7 +644,6 @@ class CompassModel(Model):
         # Combined (THIS SHOULD BE GENERALISED TO INCLUDE MORE FACTORS)
         utilities = composition_utilities * self.alpha[np.newaxis, :] + \
             (self.distance_utilities * (1 - self.alpha[:,np.newaxis])).T
-
         
         # Rank the schools according to the household utilities
         schools = np.array(schools)
@@ -648,21 +651,33 @@ class CompassModel(Model):
             transform = True
         else: transform = False
 
-        for household in households:
-            
-            if transform:
-                # Some randomness according to the temperature parameter
-                differences = utilities[:, household.array_index] - household.utility
-                exp_utilities = np.exp(self.temperature*differences)
-                transformed = exp_utilities / exp_utilities.sum()
-            else:
-                # Pick highest utility
-                transformed = utilities[:, household.array_index]
+        # for household in households:
+        #     if transform:
+        #         # Some randomness according to the temperature parameter
+        #         differences = utilities[:, household.array_index] - household.utility
+        #         exp_utilities = np.exp(self.temperature*differences)
+        #         transformed = exp_utilities / exp_utilities.sum()
+        #     else:
+        #         # Pick highest utility
+        #         transformed = utilities[:, household.array_index]
 
-            ranked_idx = transformed.argsort()[::-1]
-            ranking = schools[ranked_idx]
-            [student.set_school_preference(ranking) for student in household.students]
+        #     ranked_idx = transformed.argsort()[::-1]
+        #     ranking = schools[ranked_idx]
+        #     [student.set_school_preference(ranking) for student in household.students]
 
+        # vectorization of the code above
+        households_indices = [h.array_index for h in households]
+        households_utilities = np.fromiter([h.utility for h in households], dtype="float32")
+        transformed = utilities[:, households_indices]
+        if transform:
+            differences = transformed - households_utilities[np.newaxis, :]
+            exp_utilities = np.exp(self.temperature * differences)
+            transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
+        ranked_indices = transformed.argsort(axis=0)[::-1]
+
+        for i in range(len(households)):
+            ranking = schools[ranked_indices[:, i]]
+            [s.set_school_preference(ranking) for s in households[i].students]
 
     def get_attributes(self, pos):
         """

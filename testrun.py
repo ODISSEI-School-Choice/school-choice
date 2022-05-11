@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, "compass")
 
 import random
-import cProfile
+# import cProfile
 import numpy as np
 from parameters import FLAGS
 from model import CompassModel
