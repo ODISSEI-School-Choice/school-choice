@@ -398,8 +398,11 @@ class Household(BaseAgent):
         """
 
         schools = self.model.get_agents("schools")
-        ranking = np.random.choice(schools, len(schools), replace=False)
-        return ranking
+        # ranking = np.random.choice(schools, len(schools), replace=False)
+        # return ranking
+
+        np.random.shuffle(schools)
+        return schools
 
 
     def residential_ranking(self, positions, ranking_method):

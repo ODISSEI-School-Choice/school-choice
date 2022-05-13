@@ -1501,7 +1501,6 @@ static const char __pyx_k_super[] = "super";
 static const char __pyx_k_zeros[] = "zeros";
 static const char __pyx_k_amount[] = "amount";
 static const char __pyx_k_append[] = "append";
-static const char __pyx_k_choice[] = "choice";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_module[] = "__module__";
 static const char __pyx_k_object[] = "object";
@@ -1518,8 +1517,8 @@ static const char __pyx_k_new_pos[] = "new_pos";
 static const char __pyx_k_old_pos[] = "old_pos";
 static const char __pyx_k_prepare[] = "__prepare__";
 static const char __pyx_k_ranking[] = "ranking";
-static const char __pyx_k_replace[] = "replace";
 static const char __pyx_k_schools[] = "schools";
+static const char __pyx_k_shuffle[] = "shuffle";
 static const char __pyx_k_student[] = "student";
 static const char __pyx_k_utility[] = "utility";
 static const char __pyx_k_weights[] = "weights";
@@ -1703,7 +1702,6 @@ static PyObject *__pyx_n_s_attribute_array;
 static PyObject *__pyx_n_s_attributes;
 static PyObject *__pyx_n_s_calc_comp_utility;
 static PyObject *__pyx_n_s_category;
-static PyObject *__pyx_n_s_choice;
 static PyObject *__pyx_n_s_choices;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_closest_neighbourhoods;
@@ -1790,7 +1788,6 @@ static PyObject *__pyx_n_s_ranking_method;
 static PyObject *__pyx_n_s_remove_household;
 static PyObject *__pyx_n_s_remove_neighbourhood;
 static PyObject *__pyx_n_s_remove_student;
-static PyObject *__pyx_n_s_replace;
 static PyObject *__pyx_n_s_repr;
 static PyObject *__pyx_n_s_res_utilities;
 static PyObject *__pyx_n_s_residential;
@@ -1810,6 +1807,7 @@ static PyObject *__pyx_n_s_self;
 static PyObject *__pyx_n_s_set_school_preference;
 static PyObject *__pyx_n_s_shape;
 static PyObject *__pyx_n_s_shapely_geometry;
+static PyObject *__pyx_n_s_shuffle;
 static PyObject *__pyx_n_s_step;
 static PyObject *__pyx_n_s_student;
 static PyObject *__pyx_n_s_student_density;
@@ -6340,14 +6338,11 @@ static PyObject *__pyx_pw_7compass_16agents_household_9Household_33school_rankin
 
 static PyObject *__pyx_pf_7compass_16agents_household_9Household_32school_ranking_initial(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_v_schools = NULL;
-  PyObject *__pyx_v_ranking = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
-  Py_ssize_t __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -6357,8 +6352,8 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_32school_rankin
  *         """
  * 
  *         schools = self.model.get_agents("schools")             # <<<<<<<<<<<<<<
- *         ranking = np.random.choice(schools, len(schools), replace=False)
- *         return ranking
+ *         # ranking = np.random.choice(schools, len(schools), replace=False)
+ *         # return ranking
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 400, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -6383,53 +6378,48 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_32school_rankin
   __pyx_v_schools = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":401
+  /* "compass/agents_household.py":404
+ *         # return ranking
  * 
- *         schools = self.model.get_agents("schools")
- *         ranking = np.random.choice(schools, len(schools), replace=False)             # <<<<<<<<<<<<<<
- *         return ranking
+ *         np.random.shuffle(schools)             # <<<<<<<<<<<<<<
+ *         return schools
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 401, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 404, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_choice); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = PyObject_Length(__pyx_v_schools); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 401, __pyx_L1_error)
-  __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 401, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_random); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 404, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_INCREF(__pyx_v_schools);
-  __Pyx_GIVEREF(__pyx_v_schools);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_schools);
-  __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_3);
-  __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_replace, Py_False) < 0) __PYX_ERR(0, 401, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_ranking = __pyx_t_5;
-  __pyx_t_5 = 0;
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_shuffle); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 404, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_v_schools) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_schools);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 404, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":402
- *         schools = self.model.get_agents("schools")
- *         ranking = np.random.choice(schools, len(schools), replace=False)
- *         return ranking             # <<<<<<<<<<<<<<
+  /* "compass/agents_household.py":405
+ * 
+ *         np.random.shuffle(schools)
+ *         return schools             # <<<<<<<<<<<<<<
  * 
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_ranking);
-  __pyx_r = __pyx_v_ranking;
+  __Pyx_INCREF(__pyx_v_schools);
+  __pyx_r = __pyx_v_schools;
   goto __pyx_L0;
 
   /* "compass/agents_household.py":391
@@ -6445,18 +6435,16 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_32school_rankin
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_AddTraceback("compass.agents_household.Household.school_ranking_initial", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_schools);
-  __Pyx_XDECREF(__pyx_v_ranking);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":405
+/* "compass/agents_household.py":408
  * 
  * 
  *     def residential_ranking(self, positions, ranking_method):             # <<<<<<<<<<<<<<
@@ -6503,17 +6491,17 @@ static PyObject *__pyx_pw_7compass_16agents_household_9Household_35residential_r
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_positions)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("residential_ranking", 1, 3, 3, 1); __PYX_ERR(0, 405, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("residential_ranking", 1, 3, 3, 1); __PYX_ERR(0, 408, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ranking_method)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("residential_ranking", 1, 3, 3, 2); __PYX_ERR(0, 405, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("residential_ranking", 1, 3, 3, 2); __PYX_ERR(0, 408, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "residential_ranking") < 0)) __PYX_ERR(0, 405, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "residential_ranking") < 0)) __PYX_ERR(0, 408, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -6528,7 +6516,7 @@ static PyObject *__pyx_pw_7compass_16agents_household_9Household_35residential_r
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("residential_ranking", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 405, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("residential_ranking", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 408, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("compass.agents_household.Household.residential_ranking", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -6579,7 +6567,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
   __Pyx_RefNannySetupContext("residential_ranking", 0);
   __Pyx_INCREF(__pyx_v_positions);
 
-  /* "compass/agents_household.py":417
+  /* "compass/agents_household.py":420
  *         """
  * 
  *         summed = 0             # <<<<<<<<<<<<<<
@@ -6589,7 +6577,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_summed = __pyx_int_0;
 
-  /* "compass/agents_household.py":418
+  /* "compass/agents_household.py":421
  * 
  *         summed = 0
  *         max_utility = 0             # <<<<<<<<<<<<<<
@@ -6599,55 +6587,55 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_max_utility = __pyx_int_0;
 
-  /* "compass/agents_household.py":419
+  /* "compass/agents_household.py":422
  *         summed = 0
  *         max_utility = 0
  *         params = self.params             # <<<<<<<<<<<<<<
  *         positions = list(positions) + [self.pos] # Append own position
  *         utilities = np.zeros(len(positions))
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_params); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 419, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_params); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 422, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_params = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":420
+  /* "compass/agents_household.py":423
  *         max_utility = 0
  *         params = self.params
  *         positions = list(positions) + [self.pos] # Append own position             # <<<<<<<<<<<<<<
  *         utilities = np.zeros(len(positions))
  *         temperature = params['temperature']
  */
-  __pyx_t_1 = PySequence_List(__pyx_v_positions); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_1 = PySequence_List(__pyx_v_positions); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_pos); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_pos); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_2);
   PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF_SET(__pyx_v_positions, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "compass/agents_household.py":421
+  /* "compass/agents_household.py":424
  *         params = self.params
  *         positions = list(positions) + [self.pos] # Append own position
  *         utilities = np.zeros(len(positions))             # <<<<<<<<<<<<<<
  *         temperature = params['temperature']
  *         compositions = self.model.compositions
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 421, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 421, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 424, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = PyObject_Length(__pyx_v_positions); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 421, __pyx_L1_error)
-  __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 421, __pyx_L1_error)
+  __pyx_t_4 = PyObject_Length(__pyx_v_positions); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 424, __pyx_L1_error)
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -6662,55 +6650,55 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
   __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 421, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 424, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_utilities = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "compass/agents_household.py":422
+  /* "compass/agents_household.py":425
  *         positions = list(positions) + [self.pos] # Append own position
  *         utilities = np.zeros(len(positions))
  *         temperature = params['temperature']             # <<<<<<<<<<<<<<
  *         compositions = self.model.compositions
  *         norm_compositions = self.model.normalized_compositions
  */
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_params, __pyx_n_s_temperature); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 422, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_params, __pyx_n_s_temperature); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 425, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_temperature = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "compass/agents_household.py":423
+  /* "compass/agents_household.py":426
  *         utilities = np.zeros(len(positions))
  *         temperature = params['temperature']
  *         compositions = self.model.compositions             # <<<<<<<<<<<<<<
  *         norm_compositions = self.model.normalized_compositions
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_compositions); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_compositions); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_compositions = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":424
+  /* "compass/agents_household.py":427
  *         temperature = params['temperature']
  *         compositions = self.model.compositions
  *         norm_compositions = self.model.normalized_compositions             # <<<<<<<<<<<<<<
  * 
  *         for index, pos in enumerate(positions):
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 424, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_normalized_compositions); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 424, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_normalized_compositions); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 427, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_norm_compositions = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "compass/agents_household.py":426
+  /* "compass/agents_household.py":429
  *         norm_compositions = self.model.normalized_compositions
  * 
  *         for index, pos in enumerate(positions):             # <<<<<<<<<<<<<<
@@ -6723,26 +6711,26 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
     __pyx_t_1 = __pyx_v_positions; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
     __pyx_t_6 = NULL;
   } else {
-    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_positions); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_positions); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_6 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 429, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_6)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 426, __pyx_L1_error)
+        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 429, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 429, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       } else {
         if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 426, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 429, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 429, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       }
@@ -6752,7 +6740,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 426, __pyx_L1_error)
+          else __PYX_ERR(0, 429, __pyx_L1_error)
         }
         break;
       }
@@ -6762,40 +6750,40 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
     __pyx_t_3 = 0;
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_XDECREF_SET(__pyx_v_index, __pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2);
     __pyx_t_2 = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "compass/agents_household.py":428
+    /* "compass/agents_household.py":431
  *         for index, pos in enumerate(positions):
  * 
  *             if pos == self.pos:             # <<<<<<<<<<<<<<
  *                 utility = self.utility
  *             else:
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_pos); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_pos); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyObject_RichCompare(__pyx_v_pos, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_5 = PyObject_RichCompare(__pyx_v_pos, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 431, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 431, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     if (__pyx_t_7) {
 
-      /* "compass/agents_household.py":429
+      /* "compass/agents_household.py":432
  * 
  *             if pos == self.pos:
  *                 utility = self.utility             # <<<<<<<<<<<<<<
  *             else:
  *                 #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_utility); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 429, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_utility); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 432, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_XDECREF_SET(__pyx_v_utility, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "compass/agents_household.py":428
+      /* "compass/agents_household.py":431
  *         for index, pos in enumerate(positions):
  * 
  *             if pos == self.pos:             # <<<<<<<<<<<<<<
@@ -6805,7 +6793,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       goto __pyx_L5;
     }
 
-    /* "compass/agents_household.py":432
+    /* "compass/agents_household.py":435
  *             else:
  *                 #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
  *                 x, y = pos             # <<<<<<<<<<<<<<
@@ -6819,7 +6807,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 432, __pyx_L1_error)
+          __PYX_ERR(0, 435, __pyx_L1_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -6832,21 +6820,21 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
         __Pyx_INCREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_3);
         #else
-        __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 432, __pyx_L1_error)
+        __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 432, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_8 = PyObject_GetIter(__pyx_v_pos); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 432, __pyx_L1_error)
+        __pyx_t_8 = PyObject_GetIter(__pyx_v_pos); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_9 = Py_TYPE(__pyx_t_8)->tp_iternext;
         index = 0; __pyx_t_5 = __pyx_t_9(__pyx_t_8); if (unlikely(!__pyx_t_5)) goto __pyx_L6_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_5);
         index = 1; __pyx_t_3 = __pyx_t_9(__pyx_t_8); if (unlikely(!__pyx_t_3)) goto __pyx_L6_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_3);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_9(__pyx_t_8), 2) < 0) __PYX_ERR(0, 432, __pyx_L1_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_9(__pyx_t_8), 2) < 0) __PYX_ERR(0, 435, __pyx_L1_error)
         __pyx_t_9 = NULL;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         goto __pyx_L7_unpacking_done;
@@ -6854,7 +6842,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_9 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 432, __pyx_L1_error)
+        __PYX_ERR(0, 435, __pyx_L1_error)
         __pyx_L7_unpacking_done:;
       }
       __Pyx_XDECREF_SET(__pyx_v_x, __pyx_t_5);
@@ -6862,14 +6850,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       __Pyx_XDECREF_SET(__pyx_v_y, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "compass/agents_household.py":433
+      /* "compass/agents_household.py":436
  *                 #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
  *                 x, y = pos
  *                 composition = compositions[x, y, :]             # <<<<<<<<<<<<<<
  *                 norm_composition =  norm_compositions[x, y, :]
  *                 neighbourhood = self.get_closest_neighbourhood(pos)
  */
-      __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
+      __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_v_x);
       __Pyx_GIVEREF(__pyx_v_x);
@@ -6880,20 +6868,20 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       __Pyx_INCREF(__pyx_slice__3);
       __Pyx_GIVEREF(__pyx_slice__3);
       PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_slice__3);
-      __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_compositions, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 433, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_compositions, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 436, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_XDECREF_SET(__pyx_v_composition, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "compass/agents_household.py":434
+      /* "compass/agents_household.py":437
  *                 x, y = pos
  *                 composition = compositions[x, y, :]
  *                 norm_composition =  norm_compositions[x, y, :]             # <<<<<<<<<<<<<<
  *                 neighbourhood = self.get_closest_neighbourhood(pos)
  *                 utility = self.residential_utility(norm_composition,
  */
-      __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 434, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 437, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_INCREF(__pyx_v_x);
       __Pyx_GIVEREF(__pyx_v_x);
@@ -6904,20 +6892,20 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       __Pyx_INCREF(__pyx_slice__3);
       __Pyx_GIVEREF(__pyx_slice__3);
       PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_slice__3);
-      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_norm_compositions, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 434, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_norm_compositions, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 437, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF_SET(__pyx_v_norm_composition, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "compass/agents_household.py":435
+      /* "compass/agents_household.py":438
  *                 composition = compositions[x, y, :]
  *                 norm_composition =  norm_compositions[x, y, :]
  *                 neighbourhood = self.get_closest_neighbourhood(pos)             # <<<<<<<<<<<<<<
  *                 utility = self.residential_utility(norm_composition,
  *                                         neighbourhood.composition_normalized)
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_get_closest_neighbourhood); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 435, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_get_closest_neighbourhood); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 438, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_8 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -6931,30 +6919,30 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       }
       __pyx_t_3 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_8, __pyx_v_pos) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_pos);
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 438, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF_SET(__pyx_v_neighbourhood, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "compass/agents_household.py":436
+      /* "compass/agents_household.py":439
  *                 norm_composition =  norm_compositions[x, y, :]
  *                 neighbourhood = self.get_closest_neighbourhood(pos)
  *                 utility = self.residential_utility(norm_composition,             # <<<<<<<<<<<<<<
  *                                         neighbourhood.composition_normalized)
  * 
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_residential_utility); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 436, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_residential_utility); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 439, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
 
-      /* "compass/agents_household.py":437
+      /* "compass/agents_household.py":440
  *                 neighbourhood = self.get_closest_neighbourhood(pos)
  *                 utility = self.residential_utility(norm_composition,
  *                                         neighbourhood.composition_normalized)             # <<<<<<<<<<<<<<
  * 
  *             if utility >= max_utility:
  */
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_neighbourhood, __pyx_n_s_composition_normalized); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 437, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_neighbourhood, __pyx_n_s_composition_normalized); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_10 = NULL;
       __pyx_t_11 = 0;
@@ -6971,7 +6959,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_norm_composition, __pyx_t_8};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -6980,14 +6968,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_norm_composition, __pyx_t_8};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       } else
       #endif
       {
-        __pyx_t_12 = PyTuple_New(2+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 436, __pyx_L1_error)
+        __pyx_t_12 = PyTuple_New(2+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 439, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         if (__pyx_t_10) {
           __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
@@ -6998,7 +6986,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
         __Pyx_GIVEREF(__pyx_t_8);
         PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_11, __pyx_t_8);
         __pyx_t_8 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
@@ -7008,19 +6996,19 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
     }
     __pyx_L5:;
 
-    /* "compass/agents_household.py":439
+    /* "compass/agents_household.py":442
  *                                         neighbourhood.composition_normalized)
  * 
  *             if utility >= max_utility:             # <<<<<<<<<<<<<<
  *                 max_utility = utility
  *                 new_pos = [pos]
  */
-    __pyx_t_3 = PyObject_RichCompare(__pyx_v_utility, __pyx_v_max_utility, Py_GE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
-    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 439, __pyx_L1_error)
+    __pyx_t_3 = PyObject_RichCompare(__pyx_v_utility, __pyx_v_max_utility, Py_GE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 442, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 442, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_7) {
 
-      /* "compass/agents_household.py":440
+      /* "compass/agents_household.py":443
  * 
  *             if utility >= max_utility:
  *                 max_utility = utility             # <<<<<<<<<<<<<<
@@ -7030,14 +7018,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       __Pyx_INCREF(__pyx_v_utility);
       __Pyx_DECREF_SET(__pyx_v_max_utility, __pyx_v_utility);
 
-      /* "compass/agents_household.py":441
+      /* "compass/agents_household.py":444
  *             if utility >= max_utility:
  *                 max_utility = utility
  *                 new_pos = [pos]             # <<<<<<<<<<<<<<
  * 
  *             utility = np.exp(temperature*utility)
  */
-      __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 441, __pyx_L1_error)
+      __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 444, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_v_pos);
       __Pyx_GIVEREF(__pyx_v_pos);
@@ -7045,7 +7033,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
       __Pyx_XDECREF_SET(__pyx_v_new_pos, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "compass/agents_household.py":439
+      /* "compass/agents_household.py":442
  *                                         neighbourhood.composition_normalized)
  * 
  *             if utility >= max_utility:             # <<<<<<<<<<<<<<
@@ -7054,19 +7042,19 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
  */
     }
 
-    /* "compass/agents_household.py":443
+    /* "compass/agents_household.py":446
  *                 new_pos = [pos]
  * 
  *             utility = np.exp(temperature*utility)             # <<<<<<<<<<<<<<
  *             summed += utility
  *             utilities[index] = utility
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 443, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 446, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_exp); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 443, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_exp); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 446, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Multiply(__pyx_v_temperature, __pyx_v_utility); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 443, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Multiply(__pyx_v_temperature, __pyx_v_utility); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 446, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_12))) {
@@ -7081,34 +7069,34 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
     __pyx_t_3 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_12, __pyx_t_8, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_12, __pyx_t_5);
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 443, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 446, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     __Pyx_DECREF_SET(__pyx_v_utility, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "compass/agents_household.py":444
+    /* "compass/agents_household.py":447
  * 
  *             utility = np.exp(temperature*utility)
  *             summed += utility             # <<<<<<<<<<<<<<
  *             utilities[index] = utility
  * 
  */
-    __pyx_t_3 = PyNumber_InPlaceAdd(__pyx_v_summed, __pyx_v_utility); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 444, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_InPlaceAdd(__pyx_v_summed, __pyx_v_utility); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 447, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_summed, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "compass/agents_household.py":445
+    /* "compass/agents_household.py":448
  *             utility = np.exp(temperature*utility)
  *             summed += utility
  *             utilities[index] = utility             # <<<<<<<<<<<<<<
  * 
  *         utilities = utilities / summed
  */
-    if (unlikely(PyObject_SetItem(__pyx_v_utilities, __pyx_v_index, __pyx_v_utility) < 0)) __PYX_ERR(0, 445, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_v_utilities, __pyx_v_index, __pyx_v_utility) < 0)) __PYX_ERR(0, 448, __pyx_L1_error)
 
-    /* "compass/agents_household.py":426
+    /* "compass/agents_household.py":429
  *         norm_compositions = self.model.normalized_compositions
  * 
  *         for index, pos in enumerate(positions):             # <<<<<<<<<<<<<<
@@ -7119,77 +7107,77 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "compass/agents_household.py":447
+  /* "compass/agents_household.py":450
  *             utilities[index] = utility
  * 
  *         utilities = utilities / summed             # <<<<<<<<<<<<<<
  *         if ranking_method=='proportional' or ranking_method:
  *             new_pos = random.choices(population=positions,
  */
-  __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_v_utilities, __pyx_v_summed); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 447, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_v_utilities, __pyx_v_summed); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 450, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF_SET(__pyx_v_utilities, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "compass/agents_household.py":448
+  /* "compass/agents_household.py":451
  * 
  *         utilities = utilities / summed
  *         if ranking_method=='proportional' or ranking_method:             # <<<<<<<<<<<<<<
  *             new_pos = random.choices(population=positions,
  *                 weights=utilities, k=1)
  */
-  __pyx_t_13 = (__Pyx_PyString_Equals(__pyx_v_ranking_method, __pyx_n_s_proportional, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 448, __pyx_L1_error)
+  __pyx_t_13 = (__Pyx_PyString_Equals(__pyx_v_ranking_method, __pyx_n_s_proportional, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 451, __pyx_L1_error)
   if (!__pyx_t_13) {
   } else {
     __pyx_t_7 = __pyx_t_13;
     goto __pyx_L10_bool_binop_done;
   }
-  __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_v_ranking_method); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 448, __pyx_L1_error)
+  __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_v_ranking_method); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 451, __pyx_L1_error)
   __pyx_t_7 = __pyx_t_13;
   __pyx_L10_bool_binop_done:;
   if (__pyx_t_7) {
 
-    /* "compass/agents_household.py":449
+    /* "compass/agents_household.py":452
  *         utilities = utilities / summed
  *         if ranking_method=='proportional' or ranking_method:
  *             new_pos = random.choices(population=positions,             # <<<<<<<<<<<<<<
  *                 weights=utilities, k=1)
  *         return new_pos[0]
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 449, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_choices); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 449, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_choices); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 449, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_population, __pyx_v_positions) < 0) __PYX_ERR(0, 449, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_population, __pyx_v_positions) < 0) __PYX_ERR(0, 452, __pyx_L1_error)
 
-    /* "compass/agents_household.py":450
+    /* "compass/agents_household.py":453
  *         if ranking_method=='proportional' or ranking_method:
  *             new_pos = random.choices(population=positions,
  *                 weights=utilities, k=1)             # <<<<<<<<<<<<<<
  *         return new_pos[0]
  * 
  */
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_weights, __pyx_v_utilities) < 0) __PYX_ERR(0, 449, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_k, __pyx_int_1) < 0) __PYX_ERR(0, 449, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_weights, __pyx_v_utilities) < 0) __PYX_ERR(0, 452, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_k, __pyx_int_1) < 0) __PYX_ERR(0, 452, __pyx_L1_error)
 
-    /* "compass/agents_household.py":449
+    /* "compass/agents_household.py":452
  *         utilities = utilities / summed
  *         if ranking_method=='proportional' or ranking_method:
  *             new_pos = random.choices(population=positions,             # <<<<<<<<<<<<<<
  *                 weights=utilities, k=1)
  *         return new_pos[0]
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 449, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF_SET(__pyx_v_new_pos, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "compass/agents_household.py":448
+    /* "compass/agents_household.py":451
  * 
  *         utilities = utilities / summed
  *         if ranking_method=='proportional' or ranking_method:             # <<<<<<<<<<<<<<
@@ -7198,7 +7186,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
  */
   }
 
-  /* "compass/agents_household.py":451
+  /* "compass/agents_household.py":454
  *             new_pos = random.choices(population=positions,
  *                 weights=utilities, k=1)
  *         return new_pos[0]             # <<<<<<<<<<<<<<
@@ -7206,14 +7194,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_new_pos)) { __Pyx_RaiseUnboundLocalError("new_pos"); __PYX_ERR(0, 451, __pyx_L1_error) }
-  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_new_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 451, __pyx_L1_error)
+  if (unlikely(!__pyx_v_new_pos)) { __Pyx_RaiseUnboundLocalError("new_pos"); __PYX_ERR(0, 454, __pyx_L1_error) }
+  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_new_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 454, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "compass/agents_household.py":405
+  /* "compass/agents_household.py":408
  * 
  * 
  *     def residential_ranking(self, positions, ranking_method):             # <<<<<<<<<<<<<<
@@ -7255,7 +7243,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_34residential_r
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":454
+/* "compass/agents_household.py":457
  * 
  * 
  *     def get_student_count(self):             # <<<<<<<<<<<<<<
@@ -7288,7 +7276,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_36get_student_c
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_student_count", 0);
 
-  /* "compass/agents_household.py":461
+  /* "compass/agents_household.py":464
  *             int: the amount of students in the household.
  *         """
  *         return len(self.students)             # <<<<<<<<<<<<<<
@@ -7296,17 +7284,17 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_36get_student_c
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_students); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 461, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_students); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 464, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 461, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 464, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 461, __pyx_L1_error)
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 464, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "compass/agents_household.py":454
+  /* "compass/agents_household.py":457
  * 
  * 
  *     def get_student_count(self):             # <<<<<<<<<<<<<<
@@ -7325,7 +7313,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_36get_student_c
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":464
+/* "compass/agents_household.py":467
  * 
  * 
  *     def get_shock(self):             # <<<<<<<<<<<<<<
@@ -7359,7 +7347,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_38get_shock(CYT
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_shock", 0);
 
-  /* "compass/agents_household.py":466
+  /* "compass/agents_household.py":469
  *     def get_shock(self):
  *         """" Returns a small random float value """
  *         return self.model.get_shock()             # <<<<<<<<<<<<<<
@@ -7367,9 +7355,9 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_38get_shock(CYT
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 466, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 469, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_get_shock); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 466, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_get_shock); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 469, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -7384,14 +7372,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_38get_shock(CYT
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 469, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "compass/agents_household.py":464
+  /* "compass/agents_household.py":467
  * 
  * 
  *     def get_shock(self):             # <<<<<<<<<<<<<<
@@ -7412,7 +7400,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_38get_shock(CYT
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":469
+/* "compass/agents_household.py":472
  * 
  * 
  *     def get_uniform_shock(self):             # <<<<<<<<<<<<<<
@@ -7446,7 +7434,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_40get_uniform_s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_uniform_shock", 0);
 
-  /* "compass/agents_household.py":473
+  /* "compass/agents_household.py":476
  *         Returns a random value between 0 and 1.
  *         """
  *         return self.model.get_uniform_shock()             # <<<<<<<<<<<<<<
@@ -7454,9 +7442,9 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_40get_uniform_s
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_model); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 476, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_get_uniform_shock); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_get_uniform_shock); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 476, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -7471,14 +7459,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_40get_uniform_s
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 473, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 476, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "compass/agents_household.py":469
+  /* "compass/agents_household.py":472
  * 
  * 
  *     def get_uniform_shock(self):             # <<<<<<<<<<<<<<
@@ -7499,7 +7487,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_9Household_40get_uniform_s
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":497
+/* "compass/agents_household.py":500
  *     """
  * 
  *     def __init__(self, unique_id, household):             # <<<<<<<<<<<<<<
@@ -7545,17 +7533,17 @@ static PyObject *__pyx_pw_7compass_16agents_household_7Student_1__init__(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_unique_id)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); __PYX_ERR(0, 497, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); __PYX_ERR(0, 500, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_household)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); __PYX_ERR(0, 497, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); __PYX_ERR(0, 500, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 497, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 500, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -7570,7 +7558,7 @@ static PyObject *__pyx_pw_7compass_16agents_household_7Student_1__init__(PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 497, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 500, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("compass.agents_household.Student.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7594,67 +7582,67 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student___init__(CYTHON_U
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "compass/agents_household.py":499
+  /* "compass/agents_household.py":502
  *     def __init__(self, unique_id, household):
  * 
  *         self.school = None             # <<<<<<<<<<<<<<
  *         self.school_history = []
  *         self.unique_id = unique_id
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school, Py_None) < 0) __PYX_ERR(0, 499, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school, Py_None) < 0) __PYX_ERR(0, 502, __pyx_L1_error)
 
-  /* "compass/agents_household.py":500
+  /* "compass/agents_household.py":503
  * 
  *         self.school = None
  *         self.school_history = []             # <<<<<<<<<<<<<<
  *         self.unique_id = unique_id
  *         self.household = household
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 500, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 503, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school_history, __pyx_t_1) < 0) __PYX_ERR(0, 500, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school_history, __pyx_t_1) < 0) __PYX_ERR(0, 503, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":501
+  /* "compass/agents_household.py":504
  *         self.school = None
  *         self.school_history = []
  *         self.unique_id = unique_id             # <<<<<<<<<<<<<<
  *         self.household = household
  *         self.school_preference = None
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_unique_id, __pyx_v_unique_id) < 0) __PYX_ERR(0, 501, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_unique_id, __pyx_v_unique_id) < 0) __PYX_ERR(0, 504, __pyx_L1_error)
 
-  /* "compass/agents_household.py":502
+  /* "compass/agents_household.py":505
  *         self.school_history = []
  *         self.unique_id = unique_id
  *         self.household = household             # <<<<<<<<<<<<<<
  *         self.school_preference = None
  *         # Student does not inherit from BaseAgent, so increment here.
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_household, __pyx_v_household) < 0) __PYX_ERR(0, 502, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_household, __pyx_v_household) < 0) __PYX_ERR(0, 505, __pyx_L1_error)
 
-  /* "compass/agents_household.py":503
+  /* "compass/agents_household.py":506
  *         self.unique_id = unique_id
  *         self.household = household
  *         self.school_preference = None             # <<<<<<<<<<<<<<
  *         # Student does not inherit from BaseAgent, so increment here.
  *         self.household.model.increment_agent_count()
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school_preference, Py_None) < 0) __PYX_ERR(0, 503, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school_preference, Py_None) < 0) __PYX_ERR(0, 506, __pyx_L1_error)
 
-  /* "compass/agents_household.py":505
+  /* "compass/agents_household.py":508
  *         self.school_preference = None
  *         # Student does not inherit from BaseAgent, so increment here.
  *         self.household.model.increment_agent_count()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_household); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 505, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_household); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 508, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_model); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 505, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_model); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 508, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_increment_agent_count); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 505, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_increment_agent_count); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 508, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -7669,12 +7657,12 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student___init__(CYTHON_U
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 508, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":497
+  /* "compass/agents_household.py":500
  *     """
  * 
  *     def __init__(self, unique_id, household):             # <<<<<<<<<<<<<<
@@ -7697,7 +7685,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student___init__(CYTHON_U
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":509
+/* "compass/agents_household.py":512
  * 
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -7733,7 +7721,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_2__repr__(CYTHON_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "compass/agents_household.py":514
+  /* "compass/agents_household.py":517
  *             str: representing the unique identifier of the agent.
  *         """
  *         return f"<Student object with unique_id:{self.unique_id}>"             # <<<<<<<<<<<<<<
@@ -7741,7 +7729,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_2__repr__(CYTHON_
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 514, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = 0;
   __pyx_t_3 = 127;
@@ -7749,9 +7737,9 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_2__repr__(CYTHON_
   __pyx_t_2 += 31;
   __Pyx_GIVEREF(__pyx_kp_u_Student_object_with_unique_id);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_kp_u_Student_object_with_unique_id);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_unique_id); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 514, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_unique_id); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 517, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 514, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_4, __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 517, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_3 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) > __pyx_t_3) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) : __pyx_t_3;
@@ -7763,14 +7751,14 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_2__repr__(CYTHON_
   __pyx_t_2 += 1;
   __Pyx_GIVEREF(__pyx_kp_u_);
   PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_kp_u_);
-  __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_1, 3, __pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 514, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_1, 3, __pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 517, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_5;
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "compass/agents_household.py":509
+  /* "compass/agents_household.py":512
  * 
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -7791,7 +7779,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_2__repr__(CYTHON_
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":517
+/* "compass/agents_household.py":520
  * 
  * 
  *     def set_school_preference(self, ranking):             # <<<<<<<<<<<<<<
@@ -7835,11 +7823,11 @@ static PyObject *__pyx_pw_7compass_16agents_household_7Student_5set_school_prefe
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ranking)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_school_preference", 1, 2, 2, 1); __PYX_ERR(0, 517, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_school_preference", 1, 2, 2, 1); __PYX_ERR(0, 520, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_school_preference") < 0)) __PYX_ERR(0, 517, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_school_preference") < 0)) __PYX_ERR(0, 520, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -7852,7 +7840,7 @@ static PyObject *__pyx_pw_7compass_16agents_household_7Student_5set_school_prefe
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_school_preference", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 517, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_school_preference", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 520, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("compass.agents_household.Student.set_school_preference", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7873,16 +7861,16 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_4set_school_prefe
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_school_preference", 0);
 
-  /* "compass/agents_household.py":524
+  /* "compass/agents_household.py":527
  *             ranking (list): a ranking of School objects.
  *         """
  *         self.school_preference = ranking             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school_preference, __pyx_v_ranking) < 0) __PYX_ERR(0, 524, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school_preference, __pyx_v_ranking) < 0) __PYX_ERR(0, 527, __pyx_L1_error)
 
-  /* "compass/agents_household.py":517
+  /* "compass/agents_household.py":520
  * 
  * 
  *     def set_school_preference(self, ranking):             # <<<<<<<<<<<<<<
@@ -7902,7 +7890,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_4set_school_prefe
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":527
+/* "compass/agents_household.py":530
  * 
  * 
  *     def new_school(self, school):             # <<<<<<<<<<<<<<
@@ -7946,11 +7934,11 @@ static PyObject *__pyx_pw_7compass_16agents_household_7Student_7new_school(PyObj
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_school)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("new_school", 1, 2, 2, 1); __PYX_ERR(0, 527, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("new_school", 1, 2, 2, 1); __PYX_ERR(0, 530, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "new_school") < 0)) __PYX_ERR(0, 527, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "new_school") < 0)) __PYX_ERR(0, 530, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -7963,7 +7951,7 @@ static PyObject *__pyx_pw_7compass_16agents_household_7Student_7new_school(PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("new_school", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 527, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("new_school", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 530, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("compass.agents_household.Student.new_school", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7989,29 +7977,29 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_6new_school(CYTHO
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("new_school", 0);
 
-  /* "compass/agents_household.py":534
+  /* "compass/agents_household.py":537
  *             school (School): a School object.
  *         """
  *         if self.school:             # <<<<<<<<<<<<<<
  *             self.school.remove_student(self)
  *         self.school = school
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 534, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 534, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 537, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "compass/agents_household.py":535
+    /* "compass/agents_household.py":538
  *         """
  *         if self.school:
  *             self.school.remove_student(self)             # <<<<<<<<<<<<<<
  *         self.school = school
  *         self.school_history.append(school)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 535, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 538, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_remove_student); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 535, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_remove_student); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 538, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -8026,12 +8014,12 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_6new_school(CYTHO
     }
     __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_3, __pyx_v_self) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_self);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 538, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "compass/agents_household.py":534
+    /* "compass/agents_household.py":537
  *             school (School): a School object.
  *         """
  *         if self.school:             # <<<<<<<<<<<<<<
@@ -8040,35 +8028,35 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_6new_school(CYTHO
  */
   }
 
-  /* "compass/agents_household.py":536
+  /* "compass/agents_household.py":539
  *         if self.school:
  *             self.school.remove_student(self)
  *         self.school = school             # <<<<<<<<<<<<<<
  *         self.school_history.append(school)
  *         school.add_student(self)
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school, __pyx_v_school) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_school, __pyx_v_school) < 0) __PYX_ERR(0, 539, __pyx_L1_error)
 
-  /* "compass/agents_household.py":537
+  /* "compass/agents_household.py":540
  *             self.school.remove_student(self)
  *         self.school = school
  *         self.school_history.append(school)             # <<<<<<<<<<<<<<
  *         school.add_student(self)
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school_history); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school_history); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 540, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_Append(__pyx_t_1, __pyx_v_school); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 537, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Append(__pyx_t_1, __pyx_v_school); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 540, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":538
+  /* "compass/agents_household.py":541
  *         self.school = school
  *         self.school_history.append(school)
  *         school.add_student(self)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_school, __pyx_n_s_add_student); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 538, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_school, __pyx_n_s_add_student); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 541, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -8082,12 +8070,12 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_6new_school(CYTHO
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_3, __pyx_v_self) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_self);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 538, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 541, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":527
+  /* "compass/agents_household.py":530
  * 
  * 
  *     def new_school(self, school):             # <<<<<<<<<<<<<<
@@ -8110,7 +8098,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_6new_school(CYTHO
   return __pyx_r;
 }
 
-/* "compass/agents_household.py":541
+/* "compass/agents_household.py":544
  * 
  * 
  *     def get_school_id(self):             # <<<<<<<<<<<<<<
@@ -8144,20 +8132,20 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_8get_school_id(CY
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_school_id", 0);
 
-  /* "compass/agents_household.py":546
+  /* "compass/agents_household.py":549
  *             str: unique id of the school the student is enrolled in.
  *         """
  *         if self.school:             # <<<<<<<<<<<<<<
  *             return self.school.unique_id
  *         else:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 546, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 549, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 546, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 549, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "compass/agents_household.py":547
+    /* "compass/agents_household.py":550
  *         """
  *         if self.school:
  *             return self.school.unique_id             # <<<<<<<<<<<<<<
@@ -8165,16 +8153,16 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_8get_school_id(CY
  *             return -1
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 547, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_school); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 550, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_unique_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 547, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_unique_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 550, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "compass/agents_household.py":546
+    /* "compass/agents_household.py":549
  *             str: unique id of the school the student is enrolled in.
  *         """
  *         if self.school:             # <<<<<<<<<<<<<<
@@ -8183,7 +8171,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_8get_school_id(CY
  */
   }
 
-  /* "compass/agents_household.py":549
+  /* "compass/agents_household.py":552
  *             return self.school.unique_id
  *         else:
  *             return -1             # <<<<<<<<<<<<<<
@@ -8195,7 +8183,7 @@ static PyObject *__pyx_pf_7compass_16agents_household_7Student_8get_school_id(CY
     goto __pyx_L0;
   }
 
-  /* "compass/agents_household.py":541
+  /* "compass/agents_household.py":544
  * 
  * 
  *     def get_school_id(self):             # <<<<<<<<<<<<<<
@@ -8315,7 +8303,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_attributes, __pyx_k_attributes, sizeof(__pyx_k_attributes), 0, 0, 1, 1},
   {&__pyx_n_s_calc_comp_utility, __pyx_k_calc_comp_utility, sizeof(__pyx_k_calc_comp_utility), 0, 0, 1, 1},
   {&__pyx_n_s_category, __pyx_k_category, sizeof(__pyx_k_category), 0, 0, 1, 1},
-  {&__pyx_n_s_choice, __pyx_k_choice, sizeof(__pyx_k_choice), 0, 0, 1, 1},
   {&__pyx_n_s_choices, __pyx_k_choices, sizeof(__pyx_k_choices), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_closest_neighbourhoods, __pyx_k_closest_neighbourhoods, sizeof(__pyx_k_closest_neighbourhoods), 0, 0, 1, 1},
@@ -8402,7 +8389,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_remove_household, __pyx_k_remove_household, sizeof(__pyx_k_remove_household), 0, 0, 1, 1},
   {&__pyx_n_s_remove_neighbourhood, __pyx_k_remove_neighbourhood, sizeof(__pyx_k_remove_neighbourhood), 0, 0, 1, 1},
   {&__pyx_n_s_remove_student, __pyx_k_remove_student, sizeof(__pyx_k_remove_student), 0, 0, 1, 1},
-  {&__pyx_n_s_replace, __pyx_k_replace, sizeof(__pyx_k_replace), 0, 0, 1, 1},
   {&__pyx_n_s_repr, __pyx_k_repr, sizeof(__pyx_k_repr), 0, 0, 1, 1},
   {&__pyx_n_s_res_utilities, __pyx_k_res_utilities, sizeof(__pyx_k_res_utilities), 0, 0, 1, 1},
   {&__pyx_n_s_residential, __pyx_k_residential, sizeof(__pyx_k_residential), 0, 0, 1, 1},
@@ -8422,6 +8408,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_set_school_preference, __pyx_k_set_school_preference, sizeof(__pyx_k_set_school_preference), 0, 0, 1, 1},
   {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
   {&__pyx_n_s_shapely_geometry, __pyx_k_shapely_geometry, sizeof(__pyx_k_shapely_geometry), 0, 0, 1, 1},
+  {&__pyx_n_s_shuffle, __pyx_k_shuffle, sizeof(__pyx_k_shuffle), 0, 0, 1, 1},
   {&__pyx_n_s_step, __pyx_k_step, sizeof(__pyx_k_step), 0, 0, 1, 1},
   {&__pyx_n_s_student, __pyx_k_student, sizeof(__pyx_k_student), 0, 0, 1, 1},
   {&__pyx_n_s_student_density, __pyx_k_student_density, sizeof(__pyx_k_student_density), 0, 0, 1, 1},
@@ -8447,11 +8434,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_object = __Pyx_GetBuiltinName(__pyx_n_s_object); if (!__pyx_builtin_object) __PYX_ERR(0, 476, __pyx_L1_error)
+  __pyx_builtin_object = __Pyx_GetBuiltinName(__pyx_n_s_object); if (!__pyx_builtin_object) __PYX_ERR(0, 479, __pyx_L1_error)
   __pyx_builtin_super = __Pyx_GetBuiltinName(__pyx_n_s_super); if (!__pyx_builtin_super) __PYX_ERR(0, 38, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 51, __pyx_L1_error)
   __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 245, __pyx_L1_error)
-  __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(0, 426, __pyx_L1_error)
+  __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(0, 429, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -8697,129 +8684,129 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         """
  *         Computes a list containing all schools ranked to preference. The initial
  */
-  __pyx_tuple__41 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_schools, __pyx_n_s_ranking); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(0, 391, __pyx_L1_error)
+  __pyx_tuple__41 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_schools); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(0, 391, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__41);
   __Pyx_GIVEREF(__pyx_tuple__41);
-  __pyx_codeobj__42 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__41, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_school_ranking_initial, 391, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__42)) __PYX_ERR(0, 391, __pyx_L1_error)
+  __pyx_codeobj__42 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__41, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_school_ranking_initial, 391, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__42)) __PYX_ERR(0, 391, __pyx_L1_error)
 
-  /* "compass/agents_household.py":405
+  /* "compass/agents_household.py":408
  * 
  * 
  *     def residential_ranking(self, positions, ranking_method):             # <<<<<<<<<<<<<<
  *         """
  *         Computes the ranked location prefences of a household.
  */
-  __pyx_tuple__43 = PyTuple_Pack(19, __pyx_n_s_self, __pyx_n_s_positions, __pyx_n_s_ranking_method, __pyx_n_s_summed, __pyx_n_s_max_utility, __pyx_n_s_params, __pyx_n_s_utilities, __pyx_n_s_temperature, __pyx_n_s_compositions, __pyx_n_s_norm_compositions, __pyx_n_s_index, __pyx_n_s_pos, __pyx_n_s_utility, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_composition, __pyx_n_s_norm_composition, __pyx_n_s_neighbourhood, __pyx_n_s_new_pos); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(0, 405, __pyx_L1_error)
+  __pyx_tuple__43 = PyTuple_Pack(19, __pyx_n_s_self, __pyx_n_s_positions, __pyx_n_s_ranking_method, __pyx_n_s_summed, __pyx_n_s_max_utility, __pyx_n_s_params, __pyx_n_s_utilities, __pyx_n_s_temperature, __pyx_n_s_compositions, __pyx_n_s_norm_compositions, __pyx_n_s_index, __pyx_n_s_pos, __pyx_n_s_utility, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_composition, __pyx_n_s_norm_composition, __pyx_n_s_neighbourhood, __pyx_n_s_new_pos); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__43);
   __Pyx_GIVEREF(__pyx_tuple__43);
-  __pyx_codeobj__44 = (PyObject*)__Pyx_PyCode_New(3, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__43, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_residential_ranking, 405, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__44)) __PYX_ERR(0, 405, __pyx_L1_error)
+  __pyx_codeobj__44 = (PyObject*)__Pyx_PyCode_New(3, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__43, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_residential_ranking, 408, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__44)) __PYX_ERR(0, 408, __pyx_L1_error)
 
-  /* "compass/agents_household.py":454
+  /* "compass/agents_household.py":457
  * 
  * 
  *     def get_student_count(self):             # <<<<<<<<<<<<<<
  *         """
  *         Calculates the number of students in a household.
  */
-  __pyx_tuple__45 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __pyx_tuple__45 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(0, 457, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__45);
   __Pyx_GIVEREF(__pyx_tuple__45);
-  __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_student_count, 454, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_student_count, 457, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(0, 457, __pyx_L1_error)
 
-  /* "compass/agents_household.py":464
+  /* "compass/agents_household.py":467
  * 
  * 
  *     def get_shock(self):             # <<<<<<<<<<<<<<
  *         """" Returns a small random float value """
  *         return self.model.get_shock()
  */
-  __pyx_tuple__47 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(0, 464, __pyx_L1_error)
+  __pyx_tuple__47 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(0, 467, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__47);
   __Pyx_GIVEREF(__pyx_tuple__47);
-  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_shock, 464, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(0, 464, __pyx_L1_error)
+  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_shock, 467, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(0, 467, __pyx_L1_error)
 
-  /* "compass/agents_household.py":469
+  /* "compass/agents_household.py":472
  * 
  * 
  *     def get_uniform_shock(self):             # <<<<<<<<<<<<<<
  *         """
  *         Returns a random value between 0 and 1.
  */
-  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 469, __pyx_L1_error)
+  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__49);
   __Pyx_GIVEREF(__pyx_tuple__49);
-  __pyx_codeobj__50 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_uniform_shock, 469, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__50)) __PYX_ERR(0, 469, __pyx_L1_error)
+  __pyx_codeobj__50 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_uniform_shock, 472, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__50)) __PYX_ERR(0, 472, __pyx_L1_error)
 
-  /* "compass/agents_household.py":476
+  /* "compass/agents_household.py":479
  * 
  * 
  * class Student(object):             # <<<<<<<<<<<<<<
  *     """
  *     Student object that is enrolled into school objects and a Household. Used
  */
-  __pyx_tuple__51 = PyTuple_Pack(1, __pyx_builtin_object); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __pyx_tuple__51 = PyTuple_Pack(1, __pyx_builtin_object); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__51);
   __Pyx_GIVEREF(__pyx_tuple__51);
 
-  /* "compass/agents_household.py":497
+  /* "compass/agents_household.py":500
  *     """
  * 
  *     def __init__(self, unique_id, household):             # <<<<<<<<<<<<<<
  * 
  *         self.school = None
  */
-  __pyx_tuple__52 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_unique_id, __pyx_n_s_household); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(0, 497, __pyx_L1_error)
+  __pyx_tuple__52 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_unique_id, __pyx_n_s_household); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(0, 500, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__52);
   __Pyx_GIVEREF(__pyx_tuple__52);
-  __pyx_codeobj__53 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_init, 497, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__53)) __PYX_ERR(0, 497, __pyx_L1_error)
+  __pyx_codeobj__53 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_init, 500, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__53)) __PYX_ERR(0, 500, __pyx_L1_error)
 
-  /* "compass/agents_household.py":509
+  /* "compass/agents_household.py":512
  * 
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
  *         """
  *         Returns:
  */
-  __pyx_tuple__54 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(0, 509, __pyx_L1_error)
+  __pyx_tuple__54 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(0, 512, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__54);
   __Pyx_GIVEREF(__pyx_tuple__54);
-  __pyx_codeobj__55 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__54, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_repr, 509, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__55)) __PYX_ERR(0, 509, __pyx_L1_error)
+  __pyx_codeobj__55 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__54, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_repr, 512, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__55)) __PYX_ERR(0, 512, __pyx_L1_error)
 
-  /* "compass/agents_household.py":517
+  /* "compass/agents_household.py":520
  * 
  * 
  *     def set_school_preference(self, ranking):             # <<<<<<<<<<<<<<
  *         """
  *         Sets school preference to a given ranking.
  */
-  __pyx_tuple__56 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_ranking); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(0, 517, __pyx_L1_error)
+  __pyx_tuple__56 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_ranking); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(0, 520, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__56);
   __Pyx_GIVEREF(__pyx_tuple__56);
-  __pyx_codeobj__57 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__56, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_set_school_preference, 517, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__57)) __PYX_ERR(0, 517, __pyx_L1_error)
+  __pyx_codeobj__57 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__56, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_set_school_preference, 520, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__57)) __PYX_ERR(0, 520, __pyx_L1_error)
 
-  /* "compass/agents_household.py":527
+  /* "compass/agents_household.py":530
  * 
  * 
  *     def new_school(self, school):             # <<<<<<<<<<<<<<
  *         """
  *         Enrolls the student in a new school.
  */
-  __pyx_tuple__58 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_school); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 527, __pyx_L1_error)
+  __pyx_tuple__58 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_school); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 530, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__58);
   __Pyx_GIVEREF(__pyx_tuple__58);
-  __pyx_codeobj__59 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__58, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_new_school, 527, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__59)) __PYX_ERR(0, 527, __pyx_L1_error)
+  __pyx_codeobj__59 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__58, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_new_school, 530, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__59)) __PYX_ERR(0, 530, __pyx_L1_error)
 
-  /* "compass/agents_household.py":541
+  /* "compass/agents_household.py":544
  * 
  * 
  *     def get_school_id(self):             # <<<<<<<<<<<<<<
  *         """
  *         Returns:
  */
-  __pyx_tuple__60 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(0, 541, __pyx_L1_error)
+  __pyx_tuple__60 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(0, 544, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__60);
   __Pyx_GIVEREF(__pyx_tuple__60);
-  __pyx_codeobj__61 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__60, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_school_id, 541, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__61)) __PYX_ERR(0, 541, __pyx_L1_error)
+  __pyx_codeobj__61 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__60, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_compass_agents_household_py, __pyx_n_s_get_school_id, 544, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__61)) __PYX_ERR(0, 544, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -9430,52 +9417,52 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_school_ranking_initial, __pyx_t_5) < 0) __PYX_ERR(0, 391, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "compass/agents_household.py":405
+  /* "compass/agents_household.py":408
  * 
  * 
  *     def residential_ranking(self, positions, ranking_method):             # <<<<<<<<<<<<<<
  *         """
  *         Computes the ranked location prefences of a household.
  */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_35residential_ranking, 0, __pyx_n_s_Household_residential_ranking, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__44)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 405, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_35residential_ranking, 0, __pyx_n_s_Household_residential_ranking, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__44)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_residential_ranking, __pyx_t_5) < 0) __PYX_ERR(0, 405, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_residential_ranking, __pyx_t_5) < 0) __PYX_ERR(0, 408, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "compass/agents_household.py":454
+  /* "compass/agents_household.py":457
  * 
  * 
  *     def get_student_count(self):             # <<<<<<<<<<<<<<
  *         """
  *         Calculates the number of students in a household.
  */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_37get_student_count, 0, __pyx_n_s_Household_get_student_count, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__46)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_37get_student_count, 0, __pyx_n_s_Household_get_student_count, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__46)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 457, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_student_count, __pyx_t_5) < 0) __PYX_ERR(0, 454, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_student_count, __pyx_t_5) < 0) __PYX_ERR(0, 457, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "compass/agents_household.py":464
+  /* "compass/agents_household.py":467
  * 
  * 
  *     def get_shock(self):             # <<<<<<<<<<<<<<
  *         """" Returns a small random float value """
  *         return self.model.get_shock()
  */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_39get_shock, 0, __pyx_n_s_Household_get_shock, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__48)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 464, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_39get_shock, 0, __pyx_n_s_Household_get_shock, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__48)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 467, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_shock, __pyx_t_5) < 0) __PYX_ERR(0, 464, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_shock, __pyx_t_5) < 0) __PYX_ERR(0, 467, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "compass/agents_household.py":469
+  /* "compass/agents_household.py":472
  * 
  * 
  *     def get_uniform_shock(self):             # <<<<<<<<<<<<<<
  *         """
  *         Returns a random value between 0 and 1.
  */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_41get_uniform_shock, 0, __pyx_n_s_Household_get_uniform_shock, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__50)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 469, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_9Household_41get_uniform_shock, 0, __pyx_n_s_Household_get_uniform_shock, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__50)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_uniform_shock, __pyx_t_5) < 0) __PYX_ERR(0, 469, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_get_uniform_shock, __pyx_t_5) < 0) __PYX_ERR(0, 472, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
   /* "compass/agents_household.py":8
@@ -9495,88 +9482,88 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "compass/agents_household.py":476
+  /* "compass/agents_household.py":479
  * 
  * 
  * class Student(object):             # <<<<<<<<<<<<<<
  *     """
  *     Student object that is enrolled into school objects and a Household. Used
  */
-  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__51); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__51); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__51, __pyx_n_s_Student, __pyx_n_s_Student, (PyObject *) NULL, __pyx_n_s_compass_agents_household, __pyx_kp_s_Student_object_that_is_enrolled); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__51, __pyx_n_s_Student, __pyx_n_s_Student, (PyObject *) NULL, __pyx_n_s_compass_agents_household, __pyx_kp_s_Student_object_that_is_enrolled); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "compass/agents_household.py":497
+  /* "compass/agents_household.py":500
  *     """
  * 
  *     def __init__(self, unique_id, household):             # <<<<<<<<<<<<<<
  * 
  *         self.school = None
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_1__init__, 0, __pyx_n_s_Student___init, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__53)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 497, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_1__init__, 0, __pyx_n_s_Student___init, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__53)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 500, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_init, __pyx_t_3) < 0) __PYX_ERR(0, 497, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_init, __pyx_t_3) < 0) __PYX_ERR(0, 500, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "compass/agents_household.py":509
+  /* "compass/agents_household.py":512
  * 
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
  *         """
  *         Returns:
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_3__repr__, 0, __pyx_n_s_Student___repr, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__55)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 509, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_3__repr__, 0, __pyx_n_s_Student___repr, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__55)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 512, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_repr, __pyx_t_3) < 0) __PYX_ERR(0, 509, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_repr, __pyx_t_3) < 0) __PYX_ERR(0, 512, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "compass/agents_household.py":517
+  /* "compass/agents_household.py":520
  * 
  * 
  *     def set_school_preference(self, ranking):             # <<<<<<<<<<<<<<
  *         """
  *         Sets school preference to a given ranking.
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_5set_school_preference, 0, __pyx_n_s_Student_set_school_preference, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__57)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 517, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_5set_school_preference, 0, __pyx_n_s_Student_set_school_preference, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__57)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 520, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_set_school_preference, __pyx_t_3) < 0) __PYX_ERR(0, 517, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_set_school_preference, __pyx_t_3) < 0) __PYX_ERR(0, 520, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "compass/agents_household.py":527
+  /* "compass/agents_household.py":530
  * 
  * 
  *     def new_school(self, school):             # <<<<<<<<<<<<<<
  *         """
  *         Enrolls the student in a new school.
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_7new_school, 0, __pyx_n_s_Student_new_school, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__59)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 527, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_7new_school, 0, __pyx_n_s_Student_new_school, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__59)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 530, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_new_school, __pyx_t_3) < 0) __PYX_ERR(0, 527, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_new_school, __pyx_t_3) < 0) __PYX_ERR(0, 530, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "compass/agents_household.py":541
+  /* "compass/agents_household.py":544
  * 
  * 
  *     def get_school_id(self):             # <<<<<<<<<<<<<<
  *         """
  *         Returns:
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_9get_school_id, 0, __pyx_n_s_Student_get_school_id, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__61)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 541, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_7compass_16agents_household_7Student_9get_school_id, 0, __pyx_n_s_Student_get_school_id, NULL, __pyx_n_s_compass_agents_household, __pyx_d, ((PyObject *)__pyx_codeobj__61)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 544, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_get_school_id, __pyx_t_3) < 0) __PYX_ERR(0, 541, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_get_school_id, __pyx_t_3) < 0) __PYX_ERR(0, 544, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "compass/agents_household.py":476
+  /* "compass/agents_household.py":479
  * 
  * 
  * class Student(object):             # <<<<<<<<<<<<<<
  *     """
  *     Student object that is enrolled into school objects and a Household. Used
  */
-  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_Student, __pyx_tuple__51, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_Student, __pyx_tuple__51, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Student, __pyx_t_3) < 0) __PYX_ERR(0, 476, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Student, __pyx_t_3) < 0) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
