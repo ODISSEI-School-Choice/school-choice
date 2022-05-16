@@ -6,14 +6,11 @@ This Python implementation tries to model school choice and resulting school seg
 
 ## Usage
 ### Packages
-This project uses `pipenv` for package handling. Use the following commands to create an environment with the correct packages.
+This project uses `Anaconda` for package handling. Use the following commands to create an environment with the correct packages.
 
-* `pip3 install pipenv` - to ensure `pipenv` is correctly installed
-* `pipenv install --ignore-pipfile` - to create an environment as described in `Pipfile.lock`
+* `conda env create -f conda_env.yml`
 
-After installing the environment, open it by using `pipenv shell`. After this, you will be able to use python as usual with the correct packages and dependencies.
-
-When you wish to add/remove a package, be sure to use `pipenv install/uninstall package_name` instead of `pip3 install/uninstall package_name`. Always update the lock file with `pipenv lock` after installing/uninstalling a package you wish to keep and include both `Pipfile` and `Pipfile.lock` in the git log.
+After running this command, a new conda environment called `mesa` will be installed, and you can open it by using `conda activate mesa`. After this, you will be able to use python as usual with the correct packages and dependencies.
 
 ### Update Documentation
 Install pdoc3 if you haven't already done so. Browse to the compassproject folder in your terminal and run `pdoc3 --html --force --output-dir docs compass`. The documentation should be updated now.
