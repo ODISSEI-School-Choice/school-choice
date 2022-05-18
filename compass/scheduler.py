@@ -7,7 +7,7 @@ the agents used, result in a system that is not entirely simultaneous.
 """
 
 import numpy as np
-from allocator import Allocator
+from .allocator import Allocator
 from collections import OrderedDict
 
 

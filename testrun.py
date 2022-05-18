@@ -1,14 +1,10 @@
 """
 This file is used to perform tests while creating the model.
 """
-import sys
-sys.path.insert(0, "compass")
-
 import random
-# import cProfile
 import numpy as np
-from parameters import FLAGS
-from model import CompassModel
+from compass.parameters import FLAGS
+from compass.model import CompassModel
 
 # Set seeds for reproducibility
 random.seed(3)
@@ -36,11 +32,5 @@ FLAGS.verbose = True
 FLAGS.random_residential = False
 
 if __name__ == '__main__':
-    # import cProfile, pstats
-    # profiler = cProfile.Profile()
-    # profiler.enable()
     model = CompassModel(vars(FLAGS), export=True)
     model.simulate()
-    # profiler.disable()
-    # stats = pstats.Stats(profiler).sort_stats('tottime')
-    # stats.print_stats(0.05)

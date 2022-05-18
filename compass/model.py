@@ -12,15 +12,15 @@ import pandas as pd
 from tqdm import tqdm
 from mesa import Model
 import geopandas as gpd
-from utils import Measurements
+from .utils import Measurements
 from scipy.stats import truncnorm
 from scipy.ndimage import convolve
 from memory_profiler import profile
-from agents_household import Household
+from .agents_household import Household
 from mesa.space import ContinuousSpace
 from shapely.geometry import Point, box
-from scheduler import ThreeStagedActivation
-from agents_spatial import School, Neighbourhood
+from .scheduler import ThreeStagedActivation
+from .agents_spatial import School, Neighbourhood
 
 # added by Ji
 from numba import jit

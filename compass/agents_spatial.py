@@ -2,7 +2,7 @@
 The School and Neighbourhood class.
 """
 
-from agents_base import BaseAgent
+from .agents_base import BaseAgent
 
 class School(BaseAgent):
     """
