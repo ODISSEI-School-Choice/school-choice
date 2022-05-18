@@ -29,8 +29,7 @@ class School(BaseAgent):
     def __init__(self, unique_id, pos, model, params):
         super().__init__(unique_id, pos, model, params)
         self.total = 0
-        self.capacity = 1 + int(self.params["school_capacity"] * \
-                        self.params["n_students"] / self.params["n_schools"])
+        self.capacity = 1 + int(params["school_capacity"] * params["n_students"] / params["n_schools"])
         self.students = []
         self.composition = self.new_composition_array()
         self.composition_normalized = self.new_composition_array()

@@ -1,6 +1,7 @@
 import numpy as np
 from mesa import Agent
 
+
 class BaseAgent(Agent):
     """
     Extended base class for a MESA model agent.
@@ -30,7 +31,6 @@ class BaseAgent(Agent):
         """
         return f"<BaseAgent object with unique_id: {self.unique_id}>"
 
-
     def step(self, **kwargs):
         """
         Perform an agent step.
@@ -39,7 +39,6 @@ class BaseAgent(Agent):
             Agents should have this method for the model to work.
         """
         pass
-
 
     def advance(self, **kwargs):
         """
