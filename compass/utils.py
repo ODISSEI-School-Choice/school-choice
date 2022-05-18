@@ -44,37 +44,31 @@ class Measurements:
         model (CompassModel): CompassModel object.
 
     Attributes:
-        all_measurements (list): list of all measurements.
-        current (dict): counts the number of happy and unhappy agents.
         model (CompassModel): CompassModel object.
-        agents (list): all the agents in the model
         vis_data (dict): dictionary for visualisation purposes.
 
     """
 
     def __init__(self, model):
-        self.all_measurements = []
         self.model = model
-        self.params = model.params
-        self.agents = model.agents
         self.vis_data = dict()
 
         dtype = "float32"
 
         # Maximum steps and number of attributes per array
-        max_steps = 1 + self.params['max_res_steps'] + self.params['max_school_steps']
+        max_steps = 1 + model.params['max_res_steps'] + model.params['max_school_steps']
 
         self.households = np.zeros(
                 shape=(
-                    max_steps, self.params["n_households"], N_HOUSEHOLD_ATTRS
+                    max_steps, model.params["n_households"], N_HOUSEHOLD_ATTRS
                     ),
                 dtype=dtype
                 )
 
         self.neighbourhoods = np.zeros(
                 shape=(
-                    self.params['max_res_steps'] + 1,
-                    self.params["n_neighbourhoods"],
+                    model.params['max_res_steps'] + 1,
+                    model.params["n_neighbourhoods"],
                     N_NEIGHBOURHOOD_ATTRS
                     ),
                 dtype=dtype
@@ -82,8 +76,8 @@ class Measurements:
 
         self.schools = np.zeros(
                 shape=(
-                    self.params['max_school_steps'],
-                    self.params["n_schools"],
+                    model.params['max_school_steps'],
+                    model.params["n_schools"],
                     N_SCHOOL_ATTRS
                     ),
                 dtype=dtype
@@ -101,10 +95,8 @@ class Measurements:
             Double check neighbourhood and school indices (from unit) and the
             data
         """
-
-        self.households[time, :, :] = [household.get_data(residential) \
-            for household in self.agents['households']]    
-
+        for i, household in enumerate(self.model.agents['households']):
+            self.households[time, i, :] = household.get_data(residential)
 
     def neighbourhood_data(self, time):
         """
@@ -113,10 +105,9 @@ class Measurements:
         Args:
             time (int): time step we are at
         """
-        for index, neighbourhood in enumerate(self.agents['neighbourhoods']):
+        for index, neighbourhood in enumerate(self.model.agents['neighbourhoods']):
             self.neighbourhoods[time, index, :2] = neighbourhood.composition
             self.neighbourhoods[time, index, 5] = neighbourhood.unique_id
-
 
     def school_data(self, time):
         """
@@ -129,10 +120,9 @@ class Measurements:
             time is different for schools compared to neighbourhoods!
         """
 
-        for index, school in enumerate(self.agents['schools']):
+        for index, school in enumerate(self.model.agents['schools']):
             self.schools[time, index, :2] = school.composition
-            self.schools[time, index, 5] = school.unique_id 
-
+            self.schools[time, index, 5] = school.unique_id
 
     def end_step(self, residential):
         """
@@ -149,15 +139,6 @@ class Measurements:
         else:
             self.school_data(self.model.scheduler.get_time('school')-1)
 
-
-    def get_last(self):
-        """
-        Returns:
-            int: measurements from last performed step.
-        """
-        return self.all_measurements[-1]
-
-
     def get_bokeh_vis_data(self):
         """
         Stores model data in the correct format for the Bokeh visualisation.
@@ -173,16 +154,19 @@ class Measurements:
         household_data = self.vis_household_data()
         school_data = self.vis_school_data(household_data)
         neighbourhood_data = self.vis_neighbourhood_data(household_data)
-        system_data = self.vis_system_data(household_data,
-                                        school_data, neighbourhood_data)
-        vis_data = pd.concat([household_data, school_data,
-                                neighbourhood_data, system_data],
-                                ignore_index=True)
+        system_data = self.vis_system_data(
+                household_data,
+                school_data,
+                neighbourhood_data
+                )
+        vis_data = pd.concat([
+            household_data, school_data, neighbourhood_data, system_data
+            ], ignore_index=True)
         # Incorporate the time step of the simulation
-        vis_data['time'] = np.repeat(self.model.scheduler.get_time(),
-                                        len(vis_data))
+        vis_data['time'] = np.repeat(
+                self.model.scheduler.get_time(), len(vis_data)
+                )
         return vis_data
-
 
     def empty_dataframe(self, columns=[], n_rows=0):
         """
@@ -197,7 +181,6 @@ class Measurements:
         """
         return pd.DataFrame(index=range(n_rows), columns=columns)
 
-
     def vis_composition_data(self, household):
         """
         Extracts the composition data from the households.
@@ -209,13 +192,17 @@ class Measurements:
             school_comp = household.students[0].school.composition
         except AttributeError:
             school_comp = household.new_composition_array()
-        return [household.composition, household.neighbourhood.composition,
-            school_comp, household.school_utility_comp]
-
+        return [
+                household.composition,
+                household.neighbourhood.composition,
+                school_comp,
+                household.school_utility_comp
+                ]
 
     def vis_household_data(self):
         """
-        Transforms the household data to be suitable for the Bokeh visualisation.
+        Transforms the household data to be suitable for the Bokeh
+        visualisation.
 
         Returns:
             DataFrame of all the household data.
@@ -226,35 +213,40 @@ class Measurements:
         res_time = self.model.scheduler.get_time('residential')
         school_time = self.model.scheduler.get_time('school')
 
-        households = self.agents['households']
-        columns = ['agent_type', 'x', 'y', 'group0', 'group1', 'res_id',
-            'res_utility', 'res_happy', 'school_id', 'dist_school',
-            'school_utility', 'school_happy', 'res_q5', 'res_q95',
-            'school_q5', 'school_q95', 'res_seg', 'school_seg', 'local_comp',
-            'n_comp', 's_comp', 'school_comp_utility']
+        households = self.model.agents['households']
+        columns = [
+                'agent_type', 'x', 'y', 'group0', 'group1', 'res_id',
+                'res_utility', 'res_happy', 'school_id', 'dist_school',
+                'school_utility', 'school_happy', 'res_q5', 'res_q95',
+                'school_q5', 'school_q95', 'res_seg', 'school_seg',
+                'local_comp', 'n_comp', 's_comp', 'school_comp_utility'
+                ]
         data = self.empty_dataframe(columns=columns, n_rows=len(households))
-        
+
         # Save location and local composition per group type
         data['agent_type'] = 'household'
         data['x'] = self.households[time, :, 0]
         data['y'] = self.households[time, :, 1]
-        data['group0'] = (self.households[time, :, 5]==0).astype(int)
-        data['group1'] = (self.households[time, :, 5]==1).astype(int)
+        data['group0'] = (self.households[time, :, 5] == 0).astype(int)
+        data['group1'] = (self.households[time, :, 5] == 1).astype(int)
 
         # Neighbourhood ID, current residential utility
         data['res_id'] = self.households[res_time, :, 8]
         data['res_utility'] = self.households[res_time, :, 4]
         data['res_happy'] = None
 
-        composition_data = pd.DataFrame([self.vis_composition_data(household
-            ) for household in households])
+        composition_data = pd.DataFrame([
+            self.vis_composition_data(household) for household in households
+            ])
         data[['local_comp', 'n_comp', 's_comp', 'school_comp_utility']] = \
             composition_data
 
         # Fill school data if applicable, set them to zero otherwise
         if not self.residential:
-            data['school_id'] = (self.households[time, :, 8] - 
-                self.params['n_neighbourhoods']).astype(int)
+            data['school_id'] = (
+                    self.households[time, :, 8] -
+                    self.model.params['n_neighbourhoods']
+                    ).astype(int)
             data['dist_school'] = self.households[time, :, 7]
             data['school_utility'] = self.households[time, :, 4]
             data['school_happy'] = None
@@ -264,13 +256,13 @@ class Measurements:
 
         return data
 
-
     def vis_school_data(self, household_data):
         """
         Gets the required data from all the schools in the model.
 
         Args:
-            household_data (DataFrame): all the household data already gathered.
+            household_data (DataFrame): all the household data already
+                                        gathered.
 
         Returns:
             DataFrame of all the school data.
@@ -278,9 +270,10 @@ class Measurements:
         Note:
             School data is still calculated per household and not per student
         """
-        schools = self.agents['schools']
-        data = self.empty_dataframe(columns=household_data.columns,
-                                    n_rows=len(schools))
+        schools = self.model.agents['schools']
+        data = self.empty_dataframe(
+                columns=household_data.columns, n_rows=len(schools)
+                )
 
         for index, school in enumerate(schools):
             agent_type = 'school'
@@ -294,8 +287,8 @@ class Measurements:
 
             # Subtract the number of neighbourhoods for the visualisation of
             # school composition plot.
-            school_id = int(school.unique_id - self.params['n_neighbourhoods'])
-            pupils = household_data[household_data.school_id==school_id]
+            school_id = int(school.unique_id - self.model.params['n_neighbourhoods'])
+            pupils = household_data[household_data.school_id == school_id]
             dist_school = pupils.dist_school.mean()
             school_utility = pupils.school_utility.mean()
             school_happy = pupils.school_happy.mean()
@@ -324,7 +317,7 @@ class Measurements:
         Returns:
             DataFrame of all the neighbourhood data.
         """
-        neighbourhoods = self.agents['neighbourhoods']
+        neighbourhoods = self.model.agents['neighbourhoods']
         data = self.empty_dataframe(columns=household_data.columns,
                                     n_rows=len(neighbourhoods))
 
@@ -437,7 +430,7 @@ class Measurements:
                 neighbourhoods_headers=NEIGHBOURHOOD_HEADERS,
                 schools=self.schools[school_start:school_end_time,:,:],
                 schools_headers=SCHOOL_HEADERS,
-                params=self.params)
+                params=self.model.params)
             print('Data saved!')
 
 
@@ -480,7 +473,7 @@ class Measurements:
             list: if per_location is set to True.
 
         Note:
-            Only works for first category in self.params["group_categories"].
+            Only works for first category in self.model.params["group_categories"].
 
         Todo:
             Decide which notation to use
@@ -488,11 +481,11 @@ class Measurements:
 
         # Check which composition to use
         if type == "bounded_neighbourhood":
-            agents = self.agents["neighbourhoods"]
+            agents = self.model.agents["neighbourhoods"]
         elif type == "local_neighbourhood":
-            agents = self.agents["households"]
+            agents = self.model.agents["households"]
         elif type == "school":
-            agents = self.agents["schools"]
+            agents = self.model.agents["schools"]
         else:
             print("Calculation of Theil's information index not supported.")
             sys.exit(1)
