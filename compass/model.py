@@ -68,6 +68,11 @@ class CompassModel(Model):
         else:
             self.create_agents()
 
+        # Initialise other objects
+        self.measurements = Measurements(self)
+        self.scheduler = ThreeStagedActivation(self)
+        self.grid = ContinuousSpace(self.params["width"], self.params["height"], torus=self.params["torus"])
+
         # Initial compositions need to be calculated after every household is placed
         [household.update_utilities() for household in self.get_agents('households')]
 
@@ -114,12 +119,7 @@ class CompassModel(Model):
         self.verbose = self.params['verbose']
         self.agents = {"amount": 0, "households": [], "schools": [],
             "neighbourhoods": []}
-        
-        # Initialise other objects
-        self.measurements = Measurements(self)
-        self.scheduler = ThreeStagedActivation(self)
-        self.grid = ContinuousSpace(self.params["width"], self.params["height"],
-                                torus=self.params["torus"])
+
 
 
     def create_agents(self):
@@ -397,6 +397,7 @@ class CompassModel(Model):
         # randomness in the type and spatial distribution
         total_households = len(household_frame)
         actual_households = int(total_households / perc_of_actual)
+        print('Adjusting households to', actual_households)
         self.params['n_households'] = actual_households
         self.params['n_students'] = int(self.params["n_households"] * 
                 self.params["student_density"])

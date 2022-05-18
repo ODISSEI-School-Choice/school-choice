@@ -6,6 +6,23 @@ import sys
 import numpy as np
 import pandas as pd
 
+HOUSEHOLD_HEADERS = [
+    'loc_x', 'loc_y', 'local_comp_0', 'local_comp_1', 'utility',
+    'category', 'id', 'distance', 'unit'
+    ]
+
+NEIGHBOURHOOD_HEADERS = [
+    'comp_0', 'comp_1', 'utility', 'satisfied', 'distance', 'unit'
+    ]
+
+SCHOOL_HEADERS = [
+    'comp_0', 'comp_1', 'utility', 'satisfied', 'distance', 'unit'
+    ]
+
+N_SCHOOL_ATTRS = len(SCHOOL_HEADERS)
+N_NEIGHBOURHOOD_ATTRS = len(NEIGHBOURHOOD_HEADERS)
+N_HOUSEHOLD_ATTRS = len(HOUSEHOLD_HEADERS)
+
 
 class Utilities:
     """
@@ -36,55 +53,41 @@ class Measurements:
     """
 
     def __init__(self, model):
-
         self.all_measurements = []
         self.model = model
         self.params = model.params
         self.agents = model.agents
         self.vis_data = dict()
 
-
-    def headers(self):
-        """
-        This function creates numpy arrays with the names of the columns for
-        the household, neighbourhood and school data.
-        """
-        self.household_headers = np.array(['loc_x', 'loc_y', 'local_comp_0',
-            'local_comp_1', 'utility', 'category', 'id', 'distance', 'unit'])
-        self.neighbourhood_headers = np.array(['comp_0', 'comp_1', 'utility',
-            'satisfied', 'distance', 'unit'])
-        self.school_headers = np.array(['comp_0', 'comp_1', 'utility',
-            'satisfied', 'distance', 'unit'])
-
-    
-    def measurement_arrays(self):
-        """
-        Initialises the measurement arrays.
-        """
         dtype = "float32"
+
         # Maximum steps and number of attributes per array
-        max_steps = self.params['max_res_steps'] + 1 + \
-            self.params['max_school_steps']
-        self.headers()
-        self.n_household_attrs = len(self.household_headers)
-        self.n_neighbourhood_attrs = len(self.neighbourhood_headers)
-        self.n_school_attrs = len(self.school_headers)
-        self.temp_household = np.zeros(self.n_household_attrs, dtype=dtype)
+        max_steps = 1 + self.params['max_res_steps'] + self.params['max_school_steps']
 
-        # Determine the maximum shape of the arrays
-        households_shape = (max_steps, self.params["n_households"],
-            self.n_household_attrs)
-        neighbourhoods_shape = (self.params['max_res_steps'] + 1,
-            self.params["n_neighbourhoods"], self.n_neighbourhood_attrs)
-        schools_shape = (self.params['max_school_steps'],
-            self.params["n_schools"], self.n_school_attrs)
+        self.households = np.zeros(
+                shape=(
+                    max_steps, self.params["n_households"], N_HOUSEHOLD_ATTRS
+                    ),
+                dtype=dtype
+                )
 
-        # Initialise empty arrays (datatype is important)
-        self.households = np.zeros(shape=households_shape, dtype=dtype)
-        self.neighbourhoods = np.zeros(shape=neighbourhoods_shape, 
-            dtype=dtype)
-        self.schools = np.zeros(shape=schools_shape, dtype=dtype)
+        self.neighbourhoods = np.zeros(
+                shape=(
+                    self.params['max_res_steps'] + 1,
+                    self.params["n_neighbourhoods"],
+                    N_NEIGHBOURHOOD_ATTRS
+                    ),
+                dtype=dtype
+                )
 
+        self.schools = np.zeros(
+                shape=(
+                    self.params['max_school_steps'],
+                    self.params["n_schools"],
+                    N_SCHOOL_ATTRS
+                    ),
+                dtype=dtype
+                )
 
     def household_data(self, residential, time):
         """
@@ -140,8 +143,6 @@ class Measurements:
         # Fill arrays with data
         self.residential = residential
         time = self.model.scheduler.get_time()
-        if time == 0:
-            self.measurement_arrays()
         self.household_data(residential, time)
         if residential:
             self.neighbourhood_data(time)
@@ -427,15 +428,15 @@ class Measurements:
                 households = self.households[:end_time,:,:]
 
             print('Saving data...')
-            
+
             np.savez(filename,
                 households=households,
                 chosen_indices=self.model.chosen_indices,
-                households_headers=self.household_headers,
+                households_headers=HOUSEHOLD_HEADERS,
                 neighbourhoods=self.neighbourhoods[res_start:res_end_time,:,:],
-                neighbourhoods_headers=self.neighbourhood_headers,
+                neighbourhoods_headers=NEIGHBOURHOOD_HEADERS,
                 schools=self.schools[school_start:school_end_time,:,:],
-                schools_headers=self.school_headers,
+                schools_headers=SCHOOL_HEADERS,
                 params=self.params)
             print('Data saved!')
 
