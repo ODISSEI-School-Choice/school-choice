@@ -1034,8 +1034,8 @@ class CompassModel(Model):
                 [Point(school.pos) for school in self.agents['schools']]
                 )
         for household in self.agents['households']:
-            self.all_distances[household.array_index, :] =
-            school_frame.distance(household.shape)
+            self.all_distances[household.array_index, :] = \
+                    school_frame.distance(household.shape)
 
     def export_data(self, export=False):
         """
