@@ -85,6 +85,7 @@ class Measurements:
                     ),
                 dtype=dtype
                 )
+        self.residential = True  # TODO: sensible default?
 
     def household_data(self, residential, time):
         """
