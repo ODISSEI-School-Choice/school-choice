@@ -46,7 +46,10 @@ class Measurements:
     Attributes:
         model (CompassModel): CompassModel object.
         vis_data (dict): dictionary for visualisation purposes.
-
+        households (np array): the household data for all timesteps
+        neighbourhoods (np array): the neighbourhod data for all timesteps
+        schools (np array): the school data for all timesteps
+        residential (bool): TODO: should this be per timestep?
     """
 
     def __init__(self, model):
@@ -299,20 +302,22 @@ class Measurements:
             s_comp = school.composition.astype(int)
 
             # Add data to the DataFrame
-            data.iloc[index] = [agent_type, x, y, group0, group1, res_id,
-                res_utility, res_happy, school_id, dist_school, school_utility,
-                school_happy, res_q5, res_q95, school_q5, school_q95, res_seg,
-                school_seg, local_comp, n_comp, s_comp, school_comp_utility]
+            data.iloc[index] = [
+                    agent_type, x, y, group0, group1, res_id, res_utility,
+                    res_happy, school_id, dist_school, school_utility,
+                    school_happy, res_q5, res_q95, school_q5, school_q95,
+                    res_seg, school_seg, local_comp, n_comp, s_comp,
+                    school_comp_utility
+                    ]
 
         return data
-
 
     def vis_neighbourhood_data(self, household_data):
         """
         Gets the required data from all the neighbourhood in the model.
 
         Args:
-            household_data (DataFrame): all the household data already gathered.
+            household_data (DataFrame): all the household data already gathered
 
         Returns:
             DataFrame of all the neighbourhood data.
@@ -326,7 +331,8 @@ class Measurements:
             group0, group1 = neighbourhood.composition.astype(int)
             res_id = index
             households = household_data[
-                household_data.res_id==neighbourhood.unique_id]
+                household_data.res_id == neighbourhood.unique_id
+                ]
             res_utility = households.res_utility.mean()
             res_happy = households.res_happy.mean()
             x, y = neighbourhood.pos
@@ -335,9 +341,8 @@ class Measurements:
                 x, y = neighbourhood.shape.exterior.coords.xy
             elif neighbourhood.shape.type == 'MultiPolygon':
                 x, y = neighbourhood.shape.convex_hull.exterior.coords.xy
-        
-            x, y = list(x), list(y)
 
+            x, y = list(x), list(y)
 
             # School attributes
             school_id, dist_school, school_utility, school_happy = [None]*4
@@ -345,19 +350,21 @@ class Measurements:
             local_comp, n_comp, s_comp, school_comp_utility = [None]*4
 
             # Add data to the DataFrame
-            data.iloc[index] = [agent_type, x, y, group0, group1, res_id,
-                res_utility, res_happy, school_id, dist_school, school_utility,
-                school_happy, res_q5, res_q95, school_q5, school_q95, res_seg,
-                school_seg, local_comp, n_comp, s_comp, school_comp_utility]
+            data.iloc[index] = [
+                    agent_type, x, y, group0, group1, res_id, res_utility,
+                    res_happy, school_id, dist_school, school_utility,
+                    school_happy, res_q5, res_q95, school_q5, school_q95,
+                    res_seg, school_seg, local_comp, n_comp, s_comp,
+                    school_comp_utility
+                    ]
         return data
-
 
     def vis_system_data(self, household_data, school_data, neighbourhood_data):
         """
         Gets the required data from the whole system.
 
         Args:
-            household_data (DataFrame): all the household data already gathered.
+            household_data (DataFrame): all the household data already gathered
             school_data (DataFrame): all the school data already gathered.
             neighbourhood_data (DataFrame): all the neighbourhood data already
                 gathered.
@@ -378,8 +385,10 @@ class Measurements:
         res_q95 = household_data.res_utility.quantile(q=0.95)
         school_q5 = household_data.school_utility.quantile(q=0.05)
         school_q95 = household_data.school_utility.quantile(q=0.95)
-        res_seg = self.calculate_segregation(type="bounded_neighbourhood",
-                                                index="Theil")
+        res_seg = self.calculate_segregation(
+                type="bounded_neighbourhood",
+                index="Theil"
+                )
         if self.residential:
             school_seg = 0
         else:
@@ -389,18 +398,18 @@ class Measurements:
         school_comp_utility = household_data.school_comp_utility.mean()
 
         # Add data to the DataFrame
-        data.iloc[0] = [agent_type, x, y, group0, group1, res_id, res_utility,
-            res_happy, school, dist_school, school_utility, school_happy,
-            res_q5, res_q95, school_q5, school_q95, res_seg, school_seg,
-            local_comp, n_comp, s_comp, school_comp_utility]
+        data.iloc[0] = [
+                agent_type, x, y, group0, group1, res_id, res_utility,
+                res_happy, school, dist_school, school_utility, school_happy,
+                res_q5, res_q95, school_q5, school_q95, res_seg, school_seg,
+                local_comp, n_comp, s_comp, school_comp_utility
+                ]
         return data
 
-    
     def export_data(self):
         """
         Export the data using numpy save.
         """
-        
         if self.model.export:
             end_time = self.model.scheduler.get_time()
             res_end_time = self.model.scheduler.get_time('residential')
@@ -413,29 +422,34 @@ class Measurements:
                 start = end_time - 1
                 res_start = res_end_time - 1
                 school_start = school_end_time - 1
-                households = self.households[[res_start, start],:,:]
+                households = self.households[[res_start, start], :, :]
 
-            else: 
+            else:
                 res_start = 0
                 school_start = 0
-                households = self.households[:end_time,:,:]
+                households = self.households[:end_time, :, :]
 
             print('Saving data...')
 
-            np.savez(filename,
-                households=households,
-                chosen_indices=self.model.chosen_indices,
-                households_headers=HOUSEHOLD_HEADERS,
-                neighbourhoods=self.neighbourhoods[res_start:res_end_time,:,:],
-                neighbourhoods_headers=NEIGHBOURHOOD_HEADERS,
-                schools=self.schools[school_start:school_end_time,:,:],
-                schools_headers=SCHOOL_HEADERS,
-                params=self.model.params)
+            np.savez(
+                    filename,
+                    households=households,
+                    chosen_indices=self.model.chosen_indices,
+                    households_headers=HOUSEHOLD_HEADERS,
+                    neighbourhoods=self.neighbourhoods[res_start:res_end_time, :, :],
+                    neighbourhoods_headers=NEIGHBOURHOOD_HEADERS,
+                    schools=self.schools[school_start:school_end_time, :, :],
+                    schools_headers=SCHOOL_HEADERS,
+                    params=self.model.params
+                    )
             print('Data saved!')
 
-
-    def calculate_segregation(self, type="school", index="Theil", 
-        per_location=False):
+    def calculate_segregation(
+            self,
+            type="school",
+            index="Theil",
+            per_location=False
+            ):
         """
         Calculate segregation index for the whole system.
 
@@ -455,7 +469,6 @@ class Measurements:
         else:
             print("Segregation index not supported")
             exit(1)
-
 
     def calculate_theil(self, type, per_location=False):
         """
@@ -490,18 +503,18 @@ class Measurements:
             print("Calculation of Theil's information index not supported.")
             sys.exit(1)
 
-        global_composition = self.model.global_composition
         global_composition_normalized = self.model.global_composition_normalized
         pi_m = global_composition_normalized
 
         local_compositions = np.empty((len(agents), len(pi_m)))
         nr_of_agents = np.empty(len(agents))
-        for i in range(len(agents)):
-            nr_of_agents[i] = np.sum(agents[i].composition)
+        # for i in range(len(agents)):
+        for i, agent in enumerate(agents):
+            nr_of_agents[i] = np.sum(agent.composition)
             if nr_of_agents[i] < 1:
-                local_compositions[i] = agents[i].composition
+                local_compositions[i] = agent.composition
             else:
-                local_compositions[i] = agents[i].composition / nr_of_agents[i]
+                local_compositions[i] = agent.composition / nr_of_agents[i]
 
         total_agents = np.sum(nr_of_agents)
 
