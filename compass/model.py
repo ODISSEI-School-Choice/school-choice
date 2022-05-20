@@ -112,28 +112,30 @@ class CompassModel(Model):
         self.res_ended = False
         self.school_ended = False
         self.verbose = self.params['verbose']
-        self.agents = {"amount": 0, "households": [], "schools": [],
-            "neighbourhoods": []}
-
-
+        self.agents = {
+                "amount": 0,
+                "households": [],
+                "schools": [],
+                "neighbourhoods": []
+                }
 
     def create_agents(self):
         """
         Creates the agents when no case study is provided.
         """
-        self.neighbourhoods()
-        self.schools()
+        self.create_neighbourhoods()
+        self.create_schools()
         self.location_to_agent()
 
         # Compute closest neighbourhoods 
         self.closest_neighbourhoods = self.compute_closest_neighbourhoods()
 
         # Create households
-        self.households()
+        self.create_households()
 
     def set_agent_parameters(self, params, households):
         """
-        Puts the agent parameters in numpy arrays for faster computations. 
+        Puts the agent parameters in numpy arrays for faster computations.
 
         Args:
             params (dict): Model parameters which could differ from
@@ -141,18 +143,24 @@ class CompassModel(Model):
             households (list): list of Household objects. Students should
                 inherit their parameters from the Household object.
 
+        Calculates (constant during run):
+            categories ([int]) array of the household.category values
+
+        Allocates (changes over run):
+            distances  ([float]) array of the distance of the household to school of the first student
+
         Todo:
             Parameters should be imported from a config file in the future.
         """
+        dtype = "float32"
 
         # to remember the index in the array of the specific household
         n_agents = len(households)
-        self.local_compositions = []
-        self.neighbourhood_compositions = []
+        self.local_compositions = np.zeros(n_agents, dtype=dtype)
+        self.neighbourhood_compositions = np.zeros(n_agents, dtype=dtype)
         schools = self.agents['schools']
         n_schools = len(schools)
 
-        dtype = "float32"
         self.alpha = np.zeros(n_agents, dtype=dtype)
         self.temperature = self.params['temperature']
         self.categories = np.zeros(n_agents, dtype=int)
@@ -173,9 +181,6 @@ class CompassModel(Model):
                                 scale=params['homophily_std'],
                                 size=n_agents)
 
-        distances = np.zeros((n_agents, n_schools), dtype=dtype)
-        school_objects = np.zeros((n_agents, n_schools), dtype=object)
-
         if self.params['case'].lower() == 'lattice':
             local_compositions = self.normalized_compositions
 
@@ -192,15 +197,13 @@ class CompassModel(Model):
             # Currently only convolution (assumes every household has the same
             # radius) for composition calculations within the lattice case.
             if params['case'].lower() == 'lattice':
-                self.local_compositions.append(
-                    local_compositions[x, y, household.category])
+                self.local_compositions[array_index] = \
+                    local_compositions[x, y, household.category]
             else:
                 household.params['neighbourhood_mixture'] = 1
 
-            self.neighbourhood_compositions.append(
-                household.neighbourhood.composition_normalized[household.category])
-
-        self.school_objects = school_objects
+            self.neighbourhood_compositions[array_index] =  \
+                household.neighbourhood.composition_normalized[household.category]
 
         # These are filled with the actual distance and composition utilities
         # of the household and the school (singular!) they attend
@@ -215,7 +218,7 @@ class CompassModel(Model):
             q = self.params['q']
             self.distance_utilities = 1. / (1 + (self.all_distances / p)**q)
 
-        self.vectorise_functions() # for element-wise operations
+        self.vectorise_functions()  # for element-wise operations
 
 
     def vectorise_functions(self):
@@ -238,7 +241,7 @@ class CompassModel(Model):
         return utility
 
 
-    def neighbourhoods(self):
+    def create_neighbourhoods(self):
         """
         Adds the neighbourhood objects to the environment.
         """
@@ -250,7 +253,6 @@ class CompassModel(Model):
             locations = self.choose_locations(n_neighs,
                                 self.params["neighbourhoods_placement"])
             for i in range(n_neighs):
-                
                 x, y = locations[i]
                 location = (x, y)
                 size = self.params['width'] / float(n_neighs**0.5 * 2)
@@ -268,7 +270,7 @@ class CompassModel(Model):
                 self.grid.place_agent(neighbourhood, locations[i])
 
 
-    def schools(self):
+    def create_schools(self):
         """
         Adds the school objects to the environment.
         """
@@ -291,7 +293,7 @@ class CompassModel(Model):
                 self.grid.place_agent(school, location)
 
 
-    def households(self):
+    def create_households(self):
         """
         Adds the household objects to the environment.
 
@@ -300,9 +302,15 @@ class CompassModel(Model):
         """
 
         params = self.params
-        self.chosen_indices = None # Only matters for case studies
-        self.household_attrs = np.zeros(shape=(params["width"],
-            params['height'], len(params['group_types'][0])), dtype="float32")
+        self.chosen_indices = None  # Only matters for case studies
+        self.household_attrs = np.zeros(
+                shape=(
+                    params["width"],
+                    params['height'],
+                    len(params['group_types'][0])
+                    ),
+                dtype="float32"
+                )
 
         # Create group types, empty spots and shuffle them both
         n_groups = len(params["group_categories"])
@@ -321,7 +329,6 @@ class CompassModel(Model):
             params["optimal_fraction"][0],
             scale=params['homophily_std'],
             size=params["n_households"])
-
 
         for i, position in enumerate(empties[0:params["n_households"]]):
             household = Household(self.agents["amount"], position, self,
@@ -381,7 +388,7 @@ class CompassModel(Model):
         data = np.load(path + '/distances_perc_of_actual.npz')
         perc_of_actual = data['perc_of_actual']
         self.all_distances = data['distances']
-        
+
         self.scheduler = ThreeStagedActivation(self)
 
         # More agents are simulated to sample from them and incorporate some 
@@ -476,15 +483,15 @@ class CompassModel(Model):
         n_agents = self.params['n_neighbourhoods'] + self.params['n_schools']
         neighbourhoods = self.agents['neighbourhoods']
 
-        self.all_distances = self.all_distances[self.chosen_indices,:]
+        self.all_distances = self.all_distances[self.chosen_indices, :]
 
-        [self.create_household(index, row, n_agents, neighbourhoods
-            ) for index, row in households.iterrows()]
-            
+        for index, row in households.iterrows():
+            self.create_single_household(index, row, n_agents, neighbourhoods)
+
         self.location_to_agent()
 
 
-    def create_household(self, index, row, n_agents, neighbourhoods):
+    def create_single_household(self, index, row, n_agents, neighbourhoods):
         """
         Creates ONE household
         """
@@ -509,7 +516,6 @@ class CompassModel(Model):
         agents = self.agents['neighbourhoods']
         self.location_to_agent = {str(agent.pos):agent for agent in agents}
 
-
     def trunc_normal_sample(self, means, scale, size):
         """
         Samples from a truncated normal distribution.
@@ -518,11 +524,13 @@ class CompassModel(Model):
         for index, mu in enumerate(means):
 
             # All samples are equal if the scale is zero.
-            if scale==0:
+            if scale == 0:
                 sample[index] = np.repeat(mu, size)
             else:
-                sample[index] = truncnorm.rvs((0-mu)/scale, (1-mu)/scale,
-                                                loc=mu, scale=scale, size=size)
+                sample[index] = truncnorm.rvs(
+                        (0-mu)/scale, (1-mu)/scale,
+                        loc=mu, scale=scale, size=size
+                        )
         return sample
 
 
@@ -562,7 +570,7 @@ class CompassModel(Model):
 
     def calc_school_compositions(self):
         """
-        Calculate the new school compositions for every household and only for 
+        Calculate the new school compositions for every household and only for
         the first student!
 
         Note:
@@ -575,14 +583,13 @@ class CompassModel(Model):
             self.distances[array_index] = household.distance
             self.school_compositions[array_index] = \
                 household.students[0].school.composition_normalized[category]
-            
 
     def calc_res_utilities(self):
         """
-        Calculates residential utility at a household its current position and 
-        given its parameter values. 
+        Calculates residential utility at a household its current position and
+        given its parameter values.
         """
-        
+
         b = self.neighbourhood_mixture
         f = self.optimal_fraction
         M = self.utility_at_max
@@ -590,11 +597,10 @@ class CompassModel(Model):
             b*self.neighbourhood_compositions
         self.res_utilities = self.calc_comp_utility_v(x, M, f)
 
-
     def calc_school_utilities(self):
         """
-        Calculates school utilities at a student its current school, given 
-        distance and its other parameter values. 
+        Calculates school utilities at a student its current school, given
+        distance and its other parameter values.
         """
 
         alpha = self.alpha
@@ -610,7 +616,6 @@ class CompassModel(Model):
         self.school_utilities = (self.school_composition_utilities * alpha) + \
             (self.distances * (1 - alpha))
 
-
     def calc_school_rankings(self, households, schools):
         """
         Ranks the schools according to utility.
@@ -621,27 +626,33 @@ class CompassModel(Model):
             schools (list): list of schools that need to be ranked.
 
         Todo:
-            Schools can differ per household if we only want to look at the 
+            Schools can differ per household if we only want to look at the
             n-closest schools for example?
         """
         compositions = np.array(
             [school.composition_normalized for school in schools], dtype="float32")
-        
+
         # Composition utility calculations
         t = self.optimal_fraction
         M = self.utility_at_max
         x = compositions[:, self.categories]
-        composition_utilities = np.where(x<=t, x / t, M + (1-x)*(1-M) / (1-t))
+        composition_utilities = np.where(
+                x <= t,
+                x / t,
+                M + (1-x)*(1-M) / (1-t)
+                )
 
         # Combined (THIS SHOULD BE GENERALISED TO INCLUDE MORE FACTORS)
-        utilities = composition_utilities * self.alpha[np.newaxis, :] + \
-            (self.distance_utilities * (1 - self.alpha[:,np.newaxis])).T
-        
+        utilities = composition_utilities * self.alpha[np.newaxis, :] + (
+                self.distance_utilities * (1 - self.alpha[:, np.newaxis])
+                ).T
+
         # Rank the schools according to the household utilities
         schools = np.array(schools)
-        if self.params['ranking_method'].lower()=='proportional':
+        if self.params['ranking_method'].lower() == 'proportional':
             transform = True
-        else: transform = False
+        else:
+            transform = False
 
         # for household in households:
         #     if transform:
@@ -667,9 +678,10 @@ class CompassModel(Model):
             transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
         ranked_indices = transformed.argsort(axis=0)[::-1]
 
-        for i in range(len(households)):
+        for i, household in enumerate(households):
             ranking = schools[ranked_indices[:, i]]
-            [s.set_school_preference(ranking) for s in households[i].students]
+            for student in household.students:
+                student.set_school_preference(ranking)
 
     def get_attributes(self, pos):
         """
@@ -838,7 +850,6 @@ class CompassModel(Model):
             return []
 
         else:
-            
             # Evenly spaced is also used in 'random_per_neighbourhood'
             per_side = np.sqrt(amount)
             if per_side % 1 != 0:
@@ -849,7 +860,7 @@ class CompassModel(Model):
             per_side = int(per_side)
             xs = np.linspace(0, self.params['width'], per_side*2+1)[1::2]
             ys = np.linspace(0, self.params['height'], per_side*2+1)[1::2]
-            locations = [(x,y) for x in xs for y in ys]
+            locations = [(x, y) for x in xs for y in ys]
 
         if method == "random":
             locations = []
@@ -862,7 +873,6 @@ class CompassModel(Model):
                     i += 1
 
         elif method == "random_per_neighbourhood":
-
             width, height = self.params["width"], self.params['height']
             n_schools = self.params['n_schools']
             n_neighbourhoods = self.params['n_neighbourhoods']
@@ -916,7 +926,6 @@ class CompassModel(Model):
 
         return locations
 
-
     def compute_closest_neighbourhoods(self):
         """
         Compute distance from all grid cells to all schools and all
@@ -925,14 +934,13 @@ class CompassModel(Model):
         Returns:
             dict: of dicts containing all Euclidean distances
         """
-        
         EPS = 1.2e-6
         closest_neighbourhoods = {}
         neighbourhoods = self.agents["neighbourhoods"]
 
         for x in range(self.params["width"]):
             for y in range(self.params["height"]):
-                
+
                 # Loop over all neighbourhoods, calculate distance and save
                 # closest
                 point = Point(x,y)
@@ -941,7 +949,7 @@ class CompassModel(Model):
                     if shape.contains(point):
                         closest_neighbourhoods[str((x,y))] = str(neighbourhood.pos)
                         break
-        
+
         return closest_neighbourhoods
 
 
