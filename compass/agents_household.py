@@ -28,7 +28,7 @@ class Household(BaseAgent):
         attributes (array): array of attributes of the specific agent.
         composition (np array): the sum of the attribute arrays of all Households
             in the local composition of this household.
-        normalized_composition (np array): same as above but normalized.
+        composition_normalized (np array): same as above but normalized.
         students (list): the student(s) in the household.
         utility
         distance
@@ -37,7 +37,6 @@ class Household(BaseAgent):
         shape (Point)
         array_index (int like): household index in lookup tables
     """
-
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
         # Store parameters
