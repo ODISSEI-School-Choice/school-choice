@@ -26,7 +26,11 @@ def record_time(name):
         start_time = datetime.now()
         yield
     finally:
-        print("\n%s: %f" % (name, (datetime.now() - start_time).total_seconds()))
+        print("\n%s: %f" % (
+            name,
+            (datetime.now() - start_time).total_seconds()
+            )
+        )
 
 
 class CompassModel(Model):
@@ -47,6 +51,7 @@ class CompassModel(Model):
             to another.
         nearness_matrix (list): same as above but with normalized distances.
         global_composition_normalized (dict): normalized system compositions.
+        all_distances (np array): TODO
     """
 
     def __init__(self, params, export=False):
@@ -89,6 +94,8 @@ class CompassModel(Model):
                 In scheduler: {self.scheduler.get_agent_count()}"""
             print(text)
 
+        self.all_distances = None
+
     def set_attributes(self, params, export=False):
         """
         Sets or calculates all attributes used in the Compass class.
@@ -99,11 +106,15 @@ class CompassModel(Model):
         """
 
         # Calculate number of households and students
-        params["n_households"] = int(params["household_density"]
-            * (params["width"] * params["height"]
-            - params["n_neighbourhoods"] - params["n_schools"]))
-        params['n_students'] = int(params["n_households"] * 
-                params["student_density"])
+        params["n_households"] = int(
+                params["household_density"] * (
+                    params["width"] * params["height"]
+                    - params["n_neighbourhoods"]
+                    - params["n_schools"])
+                )
+        params['n_students'] = int(
+                params["n_households"] * params["student_density"]
+                )
         self.params = dict(params)
 
         # Set tracking attributes
@@ -127,7 +138,7 @@ class CompassModel(Model):
         self.create_schools()
         self.location_to_agent()
 
-        # Compute closest neighbourhoods 
+        # Compute closest neighbourhoods
         self.closest_neighbourhoods = self.compute_closest_neighbourhoods()
 
         # Create households
@@ -220,26 +231,23 @@ class CompassModel(Model):
 
         self.vectorise_functions()  # for element-wise operations
 
-
     def vectorise_functions(self):
         """
-        Vectorises functions using numpy.vectorize for use in 
+        Vectorises functions using numpy.vectorize for use in
         array computations.
         """
         self.calc_comp_utility_v = np.vectorize(self.calc_comp_utility)
 
-
     def calc_comp_utility(self, x, M, f):
         """
-        Calculates the utility given a normalised composition (0<=x<=1), an 
+        Calculates the utility given a normalised composition (0<=x<=1), an
         optimal fraction (0<=f<=1) and utility at homogeneity (0<=M<=1).
         """
         if x <= f:
-            utility =  x / f
+            utility = x / f
         else:
-            utility =  M + (1-x)*(1-M) / (1-f)
+            utility = M + (1-x)*(1-M) / (1-f)
         return utility
-
 
     def create_neighbourhoods(self):
         """
@@ -250,8 +258,10 @@ class CompassModel(Model):
 
         # Add neighbourhoods if necessary
         if n_neighs:
-            locations = self.choose_locations(n_neighs,
-                                self.params["neighbourhoods_placement"])
+            locations = self.choose_locations(
+                    n_neighs,
+                    self.params["neighbourhoods_placement"]
+                    )
             for i in range(n_neighs):
                 x, y = locations[i]
                 location = (x, y)
@@ -262,13 +272,16 @@ class CompassModel(Model):
 
                 # Create the Neighbourhood object and place it on the grid and
                 # add it to the scheduler
-                neighbourhood = Neighbourhood(self.agents["amount"],
-                                        location, shape, self, 
-                                        self.params)
+                neighbourhood = Neighbourhood(
+                        self.agents["amount"],
+                        location,
+                        shape,
+                        self,
+                        self.params
+                        )
                 self.agents["neighbourhoods"].append(neighbourhood)
                 self.scheduler.add(neighbourhood)
                 self.grid.place_agent(neighbourhood, locations[i])
-
 
     def create_schools(self):
         """
@@ -277,21 +290,26 @@ class CompassModel(Model):
 
         # Add schools if necessary
         if self.params["n_schools"]:
-            locations = self.choose_locations(self.params["n_schools"],
-                                self.params["schools_placement"])
+            locations = self.choose_locations(
+                    self.params["n_schools"],
+                    self.params["schools_placement"]
+                    )
             for i in range(self.params["n_schools"]):
                 x, y = locations[i]
                 location = (x, y)
 
                 # Create the School object and place it on the grid and add it
                 # to the scheduler
-                school = School(self.agents["amount"],
-                    location, self, self.params)
+                school = School(
+                        self.agents["amount"],
+                        location,
+                        self,
+                        self.params
+                        )
                 school.array_index = i
                 self.agents["schools"].append(school)
                 self.scheduler.add(school)
                 self.grid.place_agent(school, location)
-
 
     def create_households(self):
         """
@@ -314,13 +332,19 @@ class CompassModel(Model):
 
         # Create group types, empty spots and shuffle them both
         n_groups = len(params["group_categories"])
-        groups = [np.random.choice(list(range(0,
-            len(params["group_types"][i]))), size=params["n_households"],
-            p=params["group_dist"][i]) for i in range(n_groups)]
+        groups = [
+                np.random.choice(
+                    list(range(0, len(params["group_types"][i]))),
+                    size=params["n_households"],
+                    p=params["group_dist"][i]
+                    ) for i in range(n_groups)
+                ]
 
         self.grid.empties = set(
-            [(x,y) for x in range(params['width']) 
-            for y in range(params['height'])])
+                [(x, y) for x in range(params['width'])
+                    for y in range(params['height'])
+                    ]
+            )
         empties = list(self.grid.empties)
         np.random.shuffle(empties)
 
@@ -331,8 +355,13 @@ class CompassModel(Model):
             size=params["n_households"])
 
         for i, position in enumerate(empties[0:params["n_households"]]):
-            household = Household(self.agents["amount"], position, self,
-                params, groups[0][i])
+            household = Household(
+                    self.agents["amount"],
+                    position,
+                    self,
+                    params,
+                    groups[0][i]
+                    )
 
             # Find according group and group specific information
             for j in range(len(groups)):
@@ -347,7 +376,9 @@ class CompassModel(Model):
             self.grid.place_agent(household, position)
             self.grid.empties.discard(position)
             self.scheduler.add(household)
-            self.household_attrs[position[0], position[1], :] = household.attributes
+            self.household_attrs[
+                    position[0], position[1], :
+                    ] = household.attributes
 
         # Calculate AFTER all agents are placed
         all_households = self.agents['households']
@@ -356,18 +387,17 @@ class CompassModel(Model):
         self.calc_res_utilities()
         # (household.update_utilities() for household in all_households)
 
-
     def load_agents(self, case='Amsterdam'):
         """
         Load the agents from several files.
 
         Note:
-            This function is in progress and works only for the 
+            This function is in progress and works only for the
             Amsterdam case now.
         """
-        
+
         dirname = os.path.dirname(__file__)
-        if case.lower()=='amsterdam':
+        if case.lower() == 'amsterdam':
             path = dirname + '/maps/amsterdam'
 
         # Load GeoDataFrames
@@ -379,8 +409,11 @@ class CompassModel(Model):
         self.params["torus"] = 0
         self.params['max_res_steps'] = 0
         xmin, ymin, xmax, ymax = neighbourhood_frame.total_bounds
-        self.grid = ContinuousSpace(xmax, ymax, self.params["torus"],
-            xmin, ymin)
+        self.grid = ContinuousSpace(
+                xmax,
+                ymax,
+                self.params["torus"], xmin, ymin
+                )
         self.grid.empties = [(0,0)]
 
         # In the file more households could be available to sample from,
@@ -391,14 +424,15 @@ class CompassModel(Model):
 
         self.scheduler = ThreeStagedActivation(self)
 
-        # More agents are simulated to sample from them and incorporate some 
+        # More agents are simulated to sample from them and incorporate some
         # randomness in the type and spatial distribution
         total_households = len(household_frame)
         actual_households = int(total_households / perc_of_actual)
         print('Adjusting households to', actual_households)
         self.params['n_households'] = actual_households
-        self.params['n_students'] = int(self.params["n_households"] * 
-                self.params["student_density"])
+        self.params['n_students'] = int(
+                self.params["n_households"] * self.params["student_density"]
+                )
 
         # Create neighbourhoods
         self.create_neighbourhoods(neighbourhood_frame)
@@ -419,7 +453,6 @@ class CompassModel(Model):
         if self.verbose:
             print('Model loaded!')
 
-
     def create_neighbourhoods(self, neighbourhood_frame):
         """
         Given a GeoDataFrame, this creates all the neighbourhood objects
@@ -429,16 +462,19 @@ class CompassModel(Model):
 
         self.params['n_neighbourhoods'] = len(neighbourhood_frame)
         for index, row in neighbourhood_frame.iterrows():
-            neighbourhood = Neighbourhood(unique_id=index,
-                pos=(row.geometry.centroid.xy[0][0], 
-                        row.geometry.centroid.xy[1][0]),
-                shape=row.geometry,
-                model=self,
-                params=self.params)
+            neighbourhood = Neighbourhood(
+                    unique_id=index,
+                    pos=(
+                        row.geometry.centroid.xy[0][0],
+                        row.geometry.centroid.xy[1][0]
+                        ),
+                    shape=row.geometry,
+                    model=self,
+                    params=self.params
+                    )
             self.agents["neighbourhoods"].append(neighbourhood)
             self.scheduler.add(neighbourhood)
             self.grid.place_agent(neighbourhood, neighbourhood.pos)
-
 
     def create_schools(self, school_frame):
         """
@@ -450,17 +486,21 @@ class CompassModel(Model):
         self.params['n_schools'] = len(school_frame)
         n_neighbourhoods = self.params['n_neighbourhoods']
         for index, row in school_frame.iterrows():
-            school = School(unique_id=index + n_neighbourhoods,
-                pos=(row.geometry.xy[0][0], row.geometry.xy[1][0]),
-                model=self,
-                params=self.params)
+            school = School(
+                    unique_id=index + n_neighbourhoods,
+                    pos=(row.geometry.xy[0][0], row.geometry.xy[1][0]),
+                    model=self,
+                    params=self.params
+                    )
             school.array_index = index
-            school.capacity = 1 + int(self.params["school_capacity"] * \
-                        self.params["n_students"] / self.params["n_schools"])
+            school.capacity = 1 + int(
+                    self.params["school_capacity"]
+                    * self.params["n_students"]
+                    / self.params["n_schools"]
+                    )
             self.agents["schools"].append(school)
             self.scheduler.add(school)
             self.grid.place_agent(school, school.pos)
-
 
     def create_households(self, household_frame, actual_households):
         """
@@ -469,8 +509,11 @@ class CompassModel(Model):
         if self.verbose:
             print("Creating households...")
 
-        self.chosen_indices = np.random.choice(len(household_frame), 
-            size=actual_households, replace=False)
+        self.chosen_indices = np.random.choice(
+                len(household_frame),
+                size=actual_households,
+                replace=False
+                )
         households = household_frame.iloc[self.chosen_indices]
 
         if self.params['random_residential']:
@@ -490,31 +533,33 @@ class CompassModel(Model):
 
         self.location_to_agent()
 
-
     def create_single_household(self, index, row, n_agents, neighbourhoods):
         """
         Creates ONE household
         """
-        household = Household(unique_id=index + n_agents,
+        household = Household(
+                unique_id=index + n_agents,
                 pos=(row.geometry.xy[0][0], row.geometry.xy[1][0]),
                 model=self,
                 params=self.params,
                 category=row['group'],
-                nhood=neighbourhoods[row['neighbourhood_id']])
+                nhood=neighbourhoods[row['neighbourhood_id']]
+                )
         household.array_index = index
         self.agents["households"].append(household)
         self.scheduler.add(household)
         self.grid.place_agent(household, household.pos)
 
-
     def location_to_agent(self):
         """
         Creates a dictionary with the location of the neighbourhoods as key and
-        the object itself as value. Schools are not included as they can have 
+        the object itself as value. Schools are not included as they can have
         the same position as a neighbourhood (centroid).
         """
         agents = self.agents['neighbourhoods']
-        self.location_to_agent = {str(agent.pos):agent for agent in agents}
+        self.location_to_agent = {
+                str(agent.pos): agent for agent in agents
+                }
 
     def trunc_normal_sample(self, means, scale, size):
         """
@@ -533,7 +578,6 @@ class CompassModel(Model):
                         )
         return sample
 
-
     def calc_residential_compositions(self):
         """
         Updates all local residential compositions assuming all households have
@@ -548,25 +592,32 @@ class CompassModel(Model):
 
         # Should it wrap around the edges or not?
         if self.params['torus']:
-            mode='wrap'
+            mode = 'wrap'
         else:
-            mode='constant'
+            mode = 'constant'
 
         summed = 0
         num_attrs = self.household_attrs.shape[2]
-        compositions = np.zeros(shape=self.household_attrs.shape, dtype="float32")
+        compositions = np.zeros(
+                shape=self.household_attrs.shape,
+                dtype="float32"
+                )
 
         # Convolution for every household attribute.
         for attr in range(num_attrs):
-            compositions[:,:,attr] = convolve(
-                self.household_attrs[:,:,attr],
-                self.kernel, mode=mode)
-            summed += compositions[:,:,attr]
+            compositions[:, :, attr] = convolve(
+                self.household_attrs[:, :, attr],
+                self.kernel, mode=mode
+                )
+            summed += compositions[:, :, attr]
+
         self.compositions = compositions
         self.normalized_compositions = np.nan_to_num(
-            compositions / np.repeat(summed[:, :, np.newaxis],
-                num_attrs, axis=2))
-
+            compositions / np.repeat(
+                summed[:, :, np.newaxis],
+                num_attrs,
+                axis=2)
+            )
 
     def calc_school_compositions(self):
         """
@@ -630,7 +681,9 @@ class CompassModel(Model):
             n-closest schools for example?
         """
         compositions = np.array(
-            [school.composition_normalized for school in schools], dtype="float32")
+            [school.composition_normalized for school in schools],
+            dtype="float32"
+            )
 
         # Composition utility calculations
         t = self.optimal_fraction
@@ -670,7 +723,10 @@ class CompassModel(Model):
 
         # vectorization of the code above
         households_indices = [h.array_index for h in households]
-        households_utilities = np.fromiter([h.utility for h in households], dtype="float32")
+        households_utilities = np.fromiter(
+                [h.utility for h in households],
+                dtype="float32"
+                )
         transformed = utilities[:, households_indices]
         if transform:
             differences = transformed - households_utilities[np.newaxis, :]
@@ -695,7 +751,6 @@ class CompassModel(Model):
         """
         return self.household_attrs[pos[0], pos[1], :]
 
-
     def switch_attrs(self, pos1, pos2):
         """
         Switches two attribute vectors in the attribute grid by making a copy.
@@ -708,7 +763,6 @@ class CompassModel(Model):
         self.household_attrs[pos1] = self.household_attrs[pos2]
         self.household_attrs[pos2] = temp
 
-    
     def step(self, residential=False, initial_schools=False):
         """
         Perform model steps.
@@ -721,9 +775,10 @@ class CompassModel(Model):
         """
 
         # Perform school or residential step.
-        self.scheduler.step(residential=residential, 
-                            initial_schools=initial_schools)
-
+        self.scheduler.step(
+                residential=residential,
+                initial_schools=initial_schools
+                )
 
     def simulate(self, res_steps=None, school_steps=None):
         """
@@ -743,13 +798,16 @@ class CompassModel(Model):
         if not school_steps:
             school_steps = self.params['max_school_steps']
 
-        while (self.scheduler.get_time('residential') < res_steps \
-            and not self.res_ended):
+        while (
+                self.scheduler.get_time('residential') < res_steps
+                and not self.res_ended
+                ):
 
             if self.verbose:
-                f = "Residential process: step " + str(
-                self.scheduler.get_time('residential')+1) + " from " + \
-                    str(res_steps)
+                f = "Residential process: step " \
+                        + str(self.scheduler.get_time('residential')+1) \
+                        + " from " \
+                        + str(res_steps)
                 sys.stdout.write("\r" + f)
                 sys.stdout.flush()
 
@@ -758,22 +816,25 @@ class CompassModel(Model):
                 self.step(residential=True)
             else:
                 break
-        
+
         if self.verbose:
             print()
 
-        while (self.scheduler.get_time('school') < school_steps \
-            and not self.school_ended):
+        while (
+                self.scheduler.get_time('school') < school_steps
+                and not self.school_ended
+                ):
 
             if self.verbose:
-                f = "School process: step " + str(
-                self.scheduler.get_time('school')+1) + " from " + \
-                    str(school_steps)
+                f = "School process: step " \
+                        + str(self.scheduler.get_time('school')+1) \
+                        + " from " \
+                        + str(school_steps)
                 sys.stdout.write("\r" + f)
                 sys.stdout.flush()
-            
+
             self.school_ended = self.convergence_check()
-            
+
             if self.scheduler.school_steps == 0:
                 self.step(residential=False, initial_schools=True)
             else:
@@ -781,12 +842,11 @@ class CompassModel(Model):
                     self.step(residential=False, initial_schools=False)
                 else:
                     break
-        
+
         if self.verbose:
             print()
             print("Processes ended")
         self.export_data(self.export)
-
 
     def convergence_check(self):
         """
@@ -797,7 +857,7 @@ class CompassModel(Model):
         window_size = self.params['window_size']
         time = self.scheduler.get_time()
         school_time = self.scheduler.get_time('school')
-        
+
         # Check what type of segregation to calculate (i.e., which of the
         # processes is running)
         if not self.res_ended:
@@ -806,37 +866,46 @@ class CompassModel(Model):
         else:
             self.segregation.append(self.measurements.calculate_segregation(
                 type="school", index="Theil"))
-           
+
         # Wait until there is enough steps in the school process
-        if (self.res_ended and school_time<window_size):
+        if (self.res_ended and school_time < window_size):
             return False
 
         # Check all metrics in the window size and check if they are below
         # the convergence threshold
         if time >= window_size-1:
             utilities = self.measurements.households[
-                time-window_size+1:time+1, :, 4]
+                time-window_size+1:time+1,
+                :,
+                4
+                ]
             means = utilities.mean(axis=1)
             stds = utilities.std(axis=1)
 
-            metrics = np.vstack((means, stds,
-                self.segregation[time-window_size+1:time+1]))
-            
-            metric_means = np.repeat(metrics.mean(axis=1)[:, np.newaxis],
-                window_size, axis=1)
+            metrics = np.vstack((
+                means,
+                stds,
+                self.segregation[time-window_size+1:time+1]
+                ))
+
+            metric_means = np.repeat(
+                    metrics.mean(axis=1)[:, np.newaxis],
+                    window_size,
+                    axis=1
+                    )
             mad = np.abs(metrics - metric_means)
             if np.all(mad < self.params["conv_threshold"]):
                 # Start over if the residential process has converged
-                self.res_ended=True
+                self.res_ended = True
                 return True
 
         return False
 
-
     def choose_locations(self, amount, method="evenly_spaced"):
         """
-        Compute a number of locations to place school and neighbourhood objects.
-        Currently, only random and evenly spaced locations are allowed.
+        Compute a number of locations to place school and neighbourhood
+        objects.  Currently, only random and evenly spaced locations are
+        allowed.
 
         Args:
             amount (int): the number of agents to place.
@@ -943,24 +1012,30 @@ class CompassModel(Model):
 
                 # Loop over all neighbourhoods, calculate distance and save
                 # closest
-                point = Point(x,y)
+                point = Point(x, y)
                 for neighbourhood in neighbourhoods:
                     shape = neighbourhood.shape.buffer(EPS)
                     if shape.contains(point):
-                        closest_neighbourhoods[str((x,y))] = str(neighbourhood.pos)
+                        closest_neighbourhoods[str((x, y))] = str(
+                                neighbourhood.pos
+                                )
                         break
 
         return closest_neighbourhoods
-
 
     def compute_school_distances(self):
         """
         Computes school distances.
         """
-        self.all_distances = np.zeros((self.params["n_households"], self.params['n_schools']))
-        school_frame = gpd.GeoSeries([Point(school.pos) for school in self.agents['schools']])
+        self.all_distances = np.zeros((
+            self.params["n_households"], self.params['n_schools']
+            ))
+        school_frame = gpd.GeoSeries(
+                [Point(school.pos) for school in self.agents['schools']]
+                )
         for household in self.agents['households']:
-            self.all_distances[household.array_index,:] = school_frame.distance(household.shape)
+            self.all_distances[household.array_index, :] =
+            school_frame.distance(household.shape)
 
     def export_data(self, export=False):
         """
@@ -968,7 +1043,6 @@ class CompassModel(Model):
         """
         if export:
             self.measurements.export_data()
-
 
     def increment_agent_count(self):
         """
