@@ -24,11 +24,18 @@ class Household(BaseAgent):
         model (CompassModel): CompassModel object.
         params (Argparser): containing all (agent) parameter values.
         groups (list): containing all group types.
+        n_attributes (int): number of attributes
         attributes (array): array of attributes of the specific agent.
-        composition (array): the sum of the attribute arrays of all Households
+        composition (np array): the sum of the attribute arrays of all Households
             in the local composition of this household.
-        normalized_composition (array): same as above but normalized.
+        normalized_composition (np array): same as above but normalized.
         students (list): the student(s) in the household.
+        utility
+        distance
+        category
+        school_utility_comp
+        shape (Point)
+        array_index (int like): household index in lookup tables
     """
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
@@ -41,9 +48,11 @@ class Household(BaseAgent):
         self.category = category
         self.school_utility_comp = 0
         self.shape = Point(pos[0], pos[1])
+        self.n_attributes = len(self.params['group_types'][0])
         self.attributes = self.attribute_array(category)
         self.composition = self.new_composition_array()
         self.composition_normalized = self.new_composition_array()
+        self.array_index = 0
 
         # Create students
         self.students = []
@@ -53,7 +62,7 @@ class Household(BaseAgent):
         # Join closest neighbourhood if applicable
         if self.params["n_neighbourhoods"]:
             # Join the given neighbourhood or else the closest
-            if isinstance(nhood, Neighbourhood):
+            if nhood:
                 self.join_neighbourhood(nhood)
             else:
                 neighbourhood = self.get_closest_neighbourhood(self.pos)
@@ -75,8 +84,8 @@ class Household(BaseAgent):
             category (int): the category [0,n-1] the agent belongs to. Should
                 be generalised in the future.
         """
-        attributes = np.zeros(len(self.params['group_types'][0]))
-        attributes[category] += 1
+        attributes = np.zeros(self.n_attributes)
+        attributes[category] = 1
         return attributes
 
     def get_data(self, residential):
@@ -154,7 +163,7 @@ class Household(BaseAgent):
 
         Args:
             residential (bool): equals True if the model needs to update
-                residential or school parameters (default=False).
+                residential or school parameters (default=True).
         """
 
         if residential:
@@ -291,7 +300,7 @@ class Household(BaseAgent):
         self.distance = utility_dist
         self.model.distances[array_index] = utility_dist
 
-    # BUG: default empty arry value, check docs!
+    # BUG: FIXME: default empty array value, check docs!
     def residential_utility(self, composition, neighbourhood_composition=[]):
         """
         Compute residential utility.
@@ -460,7 +469,7 @@ class Student():
         unique_id (int): unique identifier of the agent.
         household (Household): Household object.
         groups (list): containing all group types.
-        school_preference ():
+        school_preference (list): a ranking of School objects.
         school (School): School object that the student is enrolled in.
         satisfied (bool): True if the student is satisfied with current school.
         school_history (list): all the school objects the student has attended.
