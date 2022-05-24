@@ -478,8 +478,7 @@ class CompassModel(Model):
         Creates ONE household
         """
         household = Household(unique_id=index + n_agents,
-                              pos=(row.geometry.xy[0][0],
-                                   row.geometry.xy[1][0]),
+                              pos=row.geometry.coords[0],
                               model=self,
                               params=self.params,
                               category=row['group'],

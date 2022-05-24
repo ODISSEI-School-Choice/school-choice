@@ -43,7 +43,7 @@ class Household(BaseAgent):
         self.params = params
         self.category = category
         self.school_utility_comp = 0
-        self.shape = Point(pos[0], pos[1])
+        self.shape = pos
         self.attributes = self.attribute_array(category)
         self.composition = self.new_composition_array()
         self.composition_normalized = self.new_composition_array()
@@ -58,7 +58,7 @@ class Household(BaseAgent):
         if self.params["n_neighbourhoods"]:
 
             # Join the given neighbourhood or else the closest
-            if isinstance(nhood, Neighbourhood):
+            if nhood:
                 self.join_neighbourhood(nhood)
             else:
                 neighbourhood = self.get_closest_neighbourhood(self.pos)

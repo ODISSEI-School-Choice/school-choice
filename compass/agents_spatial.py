@@ -142,10 +142,7 @@ class Neighbourhood(BaseAgent):
         """
         self.total += 1
         self.composition += household.attributes
-        if self.total == 0:
-            self.composition_normalized = self.new_composition_array()
-        else:
-            self.composition_normalized = self.composition / self.total
+        self.composition_normalized[:] = self.composition[:] / self.total
         self.households.append(household)
 
     def remove_household(self, household):
