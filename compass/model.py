@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import sys
 import random
+import contextlib
 from matplotlib.pyplot import axis
 # from typing import final
 import numpy as np
@@ -12,21 +13,19 @@ import pandas as pd
 from tqdm import tqdm
 from mesa import Model
 import geopandas as gpd
-from utils import Measurements
+from .utils import Measurements
 from scipy.stats import truncnorm
 from scipy.ndimage import convolve
 from memory_profiler import profile
-from agents_household import Household
+from .agents_household import Household
 from mesa.space import ContinuousSpace
 from shapely.geometry import Point, box
-from scheduler import ThreeStagedActivation
-from agents_spatial import School, Neighbourhood
+from .scheduler import ThreeStagedActivation
+from .agents_spatial import School, Neighbourhood
 
 # added by Ji
 from numba import jit
 from scipy.sparse import issparse
-
-import contextlib
 
 
 @contextlib.contextmanager

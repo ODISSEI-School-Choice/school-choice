@@ -2,11 +2,11 @@ from ast import JoinedStr
 import math
 import time
 import logging
-import numpy as np
-from tornado import gen
+from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from os.path import dirname, join
-from concurrent.futures import ThreadPoolExecutor
+from tornado import gen
+import numpy as np
 
 # Bokeh imports
 from bokeh.plotting import figure
@@ -21,8 +21,8 @@ from bokeh.models import (ColumnDataSource, Button, Select, Slider, CDSView,
                           BooleanFilter, HoverTool, Dropdown, Div, Band,
                           WheelZoomTool)
 
-from parameters import FLAGS
-from model import CompassModel
+from .parameters import FLAGS
+from .model import CompassModel
 
 
 class BokehServer():

@@ -1,14 +1,12 @@
 """
 This file is used to perform tests while creating the model.
 """
-import sys
-sys.path.insert(0, "compass")
-
 import random
-# import cProfile
 import numpy as np
-from parameters import FLAGS
-from model import CompassModel
+from compass.model import CompassModel
+from compass.parameters import FLAGS
+
+# import cProfile
 
 # Set seeds for reproducibility
 random.seed(3)

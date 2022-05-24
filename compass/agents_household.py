@@ -1,8 +1,11 @@
+"""
+The Household and Student classes.
+"""
 import random
 import numpy as np
-from agents_base import BaseAgent
+from .agents_base import BaseAgent
 from shapely.geometry import Point
-from agents_spatial import Neighbourhood
+from .agents_spatial import Neighbourhood
 
 
 class Household(BaseAgent):

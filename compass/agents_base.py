@@ -1,3 +1,6 @@
+"""
+Implementation of the BaseAgent class.
+"""
 import numpy as np
 from mesa import Agent
 
