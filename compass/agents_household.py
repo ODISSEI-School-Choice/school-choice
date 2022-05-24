@@ -30,7 +30,6 @@ class Household(BaseAgent):
         attributes (array): array of attributes of the specific agent.
         composition (array): the sum of the attribute arrays of all Households
             in the local composition of this household.
-        normalized_composition (array): same as above but normalized.
         students (list): the student(s) in the household.
     """
 
@@ -46,7 +45,6 @@ class Household(BaseAgent):
         self.shape = pos
         self.attributes = self.attribute_array(category)
         self.composition = self.new_composition_array()
-        self.composition_normalized = self.new_composition_array()
 
         # Create students
         self.students = []
@@ -239,8 +237,12 @@ class Household(BaseAgent):
 
         category = self.category
         array_index = self.array_index
+        if self.neighbourhood.total > 0:
+            norm = 1.0 / self.neighbourhood.total 
+        else:
+            norm = 1.0
         self.model.neighbourhood_compositions[array_index] = \
-            self.neighbourhood.composition_normalized[category]
+            self.neighbourhood.composition[category] * norm
 
         if self.params['neighbourhood_mixture'] == 1:
             # Only neighbourhood composition necessary, for case studies and
@@ -268,8 +270,12 @@ class Household(BaseAgent):
         array_index = self.array_index
 
         # Composition utility
+        if student.school.total > 0:
+            norm = 1.0 / student.school.total
+        else:
+            norm = 1.0
         self.model.school_compositions[array_index] = \
-            student.school.composition_normalized[self.category]
+            student.school.composition[self.category] * norm
 
         # Distance utility
         utility_dist = self.model.distance_utilities[
@@ -394,8 +400,12 @@ class Household(BaseAgent):
                 composition = compositions[x, y, :]
                 norm_composition = norm_compositions[x, y, :]
                 neighbourhood = self.get_closest_neighbourhood(pos)
+                if neighbourhood.total > 0:
+                    norm = 1.0 / neighbourhood.total
+                else:
+                    norm = 1.0
                 utility = self.residential_utility(
-                    norm_composition, neighbourhood.composition_normalized)
+                    norm_composition, neighbourhood.composition * norm)
 
             if utility >= max_utility:
                 max_utility = utility

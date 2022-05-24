@@ -204,9 +204,13 @@ class CompassModel(Model):
             else:
                 household.params['neighbourhood_mixture'] = 1
 
+            if household.neighbourhood.total > 0:
+                norm = 1.0 / household.neighbourhood.total
+            else:
+                norm = 1.0
             self.neighbourhood_compositions.append(
-                household.neighbourhood.composition_normalized[
-                    household.category])
+                household.neighbourhood.composition[
+                    household.category] * norm)
             array_index += 1
 
         self.school_objects = school_objects
@@ -563,8 +567,12 @@ class CompassModel(Model):
             category = household.category
             array_index = household.array_index
             self.distances[array_index] = household.distance
+            if household.students[0].school.total > 0:
+                norm = 1.0 / household.students[0].school.total
+            else:
+                norm = 1.0
             self.school_compositions[array_index] = \
-                household.students[0].school.composition_normalized[category]
+                household.students[0].school.composition[category] * norm
 
     def calc_res_utilities(self):
         """
@@ -611,8 +619,9 @@ class CompassModel(Model):
             Schools can differ per household if we only want to look at the
             n-closest schools for example?
         """
+        zeros = np.zeros(len(self.params["group_types"][0]))
         compositions = np.array(
-            [school.composition_normalized for school in schools],
+            [school.composition / school.total if school.total > 0 else zeros for school in schools],
             dtype="float32")
 
         # Composition utility calculations

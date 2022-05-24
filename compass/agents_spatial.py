@@ -21,10 +21,10 @@ class School(BaseAgent):
         model (CompassModel): CompassModel object.
         params (Argparser): containing all parameter values.
         capacity (float): the maximum amount of students that can be enrolled.
+        total (int): the number of Students at the school
         students (list): all the Student objects enrolled in the school.
         composition (array): the sum of the attribute arrays of all Households
             enrolled in this school.
-        normalized_composition (array): same as above but normalized.
     """
 
     def __init__(self, unique_id, pos, model, params):
@@ -34,7 +34,6 @@ class School(BaseAgent):
                         self.params["n_students"] / self.params["n_schools"])
         self.students = []
         self.composition = self.new_composition_array()
-        self.composition_normalized = self.new_composition_array()
 
     def __repr__(self):
         """
@@ -53,10 +52,6 @@ class School(BaseAgent):
         # Add HOUSEHOLD attributes to the schools' composition
         self.total += 1
         self.composition += student.household.attributes
-        if self.total == 0:
-            self.composition_normalized = self.new_composition_array()
-        else:
-            self.composition_normalized = self.composition / self.total
         self.students.append(student)
 
     def remove_student(self, student):
@@ -69,11 +64,7 @@ class School(BaseAgent):
         """
         # Subtract HOUSEHOLD attributes to the schools' composition
         self.total -= 1
-        self.composition -= student.household.attributes
-        if self.total == 0:
-            self.composition_normalized = self.new_composition_array()
-        else:
-            self.composition_normalized = self.composition / self.total
+        self.composition -= student.household.attributes  # TODO: zero self.composition?
         self.students.remove(student)
 
     def has_space(self):
@@ -110,10 +101,10 @@ class Neighbourhood(BaseAgent):
         pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
         model (CompassModel): CompassModel object.
         params (Argparser): containing all parameter values.
+        total (int): the number of Households in the neighbourhood.
         households (list): all the households living in the neighbourhood.
         composition (array): the sum of the attribute arrays of all Households
             belonging to this neighbourhood.
-        normalized_composition (array): same as above but normalized.
     """
 
     def __init__(self, unique_id, pos, shape, model, params):
@@ -123,7 +114,6 @@ class Neighbourhood(BaseAgent):
         self.shape = shape
         self.households = []
         self.composition = self.new_composition_array()
-        self.composition_normalized = self.new_composition_array()
 
     def __repr__(self):
         """
@@ -142,7 +132,6 @@ class Neighbourhood(BaseAgent):
         """
         self.total += 1
         self.composition += household.attributes
-        self.composition_normalized[:] = self.composition[:] / self.total
         self.households.append(household)
 
     def remove_household(self, household):
@@ -154,9 +143,5 @@ class Neighbourhood(BaseAgent):
             household (Household): Household object.
         """
         self.total -= 1
-        self.composition -= household.attributes
-        if self.total == 0:
-            self.composition_normalized = self.new_composition_array()
-        else:
-            self.composition_normalized = self.composition / self.total
+        self.composition -= household.attributes  # TODO: zero self.composition?
         self.households.remove(household)
