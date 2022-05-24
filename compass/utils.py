@@ -5,7 +5,7 @@ The Utils and Measurements class.
 import sys
 import numpy as np
 import pandas as pd
-
+from .agents_household import Household
 
 class Utilities:
     """
@@ -98,8 +98,26 @@ class Measurements:
             data
         """
 
-        for idx, household in enumerate(self.agents['households']):
-            self.households[time, idx, :] = household.get_data(residential)
+        # Constant data
+        if time == 0:
+            for household in self.agents['households']:
+                self.households[:, household.idx, 0] = household.pos[0]
+                self.households[:, household.idx, 1] = household.pos[1]
+                self.households[:, household.idx, 2] = household.composition[0]
+                self.households[:, household.idx, 3] = household.composition[1]
+                self.households[:, household.idx, 6] = household.unique_id
+
+        # Dynamic data
+        self.households[time, :, 4] = Household._household_utility[:]
+        self.households[time, :, 5] = Household._household_category[:]
+        self.households[time, :, 7] = Household._household_distance[:]
+
+        if residential:
+            for household in self.agents['households']:
+                self.households[time, household.idx, 8] = household.neighbourhood.unique_id
+        else:
+            for household in self.agents['households']:
+                self.households[time, household.idx, 8] = household.students[0].school.unique_id
 
     def neighbourhood_data(self, time):
         """
