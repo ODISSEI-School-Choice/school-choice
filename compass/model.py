@@ -77,7 +77,8 @@ class CompassModel(Model):
 
         if self.verbose:
             text = f""" Model initialised:
-                NR AGENTS:  Households: {self.params['n_households']}
+                NR AGENTS:
+                Households: {self.params['n_households']}
                 Neighbourhoods: {self.params['n_neighbourhoods']}
                 Schools: {self.params['n_schools']}
                 In scheduler: {self.scheduler.get_agent_count()}"""
@@ -148,35 +149,30 @@ class CompassModel(Model):
         Todo:
             Parameters should be imported from a config file in the future.
         """
+        households = self.get_agents("households")
+        n_households = len(households)
 
-        # to remember the index in the array of the specific household
-        n_agents = len(households)
         self.local_compositions = []
         self.neighbourhood_compositions = []
-        schools = self.get_agents('schools')
-        n_schools = len(schools)
 
         dtype = "float32"
-        self.alpha = np.zeros(n_agents, dtype=dtype)
+        self.alpha = np.zeros(n_households, dtype=dtype)
         self.temperature = self.params['temperature']
-        self.utility_at_max = np.zeros(n_agents, dtype=dtype)
-        self.optimal_fraction = np.zeros(n_agents, dtype=dtype)
-        self.neighbourhood_mixture = np.ones(n_agents, dtype=int)
+        self.utility_at_max = np.zeros(n_households, dtype=dtype)
+        self.optimal_fraction = np.zeros(n_households, dtype=dtype)
+        self.neighbourhood_mixture = np.ones(n_households, dtype=int)
 
         optimal_fractions = self.trunc_normal_sample(
             params["optimal_fraction"][0],
             scale=params['homophily_std'],
-            size=n_agents)
+            size=n_households)
         alphas = self.trunc_normal_sample([params["alpha"], params['alpha']],
                                           scale=params['homophily_std'],
-                                          size=n_agents)
+                                          size=n_households)
         utility_at_maxs = self.trunc_normal_sample(
             params["utility_at_max"][0],
             scale=params['homophily_std'],
-            size=n_agents)
-
-        distances = np.zeros((n_agents, n_schools), dtype=dtype)
-        school_objects = np.zeros((n_agents, n_schools), dtype=object)
+            size=n_households)
 
         if self.params['case'].lower() == 'lattice':
             local_compositions = self.normalized_compositions
@@ -208,13 +204,11 @@ class CompassModel(Model):
                 household.neighbourhood.composition[
                     household.category] * norm)
 
-        self.school_objects = school_objects
-
         # These are filled with the actual distance and composition utilities
         # of the household and the school (singular!) they attend
 
         # SHOULD BE CALLED DIFFERENTLY CAUSE NOW IT OVERWRITES AN ATTRIBUTE!!!
-        self.school_compositions = np.zeros(n_agents, dtype=dtype)
+        self.school_compositions = np.zeros(n_households, dtype=dtype)
 
         # Distance utilities based on sigmoid function
         if self.params['case'].lower() != 'lattice':
@@ -393,7 +387,7 @@ class CompassModel(Model):
 
         if self.verbose:
             print('Setting agent parameters...')
-        self.set_agent_parameters(self.params, self.agents["households"])
+        self.set_agent_parameters(self.params)
 
         self.local_compositions = self.neighbourhood_compositions
         self.calc_res_utilities()
@@ -626,38 +620,19 @@ class CompassModel(Model):
             (self.distance_utilities * (1 - self.alpha[:, np.newaxis])).T
 
         # Rank the schools according to the household utilities
-        schools = np.array(schools)
-        if self.params['ranking_method'].lower() == 'proportional':
-            transform = True
-        else:
-            transform = False
-
-        # for household in households:
-        #     if transform:
-        #         # Some randomness according to the temperature parameter
-        #         differences = utilities[:, household.array_index] - household.utility
-        #         exp_utilities = np.exp(self.temperature*differences)
-        #         transformed = exp_utilities / exp_utilities.sum()
-        #     else:
-        #         # Pick highest utility
-        #         transformed = utilities[:, household.array_index]
-
-        #     ranked_idx = transformed.argsort()[::-1]
-        #     ranking = schools[ranked_idx]
-        #     [student.set_school_preference(ranking) for student in household.students]
-
-        # vectorization of the code above
         households_indices = [h.idx for h in households]
         households_utilities = np.take(Household._household_utility, households_indices)
         transformed = utilities[:, households_indices]
 
-        if transform:
+        if self.params['ranking_method'].lower() == 'proportional':
+            # transform = True
             differences = transformed - households_utilities[np.newaxis, :]
             exp_utilities = np.exp(self.temperature * differences)
-            transformed = exp_utilities / exp_utilities.sum(
-                axis=0)[np.newaxis, :]
+            transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
+
         ranked_indices = transformed.argsort(axis=0)[::-1]
 
+        schools = np.array(schools)
         for i in range(len(households)):
             ranking = schools[ranked_indices[:, i]]
             for s in households[i].students:
