@@ -35,6 +35,7 @@ class Household(BaseAgent):
 
     _total_households = 0
     _household_utility = np.zeros(61499, dtype="float32")
+    _household_category = np.zeros(61499, dtype=int)
     __slots__ = ["idx"]
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
@@ -47,7 +48,6 @@ class Household(BaseAgent):
 
         self.distance = 0
         self.params = params
-        self.category = category
         self.school_utility_comp = 0
         self.shape = pos
         self.attributes = self.attribute_array(category)
@@ -83,6 +83,14 @@ class Household(BaseAgent):
     @utility.setter
     def utility(self, value):
         Household._household_utility[self.idx] = value
+
+    @property
+    def category(self):
+        return Household._household_category[self.idx]
+
+    @category.setter
+    def category(self, value):
+        Household._household_category[self.idx] = value
 
     def attribute_array(self, category):
         """

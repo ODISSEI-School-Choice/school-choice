@@ -159,7 +159,6 @@ class CompassModel(Model):
         dtype = "float32"
         self.alpha = np.zeros(n_agents, dtype=dtype)
         self.temperature = self.params['temperature']
-        self.categories = np.zeros(n_agents, dtype=int)
         self.utility_at_max = np.zeros(n_agents, dtype=dtype)
         self.optimal_fraction = np.zeros(n_agents, dtype=dtype)
         self.neighbourhood_mixture = np.ones(n_agents, dtype=int)
@@ -187,7 +186,6 @@ class CompassModel(Model):
             x, y = household.pos
 
             # Fill arrays with agent parameter values for faster computations
-            self.categories[array_index] = household.category
             self.optimal_fraction[array_index] = optimal_fractions[
                 household.category][array_index]
             self.alpha[array_index] = alphas[household.category][array_index]
@@ -621,7 +619,7 @@ class CompassModel(Model):
         # Composition utility calculations
         t = self.optimal_fraction
         M = self.utility_at_max
-        x = compositions[:, self.categories]
+        x = compositions[:, Household._household_category]
         composition_utilities = np.where(x <= t, x / t,
                                          M + (1 - x) * (1 - M) / (1 - t))
 
