@@ -27,8 +27,15 @@ class School(BaseAgent):
             enrolled in this school.
     """
 
+    _total_schools = 0
+    __slots__ = ["idx"]
+
     def __init__(self, unique_id, pos, model, params):
         super().__init__(unique_id, pos, model, params)
+
+        self.idx = School._total_schools
+        School._total_schools += 1
+
         self.total = 0
         self.capacity = 1 + int(self.params["school_capacity"] * \
                         self.params["n_students"] / self.params["n_schools"])
@@ -107,9 +114,16 @@ class Neighbourhood(BaseAgent):
             belonging to this neighbourhood.
     """
 
+    _total_neighbourhoods = 0
+    __slots__ = ["idx"]
+
     def __init__(self, unique_id, pos, shape, model, params):
 
         super().__init__(unique_id, pos, model, params)
+
+        self.idx = Neighbourhood._total_neighbourhoods
+        Neighbourhood._total_neighbourhoods += 1
+
         self.total = 0
         self.shape = shape
         self.households = []

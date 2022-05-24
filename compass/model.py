@@ -291,7 +291,6 @@ class CompassModel(Model):
                 # to the scheduler
                 school = School(self.get_agents("amount"), location, self,
                                 self.params)
-                school.array_index = i
                 self.agents["schools"].append(school)
                 self.scheduler.add(school)
                 self.grid.place_agent(school, location)
@@ -438,7 +437,6 @@ class CompassModel(Model):
                             pos=(row.geometry.xy[0][0], row.geometry.xy[1][0]),
                             model=self,
                             params=self.params)
-            school.array_index = index
             school.capacity = 1 + int(self.params["school_capacity"] * \
                         self.params["n_students"] / self.params["n_schools"])
             self.agents["schools"].append(school)

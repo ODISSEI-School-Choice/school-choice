@@ -4,7 +4,6 @@ The Household and Student classes.
 import random
 import numpy as np
 from .agents_base import BaseAgent
-from shapely.geometry import Point
 from .agents_spatial import Neighbourhood
 
 
@@ -35,7 +34,7 @@ class Household(BaseAgent):
     """
 
     _total_households = 0
-    __slots__ = ["idx"]  # TODO: investigate if this acutally speeds up
+    __slots__ = ["idx", "utility", "category", "unique_id", "distance"]  # TODO: investigate if this acutally speeds up
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
@@ -287,7 +286,7 @@ class Household(BaseAgent):
 
         # Distance utility
         utility_dist = self.model.distance_utilities[
-            self.idx, student.school.array_index]
+            self.idx, student.school.idx]
 
         self.distance = utility_dist
         self.model.distances[idx] = utility_dist
@@ -471,7 +470,12 @@ class Student():
 
     """
 
+    _total_students = 0
+
     def __init__(self, unique_id, household):
+
+        self.idx = Student._total_students
+        Student._total_students += 1
 
         self.school = None
         self.school_history = []
