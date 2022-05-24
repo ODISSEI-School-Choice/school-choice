@@ -627,7 +627,7 @@ class CompassModel(Model):
 
         # Combined (THIS SHOULD BE GENERALISED TO INCLUDE MORE FACTORS)
         utilities = composition_utilities * self.alpha[np.newaxis, :] + \
-            (self.distance_utilities * (1 - self.alpha[: ,np.newaxis])).T
+            (self.distance_utilities * (1 - self.alpha[:, np.newaxis])).T
 
         # Rank the schools according to the household utilities
         schools = np.array(schools)
@@ -652,9 +652,9 @@ class CompassModel(Model):
 
         # vectorization of the code above
         households_indices = [h.idx for h in households]
-        households_utilities = np.fromiter([h.utility for h in households],
-                                           dtype="float32")
+        households_utilities = np.take(Household._household_utility, households_indices)
         transformed = utilities[:, households_indices]
+
         if transform:
             differences = transformed - households_utilities[np.newaxis, :]
             exp_utilities = np.exp(self.temperature * differences)

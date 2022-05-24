@@ -34,7 +34,8 @@ class Household(BaseAgent):
     """
 
     _total_households = 0
-    __slots__ = ["idx", "utility", "category", "unique_id", "distance"]  # TODO: investigate if this acutally speeds up
+    _household_utility = np.zeros(61499, dtype="float32")
+    __slots__ = ["idx"]
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
@@ -44,7 +45,6 @@ class Household(BaseAgent):
         self.idx = Household._total_households
         Household._total_households += 1
 
-        self.utility = 0
         self.distance = 0
         self.params = params
         self.category = category
@@ -75,6 +75,14 @@ class Household(BaseAgent):
             str: representing the unique identifier of the agent.
         """
         return f"<Household object with unique_id: {self.unique_id}>"
+
+    @property
+    def utility(self):
+        return Household._household_utility[self.idx]
+
+    @utility.setter
+    def utility(self, value):
+        Household._household_utility[self.idx] = value
 
     def attribute_array(self, category):
         """
