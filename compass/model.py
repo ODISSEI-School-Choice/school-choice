@@ -182,10 +182,8 @@ class CompassModel(Model):
         if self.params['case'].lower() == 'lattice':
             local_compositions = self.normalized_compositions
 
-        array_index = 0
-
         for household in households:
-            household.array_index = array_index
+            array_index = household.idx
             x, y = household.pos
 
             # Fill arrays with agent parameter values for faster computations
@@ -211,7 +209,6 @@ class CompassModel(Model):
             self.neighbourhood_compositions.append(
                 household.neighbourhood.composition[
                     household.category] * norm)
-            array_index += 1
 
         self.school_objects = school_objects
 
@@ -487,7 +484,6 @@ class CompassModel(Model):
                               params=self.params,
                               category=row['group'],
                               nhood=neighbourhoods[row['neighbourhood_id']])
-        household.array_index = index
         self.agents["households"].append(household)
         self.scheduler.add(household)
         self.grid.place_agent(household, household.pos)
@@ -565,13 +561,13 @@ class CompassModel(Model):
 
         for household in self.get_agents('households'):
             category = household.category
-            array_index = household.array_index
-            self.distances[array_index] = household.distance
+            idx = household.idx
+            self.distances[idx] = household.distance
             if household.students[0].school.total > 0:
                 norm = 1.0 / household.students[0].school.total
             else:
                 norm = 1.0
-            self.school_compositions[array_index] = \
+            self.school_compositions[idx] = \
                 household.students[0].school.composition[category] * norm
 
     def calc_res_utilities(self):
@@ -657,7 +653,7 @@ class CompassModel(Model):
         #     [student.set_school_preference(ranking) for student in household.students]
 
         # vectorization of the code above
-        households_indices = [h.array_index for h in households]
+        households_indices = [h.idx for h in households]
         households_utilities = np.fromiter([h.utility for h in households],
                                            dtype="float32")
         transformed = utilities[:, households_indices]
@@ -948,7 +944,7 @@ class CompassModel(Model):
             [Point(school.pos) for school in self.get_agents('schools')])
         for household in self.get_agents('households'):
             self.all_distances[
-                household.array_index, :] = school_frame.distance(
+                household.idx, :] = school_frame.distance(
                     household.shape)
 
     def get_agents(self, agent_type):

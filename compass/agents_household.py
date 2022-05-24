@@ -23,6 +23,7 @@ class Household(BaseAgent):
 
     Attributes:
         unique_id (int): unique identifier of the agent.
+        idx (int): index of this Household in lookup arrays
         pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
         model (CompassModel): CompassModel object.
         params (Argparser): containing all (agent) parameter values.
@@ -33,10 +34,17 @@ class Household(BaseAgent):
         students (list): the student(s) in the household.
     """
 
+    _total_households = 0
+    __slots__ = ["idx"]  # TODO: investigate if this acutally speeds up
+
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
         # Store parameters
         super().__init__(unique_id, pos, model, params)
+
+        self.idx = Household._total_households
+        Household._total_households += 1
+
         self.utility = 0
         self.distance = 0
         self.params = params
@@ -175,11 +183,11 @@ class Household(BaseAgent):
         """
 
         if residential:
-            self.utility = self.model.res_utilities[self.array_index]
+            self.utility = self.model.res_utilities[self.idx]
         else:
             self.school_utility_comp = self.model.school_composition_utilities[
-                self.array_index]
-            self.utility = self.model.school_utilities[self.array_index]
+                self.idx]
+            self.utility = self.model.school_utilities[self.idx]
 
     def step(self,
              residential=False,
@@ -236,12 +244,12 @@ class Household(BaseAgent):
         """
 
         category = self.category
-        array_index = self.array_index
+        idx = self.idx
         if self.neighbourhood.total > 0:
-            norm = 1.0 / self.neighbourhood.total 
+            norm = 1.0 / self.neighbourhood.total
         else:
             norm = 1.0
-        self.model.neighbourhood_compositions[array_index] = \
+        self.model.neighbourhood_compositions[idx] = \
             self.neighbourhood.composition[category] * norm
 
         if self.params['neighbourhood_mixture'] == 1:
@@ -251,7 +259,7 @@ class Household(BaseAgent):
         else:
             x, y = self.pos
             self.composition = self.model.compositions[x, y, :]
-            self.model.local_compositions[array_index] = \
+            self.model.local_compositions[idx] = \
                 self.model.normalized_compositions[x, y, :][category]
 
     def update_school(self, student):
@@ -267,22 +275,22 @@ class Household(BaseAgent):
             * Should this be moved to the Student object?
         """
 
-        array_index = self.array_index
+        idx = self.idx
 
         # Composition utility
         if student.school.total > 0:
             norm = 1.0 / student.school.total
         else:
             norm = 1.0
-        self.model.school_compositions[array_index] = \
+        self.model.school_compositions[idx] = \
             student.school.composition[self.category] * norm
 
         # Distance utility
         utility_dist = self.model.distance_utilities[
-            self.array_index, student.school.array_index]
+            self.idx, student.school.array_index]
 
         self.distance = utility_dist
-        self.model.distances[array_index] = utility_dist
+        self.model.distances[idx] = utility_dist
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """
