@@ -4,6 +4,7 @@ The School and Neighbourhood class.
 
 from agents_base import BaseAgent
 
+
 class School(BaseAgent):
     """
     The School class.
@@ -35,14 +36,12 @@ class School(BaseAgent):
         self.composition = self.new_composition_array()
         self.composition_normalized = self.new_composition_array()
 
-
     def __repr__(self):
         """
         Returns:
             str: representing the unique identifier of the agent.
         """
         return f"<School object with unique_id: {self.unique_id}>"
-
 
     def add_student(self, student):
         """
@@ -54,12 +53,11 @@ class School(BaseAgent):
         # Add HOUSEHOLD attributes to the schools' composition
         self.total += 1
         self.composition += student.household.attributes
-        if self.total==0:
+        if self.total == 0:
             self.composition_normalized = self.new_composition_array()
         else:
             self.composition_normalized = self.composition / self.total
         self.students.append(student)
-
 
     def remove_student(self, student):
         """
@@ -72,12 +70,11 @@ class School(BaseAgent):
         # Subtract HOUSEHOLD attributes to the schools' composition
         self.total -= 1
         self.composition -= student.household.attributes
-        if self.total==0:
+        if self.total == 0:
             self.composition_normalized = self.new_composition_array()
         else:
             self.composition_normalized = self.composition / self.total
         self.students.remove(student)
-
 
     def has_space(self):
         """
@@ -87,7 +84,6 @@ class School(BaseAgent):
             bool: equals True if there is at least one open spot at the school.
         """
         return len(self.students) < self.capacity
-
 
     def get_students(self):
         """
@@ -129,14 +125,12 @@ class Neighbourhood(BaseAgent):
         self.composition = self.new_composition_array()
         self.composition_normalized = self.new_composition_array()
 
-
     def __repr__(self):
         """
         Returns:
             str: representing the unique identifier of the agent.
         """
         return f"<Neighbourhood object with unique_id: {self.unique_id}>"
-
 
     def add_household(self, household):
         """
@@ -148,12 +142,11 @@ class Neighbourhood(BaseAgent):
         """
         self.total += 1
         self.composition += household.attributes
-        if self.total==0:
+        if self.total == 0:
             self.composition_normalized = self.new_composition_array()
         else:
             self.composition_normalized = self.composition / self.total
         self.households.append(household)
-
 
     def remove_household(self, household):
         """
@@ -165,7 +158,7 @@ class Neighbourhood(BaseAgent):
         """
         self.total -= 1
         self.composition -= household.attributes
-        if self.total==0:
+        if self.total == 0:
             self.composition_normalized = self.new_composition_array()
         else:
             self.composition_normalized = self.composition / self.total

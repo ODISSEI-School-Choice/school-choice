@@ -30,9 +30,8 @@ class Household(BaseAgent):
         normalized_composition (array): same as above but normalized.
         students (list): the student(s) in the household.
     """
-    
-    def __init__(self, unique_id, pos, model, params, category,
-                    nhood=None):
+
+    def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
         # Store parameters
         super().__init__(unique_id, pos, model, params)
@@ -49,11 +48,12 @@ class Household(BaseAgent):
         # Create students
         self.students = []
         for i in range(int(self.params["student_density"])):
-            self.students.append(Student(self.model.get_agents("amount"), self))
+            self.students.append(Student(self.model.get_agents("amount"),
+                                         self))
 
         # Join closest neighbourhood if applicable
         if self.params["n_neighbourhoods"]:
-            
+
             # Join the given neighbourhood or else the closest
             if isinstance(nhood, Neighbourhood):
                 self.join_neighbourhood(nhood)
@@ -61,14 +61,12 @@ class Household(BaseAgent):
                 neighbourhood = self.get_closest_neighbourhood(self.pos)
                 self.join_neighbourhood(neighbourhood)
 
-
     def __repr__(self):
         """
         Returns:
             str: representing the unique identifier of the agent.
         """
         return f"<Household object with unique_id: {self.unique_id}>"
-
 
     def attribute_array(self, category):
         """
@@ -82,7 +80,6 @@ class Household(BaseAgent):
         attributes = np.zeros(len(self.params['group_types'][0]))
         attributes[category] += 1
         return attributes
-
 
     def get_data(self, residential):
         """
@@ -113,18 +110,17 @@ class Household(BaseAgent):
         # data[8] = unit
 
         data =  [
-            self.pos[0], self.pos[1], 
-            self.composition[0], self.composition[1], 
-            self.utility, 
-            self.category, 
-            self.unique_id, 
-            self.distance, 
+            self.pos[0], self.pos[1],
+            self.composition[0], self.composition[1],
+            self.utility,
+            self.category,
+            self.unique_id,
+            self.distance,
             self.neighbourhood.unique_id if residential \
-                else self.students[0].school.unique_id, 
+                else self.students[0].school.unique_id,
         ]
 
         return np.array(data, dtype=float)
-
 
     def move_to_empty(self, empties, num_considered, ranking_method):
         """
@@ -143,7 +139,6 @@ class Household(BaseAgent):
         new_pos = self.residential_ranking(positions, ranking_method)
         self.residential_move(old_pos=self.pos, new_pos=new_pos)
 
-
     def residential_move(self, old_pos=None, new_pos=None):
         """
         Moves a household from old position to its new position.
@@ -157,18 +152,17 @@ class Household(BaseAgent):
         self.remove_neighbourhood(self.neighbourhood)
         self.model.grid.move_agent(self, new_pos)
 
-        # Only remove the old position from the set if the agent actually 
+        # Only remove the old position from the set if the agent actually
         # moves to a new position
-        if new_pos!=old_pos:
+        if new_pos != old_pos:
             self.model.grid.empties.discard(new_pos)
             self.model.grid.empties.add(old_pos)
-            
+
         neighbourhood = self.get_closest_neighbourhood(self.pos)
         self.join_neighbourhood(neighbourhood)
 
         # Switch the attributes to the new location as well.
         self.model.switch_attrs(old_pos, new_pos)
-
 
     def update(self, residential=True):
         """
@@ -185,7 +179,6 @@ class Household(BaseAgent):
         else:
             for student in self.students:
                 self.update_school(student)
-
 
     def update_utilities(self, residential=True):
         """
@@ -204,9 +197,10 @@ class Household(BaseAgent):
                 self.array_index]
             self.utility = self.model.school_utilities[self.array_index]
 
-
-    def step(self, residential=False, initial_schools=False,
-                move_allowed=True):
+    def step(self,
+             residential=False,
+             initial_schools=False,
+             move_allowed=True):
         """
         Steps the agent in the residential or school choice process.
 
@@ -236,7 +230,8 @@ class Household(BaseAgent):
                 return 0
 
             elif self.params['household_density'] < 1:
-                self.move_to_empty(empties=list(self.model.grid.empties),
+                self.move_to_empty(
+                    empties=list(self.model.grid.empties),
                     num_considered=self.params['num_considered'],
                     ranking_method=self.params['ranking_method'])
 
@@ -267,7 +262,6 @@ class Household(BaseAgent):
             #     student.set_school_preference(ranking)
             # return 1
 
-
     def update_residential(self):
         """
         Computes the composition and utility at the current residential location
@@ -288,7 +282,6 @@ class Household(BaseAgent):
             self.composition = self.model.compositions[x, y, :]
             self.model.local_compositions[array_index] = \
                 self.model.normalized_compositions[x, y, :][category]
-        
 
     def update_school(self, student):
         """
@@ -304,17 +297,17 @@ class Household(BaseAgent):
         """
 
         array_index = self.array_index
-        
+
         # Composition utility
         self.model.school_compositions[array_index] = \
             student.school.composition_normalized[self.category]
 
         # Distance utility
-        utility_dist = self.model.distance_utilities[self.array_index, student.school.array_index]
+        utility_dist = self.model.distance_utilities[
+            self.array_index, student.school.array_index]
 
         self.distance = utility_dist
         self.model.distances[array_index] = utility_dist
-
 
     def residential_utility(self, composition, neighbourhood_composition=[]):
         """
@@ -335,20 +328,18 @@ class Household(BaseAgent):
         """
         params = self.params
 
-        if len(neighbourhood_composition)>0:
+        if len(neighbourhood_composition) > 0:
             combined = composition*(1-params["neighbourhood_mixture"]) + \
                 neighbourhood_composition*params["neighbourhood_mixture"]
         else:
             combined = composition
 
-
         actual_fraction = combined[self.category]
         utility_at_max = params["utility_at_max"][0][self.category]
         optimal_fraction = params["optimal_fraction"][0][self.category]
 
-        return self.model.calc_comp_utility(actual_fraction, 
-            utility_at_max, optimal_fraction)
-
+        return self.model.calc_comp_utility(actual_fraction, utility_at_max,
+                                            optimal_fraction)
 
     def get_closest_neighbourhood(self, pos):
         """
@@ -361,7 +352,6 @@ class Household(BaseAgent):
         neighbourhood = self.model.location_to_agent[location]
         return neighbourhood
 
-
     def join_neighbourhood(self, neighbourhood):
         """
         Join the given neighbourhood object.
@@ -372,10 +362,8 @@ class Household(BaseAgent):
         self.neighbourhood = neighbourhood
         neighbourhood.add_household(self)
 
-
     def get_neighbourhood(self):
         return self.neighbourhood
-
 
     def remove_neighbourhood(self, neighbourhood):
         """
@@ -386,7 +374,6 @@ class Household(BaseAgent):
         """
         neighbourhood.remove_household(self)
         self.neighbourhood = None
-
 
     def school_ranking_initial(self):
         """
@@ -404,7 +391,6 @@ class Household(BaseAgent):
         np.random.shuffle(schools)
         return schools
 
-
     def residential_ranking(self, positions, ranking_method):
         """
         Computes the ranked location prefences of a household.
@@ -420,7 +406,7 @@ class Household(BaseAgent):
         summed = 0
         max_utility = 0
         params = self.params
-        positions = list(positions) + [self.pos] # Append own position
+        positions = list(positions) + [self.pos]  # Append own position
         utilities = np.zeros(len(positions))
         temperature = params['temperature']
         compositions = self.model.compositions
@@ -434,25 +420,25 @@ class Household(BaseAgent):
                 #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
                 x, y = pos
                 composition = compositions[x, y, :]
-                norm_composition =  norm_compositions[x, y, :]
+                norm_composition = norm_compositions[x, y, :]
                 neighbourhood = self.get_closest_neighbourhood(pos)
-                utility = self.residential_utility(norm_composition,
-                                        neighbourhood.composition_normalized)
+                utility = self.residential_utility(
+                    norm_composition, neighbourhood.composition_normalized)
 
             if utility >= max_utility:
                 max_utility = utility
                 new_pos = [pos]
 
-            utility = np.exp(temperature*utility)
+            utility = np.exp(temperature * utility)
             summed += utility
             utilities[index] = utility
 
         utilities = utilities / summed
-        if ranking_method=='proportional' or ranking_method:
-            new_pos = random.choices(population=positions, 
-                weights=utilities, k=1)
+        if ranking_method == 'proportional' or ranking_method:
+            new_pos = random.choices(population=positions,
+                                     weights=utilities,
+                                     k=1)
         return new_pos[0]
-
 
     def get_student_count(self):
         """
@@ -463,11 +449,9 @@ class Household(BaseAgent):
         """
         return len(self.students)
 
-
     def get_shock(self):
         """" Returns a small random float value """
         return self.model.get_shock()
-
 
     def get_uniform_shock(self):
         """
@@ -498,7 +482,7 @@ class Student(object):
     """
 
     def __init__(self, unique_id, household):
-        
+
         self.school = None
         self.school_history = []
         self.unique_id = unique_id
@@ -506,8 +490,6 @@ class Student(object):
         self.school_preference = None
         # Student does not inherit from BaseAgent, so increment here.
         self.household.model.increment_agent_count()
-        
-
 
     def __repr__(self):
         """
@@ -515,7 +497,6 @@ class Student(object):
             str: representing the unique identifier of the agent.
         """
         return f"<Student object with unique_id:{self.unique_id}>"
-
 
     def set_school_preference(self, ranking):
         """
@@ -525,7 +506,6 @@ class Student(object):
             ranking (list): a ranking of School objects.
         """
         self.school_preference = ranking
-
 
     def new_school(self, school):
         """
@@ -539,7 +519,6 @@ class Student(object):
         self.school = school
         self.school_history.append(school)
         school.add_student(self)
-
 
     def get_school_id(self):
         """

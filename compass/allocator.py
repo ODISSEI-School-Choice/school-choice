@@ -2,6 +2,7 @@
 The school Allocator class.
 """
 
+
 class Allocator:
     """
     Class that allocates students across schools given their preferences.
@@ -35,7 +36,6 @@ class Allocator:
                     if school.has_space():
                         student.new_school(school)
                         break
-
 
     def initial_school(self, households):
         """
