@@ -6,26 +6,17 @@ import os
 import sys
 import random
 import contextlib
-from matplotlib.pyplot import axis
-# from typing import final
 import numpy as np
-import pandas as pd
-from tqdm import tqdm
 from mesa import Model
 import geopandas as gpd
 from .utils import Measurements
 from scipy.stats import truncnorm
 from scipy.ndimage import convolve
-from memory_profiler import profile
 from .agents_household import Household
 from mesa.space import ContinuousSpace
 from shapely.geometry import Point, box
 from .scheduler import ThreeStagedActivation
 from .agents_spatial import School, Neighbourhood
-
-# added by Ji
-from numba import jit
-from scipy.sparse import issparse
 
 
 @contextlib.contextmanager
@@ -70,11 +61,10 @@ class CompassModel(Model):
         else:
             self.create_agents()
 
-        # Initial compositions need to be calculated after every household is placed
-        [
+        # Initial compositions need to be calculated after every household is
+        # placed
+        for household in self.get_agents('households'):
             household.update_utilities()
-            for household in self.get_agents('households')
-        ]
 
         # Get values of the initial configuration
         self.measurements.end_step(residential=True)
@@ -147,7 +137,7 @@ class CompassModel(Model):
 
     def set_agent_parameters(self, params, households):
         """
-        Puts the agent parameters in numpy arrays for faster computations. 
+        Puts the agent parameters in numpy arrays for faster computations.
 
         Args:
             params (dict): Model parameters which could differ from
@@ -238,14 +228,14 @@ class CompassModel(Model):
 
     def vectorise_functions(self):
         """
-        Vectorises functions using numpy.vectorize for use in 
+        Vectorises functions using numpy.vectorize for use in
         array computations.
         """
         self.calc_comp_utility_v = np.vectorize(self.calc_comp_utility)
 
     def calc_comp_utility(self, x, M, f):
         """
-        Calculates the utility given a normalised composition (0<=x<=1), an 
+        Calculates the utility given a normalised composition (0<=x<=1), an
         optimal fraction (0<=f<=1) and utility at homogeneity (0<=M<=1).
         """
         if x <= f:
@@ -334,23 +324,9 @@ class CompassModel(Model):
         empties = list(self.grid.empties)
         np.random.shuffle(empties)
 
-        # Sample tolerances
-        tolerances0, tolerances1 = self.trunc_normal_sample(
-            params["optimal_fraction"][0],
-            scale=params['homophily_std'],
-            size=params["n_households"])
-
         for i, position in enumerate(empties[0:params["n_households"]]):
             household = Household(self.get_agents("amount"), position, self,
                                   params, groups[0][i])
-
-            # Find according group and group specific information
-            for j in range(len(groups)):
-                category = groups[j][i]
-                if category == 0:
-                    tolerance = tolerances0[i]
-                elif category == 1:
-                    tolerance = tolerances1[i]
 
             # Place households on the grid and add them to the scheduler
             self.agents["households"].append(household)
@@ -372,7 +348,7 @@ class CompassModel(Model):
         Load the agents from several files.
 
         Note:
-            This function is in progress and works only for the 
+            This function is in progress and works only for the
             Amsterdam case now.
         """
 
@@ -492,10 +468,8 @@ class CompassModel(Model):
 
         self.all_distances = self.all_distances[self.chosen_indices, :]
 
-        [
+        for index, row in households.iterrows():
             self.create_household(index, row, n_agents, neighbourhoods)
-            for index, row in households.iterrows()
-        ]
 
         self.location_to_agent()
 
@@ -518,7 +492,7 @@ class CompassModel(Model):
     def location_to_agent(self):
         """
         Creates a dictionary with the location of the neighbourhoods as key and
-        the object itself as value. Schools are not included as they can have 
+        the object itself as value. Schools are not included as they can have
         the same position as a neighbourhood (centroid).
         """
         agents = self.get_agents('neighbourhoods')
@@ -579,7 +553,7 @@ class CompassModel(Model):
 
     def calc_school_compositions(self):
         """
-        Calculate the new school compositions for every household and only for 
+        Calculate the new school compositions for every household and only for
         the first student!
 
         Note:
@@ -595,8 +569,8 @@ class CompassModel(Model):
 
     def calc_res_utilities(self):
         """
-        Calculates residential utility at a household its current position and 
-        given its parameter values. 
+        Calculates residential utility at a household its current position and
+        given its parameter values.
         """
 
         b = self.neighbourhood_mixture
@@ -608,8 +582,8 @@ class CompassModel(Model):
 
     def calc_school_utilities(self):
         """
-        Calculates school utilities at a student its current school, given 
-        distance and its other parameter values. 
+        Calculates school utilities at a student its current school, given
+        distance and its other parameter values.
         """
 
         alpha = self.alpha
@@ -618,7 +592,7 @@ class CompassModel(Model):
         x = self.school_compositions
         self.school_composition_utilities = self.calc_comp_utility_v(x, M, f)
 
-        # This needs to be correct, what distances to use?
+        # TODO: This needs to be correct, what distances to use?
         # self.school_utilities = (self.school_composition_utilities ** alpha) * \
         #     (self.distances ** (1 - alpha))
 
@@ -635,7 +609,7 @@ class CompassModel(Model):
             schools (list): list of schools that need to be ranked.
 
         Todo:
-            Schools can differ per household if we only want to look at the 
+            Schools can differ per household if we only want to look at the
             n-closest schools for example?
         """
         compositions = np.array(
@@ -651,7 +625,7 @@ class CompassModel(Model):
 
         # Combined (THIS SHOULD BE GENERALISED TO INCLUDE MORE FACTORS)
         utilities = composition_utilities * self.alpha[np.newaxis, :] + \
-            (self.distance_utilities * (1 - self.alpha[:,np.newaxis])).T
+            (self.distance_utilities * (1 - self.alpha[: ,np.newaxis])).T
 
         # Rank the schools according to the household utilities
         schools = np.array(schools)
@@ -688,7 +662,8 @@ class CompassModel(Model):
 
         for i in range(len(households)):
             ranking = schools[ranked_indices[:, i]]
-            [s.set_school_preference(ranking) for s in households[i].students]
+            for s in households[i].students:
+                s.set_school_preference(ranking)
 
     def get_attributes(self, pos):
         """
@@ -752,7 +727,7 @@ class CompassModel(Model):
 
             if self.verbose:
                 f = "Residential process: step " + str(
-                self.scheduler.get_time('residential')+1) + " from " + \
+                    self.scheduler.get_time('residential')+1) + " from " + \
                     str(res_steps)
                 sys.stdout.write("\r" + f)
                 sys.stdout.flush()
@@ -771,7 +746,7 @@ class CompassModel(Model):
 
             if self.verbose:
                 f = "School process: step " + str(
-                self.scheduler.get_time('school')+1) + " from " + \
+                    self.scheduler.get_time('school')+1) + " from " + \
                     str(school_steps)
                 sys.stdout.write("\r" + f)
                 sys.stdout.flush()
@@ -855,22 +830,16 @@ class CompassModel(Model):
         if amount == 0:
             return []
 
-        else:
+        # Evenly spaced is also used in 'random_per_neighbourhood'
+        per_side = np.sqrt(amount)
+        if per_side % 1 != 0:
+            print("Unable to place amount of locations using given method")
+            sys.exit(1)
 
-            # Evenly spaced is also used in 'random_per_neighbourhood'
-            per_side = np.sqrt(amount)
-            if per_side % 1 != 0:
-                print("Unable to place amount of locations using given method")
-                sys.exit(1)
-
-            # Compute locations
-            per_side = int(per_side)
-            xs = np.linspace(0, self.params['width'], per_side * 2 + 1)[1::2]
-            ys = np.linspace(0, self.params['height'], per_side * 2 + 1)[1::2]
-            locations = [(x, y) for x in xs for y in ys]
+        # Compute locations
+        locations = []
 
         if method == "random":
-            locations = []
             i = 0
             while i < amount:
                 x_coord = np.random.randint(low=0, high=self.params['width'])
@@ -890,7 +859,6 @@ class CompassModel(Model):
 
             # Draw a random sample per neighbourhood as long as there are
             # schools to place
-            locations = []
             i = 0
             while i < max(n_neighbourhoods, n_schools):
                 y_low = 0
@@ -975,18 +943,18 @@ class CompassModel(Model):
                 household.array_index, :] = school_frame.distance(
                     household.shape)
 
-    def get_agents(self, type):
+    def get_agents(self, agent_type):
         """
         Returns list of agents of given type.
 
         Args:
-            type (str): either 'School', 'Neighbourhood', 'Household' or
+            agent_type (str): either 'School', 'Neighbourhood', 'Household' or
             'Student'.
 
         Returns:
             list: containing all the objects of the specified type.
         """
-        return self.agents[type]
+        return self.agents[agent_type]
 
     def export_data(self, export=False):
         """

@@ -1,5 +1,3 @@
-from ast import JoinedStr
-import math
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -72,9 +70,9 @@ class BokehServer():
             view: the view that can be used in plots.
         """
 
-        filter = [True if agent == agent_type else False \
+        by_type = [True if agent == agent_type else False \
                     for agent in source.data['agent_type']]
-        view = CDSView(source=source, filters=[BooleanFilter(filter)])
+        view = CDSView(source=source, filters=[BooleanFilter(by_type)])
         return view
 
     def customise_grid(self):
@@ -272,7 +270,7 @@ class BokehServer():
                              color=color,
                              legend_label=label)
 
-            if lower != None:
+            if lower is not None:
                 band = Band(base='time',
                             lower=lower,
                             upper=upper,
@@ -295,7 +293,6 @@ class BokehServer():
         """
 
         # Loop over all schools to get the locations and compositions
-        count = 0
         cols = ['group0', 'group1', 'dist_school']
         data = self.data[self.data.agent_type == agent_type][cols]
 
@@ -455,7 +452,7 @@ class BokehServer():
 
     def reset_data(self):
         """
-        Resets the data, could be the initial reset (new sources need to be 
+        Resets the data, could be the initial reset (new sources need to be
         created) or a subsequent one (only update the data).
         """
 
@@ -551,7 +548,7 @@ class BokehServer():
     @gen.coroutine
     def unlocked_task(self):
         """
-        Needed to make sure that if the reset button is clicked it can go 
+        Needed to make sure that if the reset button is clicked it can go
         inbetween events, otherwise it can be quite slow.
         """
         yield self.executor.submit(self.blocking_task)
@@ -574,7 +571,7 @@ class BokehServer():
 
     def step_button(self):
         """
-        Checks which process need to be stepped and execute the step. The 
+        Checks which process need to be stepped and execute the step. The
         simulate function of the Model instance cannot be used as we need to
         visualise every step.
         """
@@ -626,7 +623,7 @@ class BokehServer():
         self.model = CompassModel(self.update_pars())
 
         # Stop the model when it is still running while reset is clicked.
-        if self.run.label == 'Stop' and self.callback_obj != None:
+        if self.run.label == 'Stop' and self.callback_obj is not None:
             self.doc.remove_periodic_callback(self.callback_obj)
             self.run.label = 'Run'
             self.run.button_type = 'success'
@@ -644,7 +641,6 @@ class BokehServer():
         widgets = self.widgets(width=200)
 
         plot_width = 500
-        plot_height = None
         sizing_mode = 'stretch_height'
         self.init_grid_plot()
         self.init_line_plot(width=plot_width, mode=sizing_mode)
@@ -772,10 +768,6 @@ class BokehServer():
                                          options=['True', 'False'],
                                          value=random_residential,
                                          width=width)
-
-        # self.random_residential = Select(title='Random residential',
-        #     options=[1, 0],
-        #     value=str(self.params['random_residential']), width=width)
 
         text = header_size + 'Simulation' + header_size
         simulation_div = Div(text=text, width=width)

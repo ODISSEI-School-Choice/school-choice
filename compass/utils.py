@@ -2,11 +2,9 @@
 The Utils and Measurements class.
 """
 
-from re import L
 import sys
 import numpy as np
 import pandas as pd
-from memory_profiler import profile
 
 
 class Utilities:
@@ -100,8 +98,8 @@ class Measurements:
             data
         """
 
-        self.households[time, :, :] = [household.get_data(residential) \
-            for household in self.agents['households']]
+        for idx, household in enumerate(self.agents['households']):
+            self.households[time, idx, :] = household.get_data(residential)
 
     def neighbourhood_data(self, time):
         """
@@ -110,9 +108,9 @@ class Measurements:
         Args:
             time (int): time step we are at
         """
-        for index, neighbourhood in enumerate(self.agents['neighbourhoods']):
-            self.neighbourhoods[time, index, :2] = neighbourhood.composition
-            self.neighbourhoods[time, index, 5] = neighbourhood.unique_id
+        for idx, neighbourhood in enumerate(self.agents['neighbourhoods']):
+            self.neighbourhoods[time, idx, :2] = neighbourhood.composition
+            self.neighbourhoods[time, idx, 5] = neighbourhood.unique_id
 
     def school_data(self, time):
         """
@@ -125,9 +123,9 @@ class Measurements:
             time is different for schools compared to neighbourhoods!
         """
 
-        for index, school in enumerate(self.agents['schools']):
-            self.schools[time, index, :2] = school.composition
-            self.schools[time, index, 5] = school.unique_id
+        for idx, school in enumerate(self.agents['schools']):
+            self.schools[time, idx, :2] = school.composition
+            self.schools[time, idx, 5] = school.unique_id
 
     def end_step(self, residential):
         """
@@ -218,7 +216,6 @@ class Measurements:
         # Grab the different times
         time = self.model.scheduler.get_time()
         res_time = self.model.scheduler.get_time('residential')
-        school_time = self.model.scheduler.get_time('school')
 
         households = self.agents['households']
         columns = [
@@ -500,7 +497,6 @@ class Measurements:
             print("Calculation of Theil's information index not supported.")
             sys.exit(1)
 
-        global_composition = self.model.global_composition
         global_composition_normalized = self.model.global_composition_normalized
         pi_m = global_composition_normalized
 

@@ -61,7 +61,7 @@ class School(BaseAgent):
 
     def remove_student(self, student):
         """
-        Removes a Student object from the list of enrolled students in the 
+        Removes a Student object from the list of enrolled students in the
         School.
 
         Args:

@@ -94,33 +94,16 @@ class Household(BaseAgent):
         Notes:
             Only the school of the first student is used!
         """
-        # # Update variable data only
-        # data = np.empty(9)
-        # data[:2] = self.pos
-        # data[2:4] = self.composition[:2]
-        # data[4] = self.utility
-        # data[5] = self.category
-        # data[6] = self.unique_id
-        # data[7] = self.distance
-
-        # # Check which unit the household belongs to (depends on the process)
-        # if residential:
-        #     unit = self.neighbourhood.unique_id
-        # else:
-        #     # Only school of first student!!!!
-        #     unit = self.students[0].school.unique_id
-
-        # data[8] = unit
-
-        data =  [
+        data = [
             self.pos[0], self.pos[1],
             self.composition[0], self.composition[1],
             self.utility,
             self.category,
             self.unique_id,
             self.distance,
-            self.neighbourhood.unique_id if residential \
-                else self.students[0].school.unique_id,
+
+            self.neighbourhood.unique_id if residential
+            else self.students[0].school.unique_id,
         ]
 
         return np.array(data, dtype=float)
@@ -169,9 +152,9 @@ class Household(BaseAgent):
 
     def update(self, residential=True):
         """
-        Updates the residential or school composition attributes of the 
+        Updates the residential or school composition attributes of the
         Household/Student.
-        
+
         Args:
             residential (bool): equals True if the model needs to update
                 residential or school parameters (default=False).
@@ -185,9 +168,9 @@ class Household(BaseAgent):
 
     def update_utilities(self, residential=True):
         """
-        Updates the residential or school utility attributes of the 
+        Updates the residential or school utility attributes of the
         Household/Student.
-        
+
         Args:
             residential (bool): equals True if the model needs to update
                 residential or school parameters (default=False).
@@ -247,23 +230,6 @@ class Household(BaseAgent):
         else:
             # Schools steps are done in the scheduler now for efficiency
             pass
-            # # Only calculate preferences if they are allowed to move, but
-            # # wait with the actual move until all agents have calculated their
-            # # preference (actual moving happens with the Allocator)
-
-            # # Initial school step
-            # if initial_schools:
-            #     for student in self.students:
-            #         ranking = self.school_ranking_initial()
-            #         student.set_school_preference(ranking)
-            #     return 0
-
-            # # Normal school step
-            # for student in self.students:
-            #     self.school_calculations(student)
-            #     ranking = self.school_ranking(student)
-            #     student.set_school_preference(ranking)
-            # return 1
 
     def update_residential(self):
         """
@@ -288,8 +254,8 @@ class Household(BaseAgent):
 
     def update_school(self, student):
         """
-        Sets the school distance and composition attributes. Note that the 
-        attributes should only be set here, as this method should only be 
+        Sets the school distance and composition attributes. Note that the
+        attributes should only be set here, as this method should only be
         called when the agent actually moves to the location!
 
         Args:
@@ -312,7 +278,7 @@ class Household(BaseAgent):
         self.distance = utility_dist
         self.model.distances[array_index] = utility_dist
 
-    def residential_utility(self, composition, neighbourhood_composition=[]):
+    def residential_utility(self, composition, neighbourhood_composition=None):
         """
         Compute residential utility.
 
@@ -331,7 +297,7 @@ class Household(BaseAgent):
         """
         params = self.params
 
-        if len(neighbourhood_composition) > 0:
+        if neighbourhood_composition is not None:
             combined = composition*(1-params["neighbourhood_mixture"]) + \
                 neighbourhood_composition*params["neighbourhood_mixture"]
         else:
@@ -366,6 +332,9 @@ class Household(BaseAgent):
         neighbourhood.add_household(self)
 
     def get_neighbourhood(self):
+        """
+        Return the neighbourhood this household belongs to.
+        """
         return self.neighbourhood
 
     def remove_neighbourhood(self, neighbourhood):
@@ -400,7 +369,7 @@ class Household(BaseAgent):
 
         Args:
             positions (list): list of (x, y) tuples that are considered.
-            ranking_method (str): one of 'highest' or 'proportional' 
+            ranking_method (str): one of 'highest' or 'proportional'
 
         Returns:
             tuple: new position (x, y) of the household.
@@ -463,7 +432,7 @@ class Household(BaseAgent):
         return self.model.get_uniform_shock()
 
 
-class Student(object):
+class Student():
     """
     Student object that is enrolled into school objects and a Household. Used
     for measuring segregation in schools and neighbourhoods.
@@ -530,5 +499,5 @@ class Student(object):
         """
         if self.school:
             return self.school.unique_id
-        else:
-            return -1
+
+        return -1

@@ -43,7 +43,7 @@ class ThreeStagedActivation:
         self.step_size = 1 + int(
             self.model.params["n_households"] // self.n_splits)
         self.max_movements = 1 + int(self.model.params["max_move_fraction"] * \
-            self.model.params["n_students"])
+                             self.model.params["n_students"])
         self._agents = dict()
         self.allocator = Allocator()
 
@@ -57,7 +57,7 @@ class ThreeStagedActivation:
         Note:
             The agent must have a step() method.
         """
-        if not agent.__class__.__name__ in list(self._agents.keys()):
+        if agent.__class__.__name__ not in self._agents:
             self._agents[agent.__class__.__name__] = OrderedDict()
         self._agents[agent.__class__.__name__][agent.unique_id] = agent
 
@@ -85,10 +85,12 @@ class ThreeStagedActivation:
 
         if time_type == 'time':
             return self.time
-        elif time_type == 'residential':
+        if time_type == 'residential':
             return self.residential_steps
-        elif time_type == 'school':
+        if time_type == 'school':
             return self.school_steps
+
+        return None
 
     def agents_to_move(self, households, initial_schools):
         """
@@ -130,7 +132,7 @@ class ThreeStagedActivation:
         Steps all agents and then advances them.
 
         Args:
-            residential (bool): True if a residential step needs to be 
+            residential (bool): True if a residential step needs to be
                 performed, False (default) means a school step.
             initial_schools (bool): True if an initial school step needs to be
                 performed, False (default) means a school step.
@@ -145,13 +147,16 @@ class ThreeStagedActivation:
 
             # Rankings are still calculated in the Household object instead of
             # model wide as for the schools.
-            [household.step(residential=residential,
-                initial_schools=initial_schools) for household in \
-                    households_to_move]
+            for household in households_to_move:
+                household.step(
+                    residential=residential,
+                    initial_schools=initial_schools
+                    )
 
             # UPDATE COMPOSITIONS OF ALL AGENTS AFTER ALL THE MOVES
             self.model.calc_residential_compositions()
-            [household.update(residential) for household in all_households]
+            for household in all_households:
+                household.update(residential)
             self.model.calc_res_utilities()
             self.residential_steps += 1
 
@@ -170,11 +175,10 @@ class ThreeStagedActivation:
                         1 + (self.model.all_distances / p)**q)
 
                 for household in all_households:
-                    [
+                    for student in household.students:
                         student.set_school_preference(
-                            household.school_ranking_initial())
-                        for student in household.students
-                    ]
+                            household.school_ranking_initial()
+                            )
 
                 # Allocate students after all initial preferences have been set
                 self.allocate_schools(all_households, initial_schools)
@@ -187,15 +191,15 @@ class ThreeStagedActivation:
 
             # Calculate the new school compositions
             self.model.calc_school_compositions()
-            [household.update(residential) for household in all_households]
+            for household in all_households:
+                household.update(residential)
+
             self.model.calc_school_utilities()
             self.school_steps += 1
 
         # Update the utilities of ALL agents
-        [
+        for household in all_households:
             household.update_utilities(residential)
-            for household in all_households
-        ]
 
         self.time += 1
         self.model.measurements.end_step(residential)
