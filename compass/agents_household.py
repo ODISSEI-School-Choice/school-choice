@@ -36,6 +36,7 @@ class Household(BaseAgent):
     _total_households = 0
     _household_utility = np.zeros(61499, dtype="float32")
     _household_category = np.zeros(61499, dtype=int)
+    _household_distance = np.zeros(61499, dtype="float32")
     __slots__ = ["idx"]
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
@@ -46,7 +47,6 @@ class Household(BaseAgent):
         self.idx = Household._total_households
         Household._total_households += 1
 
-        self.distance = 0
         self.params = params
         self.school_utility_comp = 0
         self.shape = pos
@@ -91,6 +91,14 @@ class Household(BaseAgent):
     @category.setter
     def category(self, value):
         Household._household_category[self.idx] = value
+
+    @property
+    def distance(self):
+        return Household._household_distance[self.idx]
+
+    @distance.setter
+    def distance(self, value):
+        Household._household_distance[self.idx] = value
 
     def attribute_array(self, category):
         """
@@ -305,7 +313,6 @@ class Household(BaseAgent):
             self.idx, student.school.idx]
 
         self.distance = utility_dist
-        self.model.distances[idx] = utility_dist
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """

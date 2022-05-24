@@ -214,7 +214,6 @@ class CompassModel(Model):
         # of the household and the school (singular!) they attend
 
         # SHOULD BE CALLED DIFFERENTLY CAUSE NOW IT OVERWRITES AN ATTRIBUTE!!!
-        self.distances = np.zeros(n_agents, dtype=dtype)
         self.school_compositions = np.zeros(n_agents, dtype=dtype)
 
         # Distance utilities based on sigmoid function
@@ -558,7 +557,6 @@ class CompassModel(Model):
         for household in self.get_agents('households'):
             category = household.category
             idx = household.idx
-            self.distances[idx] = household.distance
             if household.students[0].school.total > 0:
                 norm = 1.0 / household.students[0].school.total
             else:
@@ -596,7 +594,7 @@ class CompassModel(Model):
         #     (self.distances ** (1 - alpha))
 
         self.school_utilities = (self.school_composition_utilities * alpha) + \
-            (self.distances * (1 - alpha))
+            (Household._household_distance * (1 - alpha))
 
     def calc_school_rankings(self, households, schools):
         """
