@@ -136,7 +136,7 @@ class CompassModel(Model):
         # Create households
         self.households()
 
-    def set_agent_parameters(self, params, households):
+    def set_agent_parameters(self, params):
         """
         Puts the agent parameters in numpy arrays for faster computations.
 
@@ -594,6 +594,9 @@ class CompassModel(Model):
         """
         Ranks the schools according to utility.
 
+        Note: this is probably a performance bottleneck; one of the array is
+        of size [n_households_moving, n_of_schools].
+
         Args:
             households (list): list of households the rankings need to be
                 calculated for.
@@ -608,33 +611,53 @@ class CompassModel(Model):
             [school.composition / school.total if school.total > 0 else zeros for school in schools],
             dtype="float32")
 
+        # TODO: is using an np.array for indexing really faster?
+        households_indices = np.array([h.idx for h in households], dtype=int)
+
+        # TODO: sorting the households should speed up the np.take() call below,
+        # because after sorting they can just walk linearly through the data once.
+        # on the small test case, the performance impact was zero.
+        households_indices.sort()
+
+        households_categories = np.take(Household._household_category,
+                households_indices)
+
         # Composition utility calculations
-        t = self.optimal_fraction
-        M = self.utility_at_max
-        x = compositions[:, Household._household_category]
+        t = np.take(self.optimal_fraction, households_indices)  # [n_indices]
+        M = np.take(self.utility_at_max, households_indices)  # [n_indices]
+        x = np.take(compositions, households_categories, axis=1)  # [n_schools, n_indices]
         composition_utilities = np.where(x <= t, x / t,
                                          M + (1 - x) * (1 - M) / (1 - t))
 
         # Combined (THIS SHOULD BE GENERALISED TO INCLUDE MORE FACTORS)
-        utilities = composition_utilities * self.alpha[np.newaxis, :] + \
-            (self.distance_utilities * (1 - self.alpha[:, np.newaxis])).T
+        utilities = \
+            composition_utilities * self.alpha[np.newaxis, households_indices] + \
+            (
+                np.take(self.distance_utilities, households_indices, axis=0) *
+                (1 - self.alpha[households_indices, np.newaxis])
+            ).T
 
         # Rank the schools according to the household utilities
-        households_indices = [h.idx for h in households]
         households_utilities = np.take(Household._household_utility, households_indices)
-        transformed = utilities[:, households_indices]
 
         if self.params['ranking_method'].lower() == 'proportional':
             # transform = True
-            differences = transformed - households_utilities[np.newaxis, :]
+            differences = utilities - households_utilities[np.newaxis, :]
             exp_utilities = np.exp(self.temperature * differences)
             transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
 
+        # TODO: sorting, and then reversing the list,
+        # or sort the inverted (negative) values?
+        # No difference on the (3K househoulds, 202 schools) case
         ranked_indices = transformed.argsort(axis=0)[::-1]
 
+        # necessary to allow indexing with the argsort result
         schools = np.array(schools)
         for i in range(len(households)):
             ranking = schools[ranked_indices[:, i]]
+
+            # TODO: can we make school preference a Household property,
+            # instead of a Student property?
             for s in households[i].students:
                 s.set_school_preference(ranking)
 

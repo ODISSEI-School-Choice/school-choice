@@ -309,10 +309,9 @@ class Household(BaseAgent):
             student.school.composition[self.category] * norm
 
         # Distance utility
-        utility_dist = self.model.distance_utilities[
-            self.idx, student.school.idx]
+        self.distance = \
+            self.model.distance_utilities[self.idx, student.school.idx]
 
-        self.distance = utility_dist
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """
