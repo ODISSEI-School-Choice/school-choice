@@ -7,7 +7,7 @@ from hypothesis import given
 from shapely.geometry import Point
 import hypothesis.strategies as st
 
-sys.path.insert(0, "../compass/")
+sys.path.insert(0, "../compass")
 from parameters import FLAGS
 from model import CompassModel
 from agents_base import BaseAgent

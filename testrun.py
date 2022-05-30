@@ -41,6 +41,7 @@ if __name__ == '__main__':
     # profiler.enable()
     model = CompassModel(vars(FLAGS), export=True)
     model.simulate()
+
     # profiler.disable()
     # stats = pstats.Stats(profiler).sort_stats('tottime')
     # stats.print_stats(0.05)

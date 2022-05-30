@@ -388,21 +388,25 @@ class Household(BaseAgent):
         self.neighbourhood = None
 
 
-    def school_ranking_initial(self):
+    def school_ranking_initial(self, replace=False):
         """
         Computes a list containing all schools ranked to preference. The initial
         school ranking is random.
 
+        Args:
+            replace (Boolean): random choice with replacement (default: False)
+            
         Returns:
             list: a randomly ordered list of School objects.
         """
-
         schools = self.model.get_agents("schools")
-        # ranking = np.random.choice(schools, len(schools), replace=False)
-        # return ranking
-
-        np.random.shuffle(schools)
-        return schools
+        
+        if replace:
+            return np.random.choice(schools, len(schools), replace=False)
+        else:
+            # np.random.shuffle works in-place
+            np.random.shuffle(schools)
+            return schools
 
 
     def residential_ranking(self, positions, ranking_method):

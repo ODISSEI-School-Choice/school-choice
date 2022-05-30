@@ -26,15 +26,6 @@ from agents_spatial import School, Neighbourhood
 from numba import jit
 from scipy.sparse import issparse
 
-import contextlib
-@contextlib.contextmanager
-def record_time(name):
-    try:
-        start_time = datetime.now()
-        yield
-    finally:
-        print("\n%s: %f" % (name, (datetime.now() - start_time).total_seconds()))
-
 
 class CompassModel(Model):
     """
@@ -675,9 +666,10 @@ class CompassModel(Model):
             transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
         ranked_indices = transformed.argsort(axis=0)[::-1]
 
-        for i in range(len(households)):
+        for i, household in enumerate(households):
             ranking = schools[ranked_indices[:, i]]
-            [s.set_school_preference(ranking) for s in households[i].students]
+            for student in household.students:
+                student.set_school_preference(ranking)
 
     def get_attributes(self, pos):
         """
