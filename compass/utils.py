@@ -7,6 +7,16 @@ import numpy as np
 import pandas as pd
 from .agents_household import Household
 
+
+def calc_comp_utility(dest, x, M, f):
+    """
+    Calculates the utility given a normalised composition (0<=x<=1), an
+    optimal fraction (0<=f<=1) and utility at homogeneity (0<=M<=1).
+    """
+    dest[x <= f] = (x / f)[x <= f]
+    dest[x > f] = (M + (1 - x) * (1 - M) / (1 - f))[x > f]
+
+
 class Utilities:
     """
     Class containing a number of measurement functions.

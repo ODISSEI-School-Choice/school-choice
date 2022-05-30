@@ -9,7 +9,7 @@ import contextlib
 import numpy as np
 from mesa import Model
 import geopandas as gpd
-from .utils import Measurements
+from .utils import Measurements, calc_comp_utility
 from scipy.stats import truncnorm
 from scipy.ndimage import convolve
 from .agents_household import Household
@@ -210,26 +210,6 @@ class CompassModel(Model):
             p = self.params['p']
             q = self.params['q']
             self.distance_utilities = 1. / (1 + (self.all_distances / p)**q)
-
-        self.vectorise_functions()  # for element-wise operations
-
-    def vectorise_functions(self):
-        """
-        Vectorises functions using numpy.vectorize for use in
-        array computations.
-        """
-        self.calc_comp_utility_v = np.vectorize(self.calc_comp_utility)
-
-    def calc_comp_utility(self, x, M, f):
-        """
-        Calculates the utility given a normalised composition (0<=x<=1), an
-        optimal fraction (0<=f<=1) and utility at homogeneity (0<=M<=1).
-        """
-        if x <= f:
-            utility = x / f
-        else:
-            utility = M + (1 - x) * (1 - M) / (1 - f)
-        return utility
 
     def neighbourhoods(self):
         """
@@ -562,9 +542,9 @@ class CompassModel(Model):
         b = self.neighbourhood_mixture
         f = self.optimal_fraction
         M = self.utility_at_max
-        x = (1-b)*self.local_compositions + \
-            b*self.neighbourhood_compositions
-        Household._household_res_utility = self.calc_comp_utility_v(x, M, f)
+        x = (1-b)*self.local_compositions + b*self.neighbourhood_compositions
+
+        calc_comp_utility(Household._household_res_utility, x, M, f)
 
     def calc_school_utilities(self):
         """
@@ -577,8 +557,7 @@ class CompassModel(Model):
         M = self.utility_at_max
         x = self.school_compositions
 
-        # TODO: can we make the assignment below in-place?
-        Household._household_school_utility_comp = self.calc_comp_utility_v(x, M, f)
+        calc_comp_utility(Household._household_school_utility_comp, x, M, f)
 
         # TODO: This needs to be correct, what distances to use?
         Household._household_school_utility = \
