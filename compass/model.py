@@ -581,13 +581,12 @@ class CompassModel(Model):
         f = self.optimal_fraction
         M = self.utility_at_max
         x = self.school_compositions
-        self.school_composition_utilities = self.calc_comp_utility_v(x, M, f)
+
+        # TODO: can we make the assignment below in-place?
+        Household._household_school_utility_comp = self.calc_comp_utility_v(x, M, f)
 
         # TODO: This needs to be correct, what distances to use?
-        # self.school_utilities = (self.school_composition_utilities ** alpha) * \
-        #     (self.distances ** (1 - alpha))
-
-        self.school_utilities = (self.school_composition_utilities * alpha) + \
+        self.school_utilities = (Household._household_school_utility_comp * alpha) + \
             (Household._household_distance * (1 - alpha))
 
     def calc_school_rankings(self, households, schools):

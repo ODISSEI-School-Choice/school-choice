@@ -36,6 +36,7 @@ class Household(BaseAgent):
     _total_households = 0
     _household_utility = np.zeros(61499, dtype="float32")
     _household_distance = np.zeros(61499, dtype="float32")
+    _household_school_utility_comp = np.zeros(61499, dtype="float32")
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
@@ -47,7 +48,6 @@ class Household(BaseAgent):
 
         self.category = category
         self.params = params
-        self.school_utility_comp = 0
         self.shape = pos
         self.attributes = self.attribute_array()
         self.composition = self.new_composition_array()
@@ -82,6 +82,14 @@ class Household(BaseAgent):
     @utility.setter
     def utility(self, value):
         Household._household_utility[self.idx] = value
+
+    @property
+    def school_utility_comp(self):
+        return Household._household_school_utility_comp[self.idx]
+
+    @utility.setter
+    def scholl_utility_comp(self, value):
+        Household._household_school_utility_comp[self.idx] = value
 
     @property
     def distance(self):
@@ -194,8 +202,6 @@ class Household(BaseAgent):
         if residential:
             self.utility = self.model.res_utilities[self.idx]
         else:
-            self.school_utility_comp = self.model.school_composition_utilities[
-                self.idx]
             self.utility = self.model.school_utilities[self.idx]
 
     def step(self,
