@@ -125,8 +125,7 @@ class Measurements:
                 self.households[time, household.idx, 8] = household.neighbourhood.unique_id
         else:
             self.households[time, :, 4] = Household._household_school_utility[:]
-            for household in self.agents['households']:
-                self.households[time, household.idx, 8] = household.students[0].school.unique_id
+            self.households[time, :, 8] = Household._household_school_id[:]
 
     def neighbourhood_data(self, time):
         """

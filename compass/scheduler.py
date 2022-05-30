@@ -201,11 +201,7 @@ class ThreeStagedActivation:
                 #  * Household.composition
                 for household in all_households:
                     household.update_residential()
-            else:
-                # Set:
-                #  * Household.distance
-                for household in all_households:
-                    household.update_schools()
+            # updating the household.distance is done when moving the student
 
             # Set:
             #  * Household.school_utility_comp

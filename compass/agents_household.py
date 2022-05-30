@@ -37,6 +37,7 @@ class Household(BaseAgent):
     _household_school_utility = np.zeros(61499, dtype="float32")  # self.utility if not residential
     _household_distance = np.zeros(61499, dtype="float32")
     _household_school_utility_comp = np.zeros(61499, dtype="float32")
+    _household_school_id = np.zeros(61499, dtype="float32")
 
     __slots__ = ["idx", "category"]
 
@@ -53,6 +54,7 @@ class Household(BaseAgent):
         self.shape = pos
         self.attributes = self.attribute_array()
         self.composition = self.new_composition_array()
+        self.school_id = 0
 
         # Create students
         self.students = []
@@ -76,6 +78,14 @@ class Household(BaseAgent):
             str: representing the unique identifier of the agent.
         """
         return f"<Household object with unique_id: {self.unique_id}>"
+
+    @property
+    def school_id(self):
+        return Household._household_school_id[self.idx]
+
+    @school_id.setter
+    def school_id(self, value):
+        Household._household_school_id[self.idx] = value
 
     @property
     def res_utility(self):
@@ -187,21 +197,6 @@ class Household(BaseAgent):
         # Switch the attributes to the new location as well.
         self.model.switch_attrs(old_pos, new_pos)
 
-    def update(self, residential=True):
-        """
-        Updates the residential or school composition attributes of the
-        Household/Student.
-
-        Args:
-            residential (bool): equals True if the model needs to update
-                residential or school parameters (default=False).
-        """
-
-        if residential:
-            self.update_residential()
-        else:
-            self.update_schools()
-
     def step(self,
              residential=False,
              initial_schools=False,
@@ -274,31 +269,6 @@ class Household(BaseAgent):
             self.composition = self.model.compositions[x, y, :]
             self.model.local_compositions[idx] = \
                 self.model.normalized_compositions[x, y, :][category]
-
-    def update_schools(self):
-        """
-        Sets the school distance and composition attributes. Note that the
-        attributes should only be set here, as this method should only be
-        called when the agent actually moves to the location!
-
-        Note:
-            * takes data from the *first* student in the household
-
-        Todo:
-            * Should this be moved to the Student object?
-        """
-
-        idx = self.idx
-
-        if len(self.students) > 0:
-            student = self.students[0]  # First student
-            school = student.school
-        else:
-            return
-
-        # Distance utility
-        Household._household_distance[idx] = \
-            self.model.distance_utilities[self.idx, school.idx]
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """
