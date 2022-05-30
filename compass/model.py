@@ -606,6 +606,10 @@ class CompassModel(Model):
             Schools can differ per household if we only want to look at the
             n-closest schools for example?
         """
+        # TODO: remove schools without space?
+        # necessary to allow indexing with the argsort result
+        schools = np.array(schools)
+
         zeros = np.zeros(len(self.params["group_types"][0]))
         compositions = np.array(
             [school.composition / school.total if school.total > 0 else zeros for school in schools],
@@ -651,8 +655,6 @@ class CompassModel(Model):
         # No difference on the (3K househoulds, 202 schools) case
         ranked_indices = transformed.argsort(axis=0)[::-1]
 
-        # necessary to allow indexing with the argsort result
-        schools = np.array(schools)
         for i in range(len(households)):
             ranking = schools[ranked_indices[:, i]]
 

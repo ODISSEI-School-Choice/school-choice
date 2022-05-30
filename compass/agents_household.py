@@ -192,8 +192,7 @@ class Household(BaseAgent):
         if residential:
             self.update_residential()
         else:
-            for student in self.students:
-                self.update_school(student)
+            self.update_schools()
 
     def update_utilities(self, residential=True):
         """
@@ -285,7 +284,7 @@ class Household(BaseAgent):
             self.model.local_compositions[idx] = \
                 self.model.normalized_compositions[x, y, :][category]
 
-    def update_school(self, student):
+    def update_schools(self):
         """
         Sets the school distance and composition attributes. Note that the
         attributes should only be set here, as this method should only be
@@ -300,18 +299,18 @@ class Household(BaseAgent):
 
         idx = self.idx
 
-        # Composition utility
-        if student.school.total > 0:
-            norm = 1.0 / student.school.total
-        else:
-            norm = 1.0
-        self.model.school_compositions[idx] = \
-            student.school.composition[self.category] * norm
+        for student in self.students:
+            # Composition utility
+            if student.school.total > 0:
+                norm = 1.0 / student.school.total
+            else:
+                norm = 1.0
+            self.model.school_compositions[idx] = \
+                student.school.composition[self.category] * norm
 
-        # Distance utility
-        self.distance = \
-            self.model.distance_utilities[self.idx, student.school.idx]
-
+            # Distance utility
+            self.distance = \
+                self.model.distance_utilities[self.idx, student.school.idx]
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """
