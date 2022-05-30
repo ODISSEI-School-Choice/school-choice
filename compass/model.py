@@ -61,11 +61,6 @@ class CompassModel(Model):
         else:
             self.create_agents()
 
-        # Initial compositions need to be calculated after every household is
-        # placed
-        for household in self.get_agents('households'):
-            household.update_utilities()
-
         # Get values of the initial configuration
         self.measurements.end_step(residential=True)
 
@@ -332,7 +327,6 @@ class CompassModel(Model):
         self.calc_residential_compositions()
         self.set_agent_parameters(params, all_households)
         self.calc_res_utilities()
-        # (household.update_utilities() for household in all_households)
 
     def load_agents(self, case='Amsterdam'):
         """
@@ -569,7 +563,7 @@ class CompassModel(Model):
         M = self.utility_at_max
         x = (1-b)*self.local_compositions + \
             b*self.neighbourhood_compositions
-        self.res_utilities = self.calc_comp_utility_v(x, M, f)
+        Household._household_res_utility = self.calc_comp_utility_v(x, M, f)
 
     def calc_school_utilities(self):
         """
@@ -586,7 +580,8 @@ class CompassModel(Model):
         Household._household_school_utility_comp = self.calc_comp_utility_v(x, M, f)
 
         # TODO: This needs to be correct, what distances to use?
-        self.school_utilities = (Household._household_school_utility_comp * alpha) + \
+        Household._household_school_utility = \
+            (Household._household_school_utility_comp * alpha) + \
             (Household._household_distance * (1 - alpha))
 
     def calc_school_rankings(self, households, schools):
@@ -637,7 +632,8 @@ class CompassModel(Model):
             ).T
 
         # Rank the schools according to the household utilities
-        households_utilities = np.take(Household._household_utility, households_indices)
+        # TODO: is this the right utility? ie. residential=False?
+        households_utilities = np.take(Household._household_school_utility, households_indices)
 
         if self.params['ranking_method'].lower() == 'proportional':
             # transform = True

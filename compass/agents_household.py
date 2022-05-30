@@ -34,7 +34,8 @@ class Household(BaseAgent):
     """
 
     _total_households = 0
-    _household_utility = np.zeros(61499, dtype="float32")
+    _household_res_utility = np.zeros(61499, dtype="float32")  # self.utility if residential
+    _household_school_utility = np.zeros(61499, dtype="float32")  # self.utility if not residential
     _household_distance = np.zeros(61499, dtype="float32")
     _household_school_utility_comp = np.zeros(61499, dtype="float32")
 
@@ -76,12 +77,20 @@ class Household(BaseAgent):
         return f"<Household object with unique_id: {self.unique_id}>"
 
     @property
-    def utility(self):
-        return Household._household_utility[self.idx]
+    def res_utility(self):
+        return Household._household_res_utility[self.idx]
 
-    @utility.setter
+    @res_utility.setter
+    def res_utility(self, value):
+        Household._household_res_utility[self.idx] = value
+
+    @property
+    def school_utility(self):
+        return Household._household_school_utility[self.idx]
+
+    @school_utility.setter
     def utility(self, value):
-        Household._household_utility[self.idx] = value
+        Household._household_school_utility[self.idx] = value
 
     @property
     def school_utility_comp(self):
@@ -121,7 +130,10 @@ class Household(BaseAgent):
         data = [
             self.pos[0], self.pos[1],
             self.composition[0], self.composition[1],
-            self.utility,
+
+            self.res_utility if residential
+            else self.school_utility,
+
             self.category,
             self.unique_id,
             self.distance,
@@ -188,21 +200,6 @@ class Household(BaseAgent):
             self.update_residential()
         else:
             self.update_schools()
-
-    def update_utilities(self, residential=True):
-        """
-        Updates the residential or school utility attributes of the
-        Household/Student.
-
-        Args:
-            residential (bool): equals True if the model needs to update
-                residential or school parameters (default=False).
-        """
-
-        if residential:
-            self.utility = self.model.res_utilities[self.idx]
-        else:
-            self.utility = self.model.school_utilities[self.idx]
 
     def step(self,
              residential=False,

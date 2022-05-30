@@ -197,9 +197,8 @@ class ThreeStagedActivation:
             self.model.calc_school_utilities()
             self.school_steps += 1
 
-        # Update the utilities of ALL agents
-        for household in all_households:
-            household.update_utilities(residential)
+        # Updating of the utilities of ALL agents was done in
+        # self.model.calc_school_utilities()
 
         self.time += 1
         self.model.measurements.end_step(residential)

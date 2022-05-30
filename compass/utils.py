@@ -109,13 +109,12 @@ class Measurements:
                 self.households[:, household.idx, 6] = household.unique_id
 
         # Dynamic data
-        self.households[time, :, 4] = Household._household_utility[:]
-        self.households[time, :, 7] = Household._household_distance[:]
-
         if residential:
+            self.households[time, :, 4] = Household._household_res_utility[:]
             for household in self.agents['households']:
                 self.households[time, household.idx, 8] = household.neighbourhood.unique_id
         else:
+            self.households[time, :, 4] = Household._household_school_utility[:]
             for household in self.agents['households']:
                 self.households[time, household.idx, 8] = household.students[0].school.unique_id
 
