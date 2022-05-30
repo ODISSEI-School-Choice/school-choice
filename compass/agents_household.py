@@ -280,8 +280,8 @@ class Household(BaseAgent):
         attributes should only be set here, as this method should only be
         called when the agent actually moves to the location!
 
-        Args:
-            student (Student): object to calculate for.
+        Note:
+            * takes data from the *last* student in the household
 
         Todo:
             * Should this be moved to the Student object?
@@ -289,18 +289,22 @@ class Household(BaseAgent):
 
         idx = self.idx
 
-        for student in self.students:
-            # Composition utility
-            if student.school.total > 0:
-                norm = 1.0 / student.school.total
-            else:
-                norm = 1.0
-            self.model.school_compositions[idx] = \
-                student.school.composition[self.category] * norm
+        if len(self.students) > 0:
+            student = self.students[-1]
+        else:
+            return
 
-            # Distance utility
-            self.distance = \
-                self.model.distance_utilities[self.idx, student.school.idx]
+        # Composition utility
+        if student.school.total > 0:
+            norm = 1.0 / student.school.total
+        else:
+            norm = 1.0
+        self.model.school_compositions[idx] = \
+            student.school.composition[self.category] * norm
+
+        # Distance utility
+        self.distance = \
+            self.model.distance_utilities[self.idx, student.school.idx]
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """
