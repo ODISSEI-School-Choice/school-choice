@@ -283,7 +283,7 @@ class Household(BaseAgent):
         called when the agent actually moves to the location!
 
         Note:
-            * takes data from the *last* student in the household
+            * takes data from the *first* student in the household
 
         Todo:
             * Should this be moved to the Student object?
@@ -292,13 +292,14 @@ class Household(BaseAgent):
         idx = self.idx
 
         if len(self.students) > 0:
-            student = self.students[-1]
+            student = self.students[0]  # First student
+            school = student.school
         else:
             return
 
         # Distance utility
-        self.distance = \
-            self.model.distance_utilities[self.idx, student.school.idx]
+        Household._household_distance[idx] = \
+            self.model.distance_utilities[self.idx, school.idx]
 
     def residential_utility(self, composition, neighbourhood_composition=None):
         """
