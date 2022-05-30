@@ -105,11 +105,11 @@ class Measurements:
                 self.households[:, household.idx, 1] = household.pos[1]
                 self.households[:, household.idx, 2] = household.composition[0]
                 self.households[:, household.idx, 3] = household.composition[1]
+                self.households[:, household.idx, 5] = household.category
                 self.households[:, household.idx, 6] = household.unique_id
 
         # Dynamic data
         self.households[time, :, 4] = Household._household_utility[:]
-        self.households[time, :, 5] = Household._household_category[:]
         self.households[time, :, 7] = Household._household_distance[:]
 
         if residential:

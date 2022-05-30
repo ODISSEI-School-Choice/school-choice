@@ -35,9 +35,7 @@ class Household(BaseAgent):
 
     _total_households = 0
     _household_utility = np.zeros(61499, dtype="float32")
-    _household_category = np.zeros(61499, dtype=int)
     _household_distance = np.zeros(61499, dtype="float32")
-    __slots__ = ["idx"]
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
@@ -47,10 +45,11 @@ class Household(BaseAgent):
         self.idx = Household._total_households
         Household._total_households += 1
 
+        self.category = category
         self.params = params
         self.school_utility_comp = 0
         self.shape = pos
-        self.attributes = self.attribute_array(category)
+        self.attributes = self.attribute_array()
         self.composition = self.new_composition_array()
 
         # Create students
@@ -85,14 +84,6 @@ class Household(BaseAgent):
         Household._household_utility[self.idx] = value
 
     @property
-    def category(self):
-        return Household._household_category[self.idx]
-
-    @category.setter
-    def category(self, value):
-        Household._household_category[self.idx] = value
-
-    @property
     def distance(self):
         return Household._household_distance[self.idx]
 
@@ -100,17 +91,13 @@ class Household(BaseAgent):
     def distance(self, value):
         Household._household_distance[self.idx] = value
 
-    def attribute_array(self, category):
+    def attribute_array(self):
         """
         This function creates the attribute array for the household that is
         used to calculate the local, neighbourhood and school compositions.
-
-        Args:
-            category (int): the category [0,n-1] the agent belongs to. Should
-                be generalised in the future.
         """
         attributes = np.zeros(len(self.params['group_types'][0]))
-        attributes[category] += 1
+        attributes[self.category] += 1
         return attributes
 
     def get_data(self, residential):

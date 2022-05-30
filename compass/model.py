@@ -615,16 +615,12 @@ class CompassModel(Model):
             [school.composition / school.total if school.total > 0 else zeros for school in schools],
             dtype="float32")
 
-        # TODO: is using an np.array for indexing really faster?
-        households_indices = np.array([h.idx for h in households], dtype=int)
-
-        # TODO: sorting the households should speed up the np.take() call below,
-        # because after sorting they can just walk linearly through the data once.
-        # on the small test case, the performance impact was zero.
-        households_indices.sort()
-
-        households_categories = np.take(Household._household_category,
-                households_indices)
+        # # TODO: combine this in one array, then split?
+        # households_indices = np.array([h.idx for h in households], dtype=int)
+        # households_categories = np.array([h.category for h in households], dtype=int)
+        households_data = np.array([(h.idx, h.category) for h in households], dtype=int).T
+        households_indices = households_data[0, :]
+        households_categories = households_data[1, :]
 
         # Composition utility calculations
         t = np.take(self.optimal_fraction, households_indices)  # [n_indices]
