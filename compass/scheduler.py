@@ -189,11 +189,27 @@ class ThreeStagedActivation:
                     households_to_move, self.model.get_agents('schools'))
                 self.allocate_schools(households_to_move, initial_schools)
 
-            # Calculate the new school compositions
+            # Calculate the new school compositions:
+            #  * Compass.school_compositions
+            #  TODO: should this move to in the 'residential' below?
             self.model.calc_school_compositions()
-            for household in all_households:
-                household.update(residential)
 
+            if residential:
+                # Set:
+                #  * Compass.neighbourhodd_compositions
+                #  * Compass.local_compositions
+                #  * Household.composition
+                for household in all_households:
+                    household.update_residential()
+            else:
+                # Set:
+                #  * Household.distance
+                for household in all_households:
+                    household.update_schools()
+
+            # Set:
+            #  * Household.school_utility_comp
+            #  * Household.school_utility
             self.model.calc_school_utilities()
             self.school_steps += 1
 

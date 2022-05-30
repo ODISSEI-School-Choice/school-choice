@@ -545,12 +545,13 @@ class CompassModel(Model):
         for household in self.get_agents('households'):
             category = household.category
             idx = household.idx
-            if household.students[0].school.total > 0:
-                norm = 1.0 / household.students[0].school.total
+            school = household.students[0].school
+            if school.total > 0:
+                norm = 1.0 / school.total
             else:
                 norm = 1.0
             self.school_compositions[idx] = \
-                household.students[0].school.composition[category] * norm
+                school.composition[category] * norm
 
     def calc_res_utilities(self):
         """

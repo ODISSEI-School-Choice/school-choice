@@ -294,14 +294,6 @@ class Household(BaseAgent):
         else:
             return
 
-        # Composition utility
-        if student.school.total > 0:
-            norm = 1.0 / student.school.total
-        else:
-            norm = 1.0
-        self.model.school_compositions[idx] = \
-            student.school.composition[self.category] * norm
-
         # Distance utility
         self.distance = \
             self.model.distance_utilities[self.idx, student.school.idx]
