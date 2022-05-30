@@ -589,9 +589,6 @@ class CompassModel(Model):
             [school.composition / school.total if school.total > 0 else zeros for school in schools],
             dtype="float32")
 
-        # # TODO: combine this in one array, then split?
-        # households_indices = np.array([h.idx for h in households], dtype=int)
-        # households_categories = np.array([h.category for h in households], dtype=int)
         households_data = np.array([(h.idx, h.category) for h in households], dtype=int).T
         households_indices = households_data[0, :]
         households_categories = households_data[1, :]
@@ -621,18 +618,16 @@ class CompassModel(Model):
             exp_utilities = np.exp(self.temperature * differences)
             transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
 
-        # TODO: sorting, and then reversing the list,
-        # or sort the inverted (negative) values?
-        # No difference on the (3K househoulds, 202 schools) case
-        ranked_indices = transformed.argsort(axis=0)[::-1]
+        # instead of reversing the list, sort the negative values in the list
+        ranked_indices = -transformed.argsort(axis=0)
 
-        for i in range(len(households)):
+        for i, household in enumerate(households):
             ranking = schools[ranked_indices[:, i]]
 
             # TODO: can we make school preference a Household property,
-            # instead of a Student property?
-            for s in households[i].students:
-                s.set_school_preference(ranking)
+            # instead of a Student property? gives ~10% extra speedup
+            for student in household.students:
+                student.set_school_preference(ranking)
 
     def get_attributes(self, pos):
         """

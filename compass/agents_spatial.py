@@ -1,7 +1,6 @@
 """
 The School and Neighbourhood class.
 """
-
 from .agents_base import BaseAgent
 
 

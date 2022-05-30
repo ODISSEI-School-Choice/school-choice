@@ -181,13 +181,21 @@ class ThreeStagedActivation:
                             )
 
                 # Allocate students after all initial preferences have been set
-                self.allocate_schools(all_households, initial_schools)
+                self.allocate_schools(
+                        all_households,
+                        initial_schools
+                        )
 
             else:
                 # Normal school step
                 self.model.calc_school_rankings(
-                    households_to_move, self.model.get_agents('schools'))
-                self.allocate_schools(households_to_move, initial_schools)
+                    households_to_move,
+                    self.model.get_agents('schools')
+                    )
+                self.allocate_schools(
+                        households_to_move,
+                        initial_schools
+                        )
 
             # Calculate the new school compositions:
             #  * Compass.school_compositions
