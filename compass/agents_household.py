@@ -39,6 +39,8 @@ class Household(BaseAgent):
     _household_distance = np.zeros(61499, dtype="float32")
     _household_school_utility_comp = np.zeros(61499, dtype="float32")
 
+    __slots__ = ["idx", "category"]
+
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
 
         # Store parameters

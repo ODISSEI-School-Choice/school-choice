@@ -28,7 +28,7 @@ class School(BaseAgent):
     """
 
     _total_schools = 0
-    __slots__ = ["idx"]
+    __slots__ = ["idx", "total", "capacity"]
 
     def __init__(self, unique_id, pos, model, params):
         super().__init__(unique_id, pos, model, params)
