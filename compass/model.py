@@ -320,6 +320,10 @@ class CompassModel(Model):
         dirname = os.path.dirname(__file__)
         if case.lower() == 'amsterdam':
             path = dirname + '/maps/amsterdam'
+        elif case.lower() == 'south-london':
+            path = dirname + '/maps/south-london'
+        elif case.lower() == 'london':
+            path = dirname + '/maps/london'
 
         # Load GeoDataFrames
         school_frame = gpd.read_file(path + '/schools.geojson')
