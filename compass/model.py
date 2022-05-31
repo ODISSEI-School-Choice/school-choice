@@ -436,6 +436,7 @@ class CompassModel(Model):
 
         self.all_distances = self.all_distances[self.chosen_indices, :]
 
+        Household.reset(len(households))
         for index, row in households.iterrows():
             self.create_household(index, row, n_agents, neighbourhoods)
 

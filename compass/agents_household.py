@@ -1,9 +1,12 @@
 """
 The Household and Student classes.
 """
+import sys
 import random
 import numpy as np
 from .agents_base import BaseAgent
+
+MAX_INITIAL_HOUSEHOLDS = 100
 
 
 class Household(BaseAgent):
@@ -33,21 +36,30 @@ class Household(BaseAgent):
     """
 
     _total_households = 0
-    _household_res_utility = np.zeros(61499, dtype="float32")  # self.utility if residential
-    _household_school_utility = np.zeros(61499, dtype="float32")  # self.utility if not residential
-    _household_distance = np.zeros(61499, dtype="float32")
-    _household_school_utility_comp = np.zeros(61499, dtype="float32")
-    _household_school_id = np.zeros(61499, dtype="float32")
+    _max_households = 0
+    _household_res_utility = None
+    _household_school_utility = None
+    _household_distance = None
+    _household_school_utility_comp = None
+    _household_school_id = None
 
     __slots__ = ["idx", "category"]
 
     def __init__(self, unique_id, pos, model, params, category, nhood=None):
-
         # Store parameters
         super().__init__(unique_id, pos, model, params)
 
+        # Initialize some storage for Household objects
+        # Note: this should be done by a call to Household.initialize()
+        if Household._max_households == 0:
+            Household.initialize(MAX_INITIAL_HOUSEHOLDS)
+
         self.idx = Household._total_households
         Household._total_households += 1
+
+        if Household._total_households > Household._max_households:
+            print("Too many Household objects!")
+            sys.exit(-1)
 
         self.category = category
         self.params = params
@@ -78,6 +90,32 @@ class Household(BaseAgent):
             str: representing the unique identifier of the agent.
         """
         return f"<Household object with unique_id: {self.unique_id}>"
+
+    def reset(max_households):
+        """
+        Allocates numpy arrays backing the Household data for the given amount of households.
+
+        Must be called before any Household objects are created.
+
+        Arguments:
+            max_households (int) : maximum number of Household objects that will
+            be created.
+        """
+        if Household._total_households > 0:
+            print("Resetting households while there already are Household objects not implemented yet.")
+            sys.exit()
+        Household._max_households = \
+            max_households
+        Household._household_res_utility = \
+            np.zeros(max_households, dtype="float32")  # self.utility if residential
+        Household._household_school_utility = \
+            np.zeros(max_households, dtype="float32")  # self.utility if not residential
+        Household._household_distance = \
+            np.zeros(max_households, dtype="float32")
+        Household._household_school_utility_comp = \
+            np.zeros(max_households, dtype="float32")
+        Household._household_school_id = \
+            np.zeros(max_households, dtype="float32")
 
     @property
     def school_id(self):
