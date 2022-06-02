@@ -91,25 +91,31 @@ class Household(BaseAgent):
         """
         return f"<Household object with unique_id: {self.unique_id}>"
 
-    def reset(max_households):
+    def reset(self, max_households=MAX_INITIAL_HOUSEHOLDS):
         """
-        Allocates numpy arrays backing the Household data for the given amount of households.
+        Allocates numpy arrays backing the Household data.
 
         Must be called before any Household objects are created.
 
         Arguments:
-            max_households (int) : maximum number of Household objects that will
-            be created.
+            max_households (int) : maximum number of Household objects that
+            will be created.
         """
         if Household._total_households > 0:
-            print("Resetting households while there already are Household objects not implemented yet.")
+            print("Resetting households while there already are Household"
+                  " objects not implemented yet.")
             sys.exit()
         Household._max_households = \
             max_households
+
+        # was self.utility if residential
         Household._household_res_utility = \
-            np.zeros(max_households, dtype="float32")  # self.utility if residential
+            np.zeros(max_households, dtype="float32")
+
+        # was self.utility if not residential
         Household._household_school_utility = \
-            np.zeros(max_households, dtype="float32")  # self.utility if not residential
+            np.zeros(max_households, dtype="float32")
+
         Household._household_distance = \
             np.zeros(max_households, dtype="float32")
         Household._household_school_utility_comp = \
