@@ -32,7 +32,7 @@ def calc_school_rankings(
         households_indices[j] = households[j].idx
     np.asarray(households_indices).sort()
 
-    optimal_fraction = optimal_fraction[households_indices]
+    optimal_fraction = np.take(optimal_fraction, households_indices)
     utility_at_max = np.take(utility_at_max, households_indices)
     alpha = np.take(alpha, households_indices)
     distance_utilities = np.take(distance_utilities, households_indices, axis=0)
