@@ -414,7 +414,22 @@ class CompassModel(Model):
 
     def create_households(self, household_frame, actual_households):
         """
-        Given a GeoDataFrame, this creates all the household objects
+        Given a GeoDataFrame, this creates household objects by randomly
+        drawing (without replacement) household metadata rows from the frame.
+
+        Arguments
+            household_frame (pd.DataFrame)
+                A GeoPandas DataFrame with the household metadata in the
+                columns 'geometry.coords', 'group', and 'neighbourhood_id'
+
+            actual_households (int)
+                The number of households to create.
+
+        Parameters used
+            params['random_residential']
+
+        Parameters set
+            params['n_households']
         """
         if self.verbose:
             print("Creating households...")
@@ -422,23 +437,44 @@ class CompassModel(Model):
         self.chosen_indices = np.random.choice(len(household_frame),
                                                size=actual_households,
                                                replace=False)
-        households = household_frame.iloc[self.chosen_indices]
+        households_sample = household_frame.iloc[self.chosen_indices]
 
         if self.params['random_residential']:
             # Randomly shuffle the group of the household
-            shuffled = households['group'].values
+            shuffled = households_sample['group'].values
             np.random.shuffle(shuffled)
-            households['group'] = shuffled
+            households_sample['group'] = shuffled
 
-        self.params['n_households'] = len(households)
+        self.params['n_households'] = actual_households
         n_agents = self.params['n_neighbourhoods'] + self.params['n_schools']
         neighbourhoods = self.get_agents('neighbourhoods')
 
         self.all_distances = self.all_distances[self.chosen_indices, :]
 
-        Household.reset(len(households))
-        for index, row in households.iterrows():
-            self.create_household(index, row, n_agents, neighbourhoods)
+        # pre-allocate storage for the Housholds
+        Household.reset(actual_households)
+
+        # DataFrame.iterrows() is very slow, dont use it!
+        # the current code uses only iterates (no copies)
+        # and should be memory-friendly and performant:
+        # accumulated time for create_households:
+        # for the testcase with  60K households from 9.10 to 2.60 seconds
+        # for the testcase with 210K households from 30.0 to 9.27 seconds
+        for index, row in enumerate(zip(
+                households_sample['geometry'],
+                households_sample['group'],
+                households_sample['neighbourhood_id']
+                )):
+            household = Household(unique_id=index + n_agents,
+                                  pos=row[0].coords[0],
+                                  model=self,
+                                  params=self.params,
+                                  category=row[1],
+                                  nhood=neighbourhoods[row[2]]
+                                  )
+            self.agents["households"].append(household)
+            self.scheduler.add(household)
+            self.grid.place_agent(household, household.pos)
 
         self.location_to_agent()
 
@@ -446,15 +482,6 @@ class CompassModel(Model):
         """
         Creates ONE household
         """
-        household = Household(unique_id=index + n_agents,
-                              pos=row.geometry.coords[0],
-                              model=self,
-                              params=self.params,
-                              category=row['group'],
-                              nhood=neighbourhoods[row['neighbourhood_id']])
-        self.agents["households"].append(household)
-        self.scheduler.add(household)
-        self.grid.place_agent(household, household.pos)
 
     def location_to_agent(self):
         """
