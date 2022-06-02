@@ -30,8 +30,12 @@ def calc_school_rankings(
         compositions[i, 1] = schools[i].composition[1]
     for j in range(n_households):
         households_indices[j] = households[j].idx
+
+    # TODO: seems that numpy sort is the fastest regarding a stackflow thread, 
+    #       but still wonder if any faster alternatives exist
     np.asarray(households_indices).sort()
 
+    # TODO: look for better way of memoryview slicing
     optimal_fraction = np.take(optimal_fraction, households_indices)
     utility_at_max = np.take(utility_at_max, households_indices)
     alpha = np.take(alpha, households_indices)
@@ -70,6 +74,7 @@ def calc_school_rankings(
         argsort(utilities[:, j], ranked_indices)
         ranked_indices = ranked_indices[::-1]
 
+        # TODO: look for better way to deal with list of Python objects
         ranking = []
         for i in range(n_schools):
             ranking.append(schools[ranked_indices[i]])
