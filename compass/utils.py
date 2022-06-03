@@ -523,8 +523,7 @@ class Measurements:
             print("Calculation of Theil's information index not supported.")
             sys.exit(1)
 
-        global_composition_normalized = self.model.global_composition_normalized
-        pi_m = global_composition_normalized
+        pi_m = self.model.global_composition / self.model.global_composition.sum()
 
         local_compositions = np.empty((len(agents), len(pi_m)))
         nr_of_agents = np.empty(len(agents))

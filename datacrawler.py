@@ -105,7 +105,7 @@ class DataCrawler:
         compositions = data[['comp_0', 'comp_1']]
         global_composition = compositions.sum(axis=0)
         global_composition_normalized = global_composition / \
-            global_composition.sum()
+                global_composition.sum()
         pi_m = global_composition_normalized.values
 
         t_j = compositions.sum(axis=1)

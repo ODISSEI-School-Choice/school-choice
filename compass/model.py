@@ -85,7 +85,6 @@ class CompassModel(Model):
         distance_matrix (list): all the Euclidean distances from one grid cell
             to another.
         nearness_matrix (list): same as above but with normalized distances.
-        global_composition_normalized (dict): normalized system compositions.
     """
 
     def __init__(self, params, export=False):
@@ -106,8 +105,6 @@ class CompassModel(Model):
         # Calculate global compositions for the segregation calculations
         self.global_composition = self.measurements.neighbourhoods[
             0, :, :2].sum(axis=0)
-        self.global_composition_normalized = self.global_composition / \
-            self.global_composition.sum()
 
         if self.verbose:
             text = f""" Model initialised:
