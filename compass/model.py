@@ -452,7 +452,7 @@ class CompassModel(Model):
         self.all_distances = self.all_distances[self.chosen_indices, :]
 
         # pre-allocate storage for the Housholds
-        Household.reset(actual_households)
+        Household.reset(max_households=actual_households)
 
         # DataFrame.iterrows() is very slow, dont use it!
         # the current code uses only iterates (no copies)
