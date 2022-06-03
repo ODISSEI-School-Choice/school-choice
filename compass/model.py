@@ -8,6 +8,8 @@ import random
 import contextlib
 import numpy as np
 from mesa import Model
+import ijson
+import pandas as pd
 import geopandas as gpd
 from .utils import Measurements, calc_comp_utility
 from scipy.stats import truncnorm
@@ -27,6 +29,43 @@ def record_time(name):
     finally:
         print("\n%s: %f" % (name,
                             (datetime.now() - start_time).total_seconds()))
+
+
+def read_households(path):
+    """
+    A fast and efficient parser to read household data from a GeoJSON file.
+
+    Arguments
+        path    File to open, passed directly to open()
+
+    Returns
+        households (pd.DataFrame) [pos, category, neighbourhood_id]
+    """
+
+    # open in binary mode for ijson
+    geofile = open(path, 'rb')
+
+    # assume floats are good enough,
+    # no need for aribrary precision Decimal objects
+    geo_households = ijson.items(geofile, 'features.item', use_float=True)
+
+    # normal python lists, because appending is fast for them,
+    # and we need the columns to create a pandas DataFrame
+    coordinates = []
+    groups = []
+    neighbourhood_ids = []
+
+    for feature in geo_households:
+        coordinates.append(feature['geometry']['coordinates'])
+        groups.append(feature['properties']['group'])
+        neighbourhood_ids.append(feature['properties']['neighbourhood_id'])
+    geofile.close()
+
+    return pd.DataFrame({
+        'pos': coordinates,
+        'category': groups,
+        'neighbourhood_id': neighbourhood_ids
+        })
 
 
 class CompassModel(Model):
@@ -327,7 +366,7 @@ class CompassModel(Model):
 
         # Load GeoDataFrames
         school_frame = gpd.read_file(path + '/schools.geojson')
-        household_frame = gpd.read_file(path + '/households.geojson')
+        household_frame = read_households(path + '/households.geojson')
         neighbourhood_frame = gpd.read_file(path + '/neighbourhoods.geojson')
 
         # Create grid
@@ -418,10 +457,6 @@ class CompassModel(Model):
         drawing (without replacement) household metadata rows from the frame.
 
         Arguments
-            household_frame (pd.DataFrame)
-                A GeoPandas DataFrame with the household metadata in the
-                columns 'geometry.coords', 'group', and 'neighbourhood_id'
-
             actual_households (int)
                 The number of households to create.
 
@@ -461,12 +496,12 @@ class CompassModel(Model):
         # for the testcase with  60K households from 9.10 to 2.60 seconds
         # for the testcase with 210K households from 30.0 to 9.27 seconds
         for index, row in enumerate(zip(
-                households_sample['geometry'],
-                households_sample['group'],
+                households_sample['pos'],
+                households_sample['category'],
                 households_sample['neighbourhood_id']
                 )):
             household = Household(unique_id=index + n_agents,
-                                  pos=row[0].coords[0],
+                                  pos=row[0],
                                   model=self,
                                   params=self.params,
                                   category=row[1],
@@ -477,11 +512,6 @@ class CompassModel(Model):
             self.grid.place_agent(household, household.pos)
 
         self.location_to_agent()
-
-    def create_household(self, index, row, n_agents, neighbourhoods):
-        """
-        Creates ONE household
-        """
 
     def location_to_agent(self):
         """
