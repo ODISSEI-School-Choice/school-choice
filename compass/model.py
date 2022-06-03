@@ -85,11 +85,82 @@ class CompassModel(Model):
         distance_matrix (list): all the Euclidean distances from one grid cell
             to another.
         nearness_matrix (list): same as above but with normalized distances.
+
+        alpha np.ndarray[n_households]
+        temperature float
+        utility_at_max np.ndarray[n_households]
+        optimal_fraction np.ndarray [n_households]
+        neighbourhood_mixture np.ndarray [n_households]
+        chosen_indices np.ndarray [n_households]
+
+        school_ended boolean
+        res_ended boolean
+
+    Cached attributes:
+        kernel (ndarray)
+            set: calc_residential_compositions
+            used: calc_residential_compositions
+        local_compositions (list, ndarray) [n_households, ndarray]
+            set: set_agent_parameters, overwritten in load_agents, update_residential
+            used: calc_res_utilities
+        normalized_compositions (ndarray) [??]
+            set: calc_residential_compositions
+            used: set_agent_parameters
+        neighbourhood_compositions (list, ndarray) [n_households]
+            set: set_agent_parameters, update_residential
+            used: load_agents, calc_res_utilities
+        school_compositions (ndarray, float32) [n_households]
+            set: set_agent_parameters, calc_school_compositions, update_school
+            used: calc_school_utilities
+        alpha (ndarray, float32) [n_households]
+            set: set_agent_parameters
+            used: calc_school_utilities, calc_school_rankings
+        temperature (float?)
+            set: set_agent_parameters
+            used: (calc_school_rankings, residential_ranking but from params)
+        utility_at_max (ndarray, float32) [n_households]
+            set: set_agent_parameters
+            used: calc_res_utilities, calc_school_utilities , calc_school_rankings
+            (residential_utility, but from params)
+        optimal_fraction (ndarray, float32) [n_households]
+            set: set_agent_parameters
+            used: calc_res_utilities, calc_school_utilities, calc_school_rankings
+        neighbourhood_mixture (ndarray, int) [n_households]  TODO: np.ushort?
+            set: set_agent_parameters
+            used: calc_res_utilities
+        distance_utilities(ndarray) [n_households, n_schools]
+            set: set_agent_parameters
+            used: calc_school_rankings, update_school
+        all_distances:  (ndarray) [n_households, n_schools] FIXME
+        household_attrs (ndarray, float) [width, height, len(params['group_types'][0])]
+        compositions (ndarray, float32)  as household_attrs
+        normalized_compositions (ndarray, float32)  as compositions 
     """
 
     def __init__(self, params, export=False):
 
         super().__init__()
+
+        # define various arrays TODO: sort/document those
+        self.local_compositions = []
+        self.neighbourhood_compositions = []
+        self.alpha = np.ndarray([])
+        self.temperature = 0.0
+        self.utility_at_max = np.ndarray([])
+        self.optimal_fraction = np.ndarray([])
+        self.neighbourhood_mixture = np.ndarray([])
+        self.school_compositions = np.ndarray([])
+        self.school_ended = False
+        self.res_ended = False
+        self.distance_utilities = np.ndarray([])
+        self.chosen_indices = np.ndarray([])
+
+        self.household_attrs = np.ndarray([])
+        self.compositions = np.ndarray([])
+        self.normalized_compositions = np.ndarray([])
+
+        self.all_distances = np.ndarray([])
+        self.kernel = np.ndarray([])
 
         # Initialise the model attributes
         self.set_attributes(params=params, export=export)
@@ -182,9 +253,6 @@ class CompassModel(Model):
         """
         households = self.get_agents("households")
         n_households = len(households)
-
-        self.local_compositions = []
-        self.neighbourhood_compositions = []
 
         dtype = "float32"
         self.alpha = np.zeros(n_households, dtype=dtype)
