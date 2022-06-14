@@ -140,7 +140,6 @@ class ThreeStagedActivation:
             initial_schools (bool): True if an initial school step needs to be
                 performed, False (default) means a school step.
         """
-        print([s.unique_id for s in self.model.get_agents("schools")])
         all_households = self.model.get_agents("households")
         households_to_move = self.agents_to_move(all_households, initial_schools)
         self.households_to_move = households_to_move  # For testing purposes
