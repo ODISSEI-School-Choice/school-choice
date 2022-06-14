@@ -679,13 +679,8 @@ class CompassModel(Model):
             ranked_idx = transformed.argsort()[::-1]
             ranking = schools[ranked_idx]
 
-            # # compute the real distances of the ranking list
-            # household_pos = Point(household.pos)
-            # school_geometries = gpd.GeoSeries([Point(s.pos) for s in ranking])
-            # self.test1 = school_geometries.distance(household_pos)
-            # self.test2 = self.all_distances[household.array_index, :][ranked_idx]
-
             [student.set_school_preference(ranking) for student in household.students]
+
         # # vectorization of the code above
         # households_indices = [h.array_index for h in households]
         # households_utilities = np.fromiter([h.utility for h in households], dtype="float32")
