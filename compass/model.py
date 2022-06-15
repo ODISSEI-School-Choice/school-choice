@@ -914,11 +914,10 @@ class CompassModel(Model):
     def choose_locations(self, amount: int, method: str = "evenly_spaced") -> List[tuple[float, float]]:
         """
         Compute a number of locations to place school and neighbourhood objects.
-        Currently, only random and evenly spaced locations are allowed.
 
         Args:
             amount (int): the number of agents to place.
-            method (str): 'evenly_spaced' only supported method for now.
+            method (str): one of 'evenly_spaced', 'random', 'random_per_neighbourhood'
 
         Returns:
             list: containing all the locations in tuple (x,y) format.
@@ -927,16 +926,20 @@ class CompassModel(Model):
         if amount == 0:
             return []
 
-        # Evenly spaced is also used in 'random_per_neighbourhood'
-        per_side = np.sqrt(amount)
-        if per_side % 1 != 0:
-            print("Unable to place amount of locations using given method")
-            sys.exit(1)
+        if method == "evenly_spaced":
+            per_side = np.sqrt(amount)
+            if per_side % 1 != 0:
+                print("Unable to place amount of locations using given method")
+                sys.exit(1)
 
-        # Compute locations
-        locations = []
+            # Compute locations
+            per_side = int(per_side)
+            xs = np.linspace(0, self.params['width'], per_side*2+1)[1::2]
+            ys = np.linspace(0, self.params['height'], per_side*2+1)[1::2]
+            return [(x, y) for x in xs for y in ys]
 
-        if method == "random":
+        elif method == "random":
+            locations = []
             i = 0
             while i < amount:
                 x_coord = np.random.randint(low=0, high=self.params['width'])
@@ -944,9 +947,10 @@ class CompassModel(Model):
                 if (x_coord, y_coord) not in locations:
                     locations.append((x_coord, y_coord))
                     i += 1
+            return locations
 
         elif method == "random_per_neighbourhood":
-
+            locations = []
             width, height = self.params["width"], self.params['height']
             n_schools = self.params['n_schools']
             n_neighbourhoods = self.params['n_neighbourhoods']
@@ -997,7 +1001,10 @@ class CompassModel(Model):
                 random.shuffle(rest_locations)
                 locations = first_locations + rest_locations[:remainder]
 
-        return locations
+            return locations
+
+        print(f"Unknown method in choose_locations {method} __file__:__line__")
+        sys.exit(-1)
 
     def compute_closest_neighbourhoods(self) -> dict:
         """
