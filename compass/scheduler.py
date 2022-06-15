@@ -141,6 +141,8 @@ class ThreeStagedActivation:
         all_households = self.model.get_agents('households')
         households_to_move = self.agents_to_move(all_households,
                                                  initial_schools)
+
+        # FIXME: we shouldnt store this, but is needed for a test
         self.households_to_move = households_to_move  # For testing purposes
 
         if residential:
@@ -156,7 +158,7 @@ class ThreeStagedActivation:
             # UPDATE COMPOSITIONS OF ALL AGENTS AFTER ALL THE MOVES
             self.model.calc_residential_compositions()
             for household in all_households:
-                household.update(residential)
+                household.update_residential()
             self.model.calc_res_utilities()
             self.residential_steps += 1
 

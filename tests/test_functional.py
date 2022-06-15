@@ -83,7 +83,7 @@ def random_params():
 def test_distance_only(random_params):
     '''
     Only distance matters in school choice, so in the lattice case,
-    with schools in the middle of the neighbourhoods, school 
+    with schools in the middle of the neighbourhoods, school
     segregation should equal residential segregation!
     '''
     logging.warning('\n\n\nDISTANCE ONLY')
@@ -107,7 +107,7 @@ def test_distance_only(random_params):
                     school_steps=random_params['max_school_steps'])
     log_steps(model)
     res_seg, school_seg = log_segregation(model)
-    if res_seg>0.1:
+    if res_seg > 0.1:
         assert np.isclose(res_seg, school_seg, atol=0.05)
 
 
@@ -186,22 +186,25 @@ def test_closest_school(random_params):
     # Pick 20 random households and check if they attend their closest school
     schools = model.get_agents('schools')
     school_geometries = gpd.GeoSeries([Point(school.pos) for school in schools])
-    households = model.get_agents('households')
-    np.random.shuffle(households)
+    households = np.random.choice(
+            model.get_agents('households'),
+            size=20,
+            replace=False
+            )
+
     total = 0
     closest_school = 0
-    for household in households[:20]:
-        household_pos = Point(household.pos)
-        distances = school_geometries.distance(household_pos)
+    for household in households:
+        distances = school_geometries.distance(Point(household.pos))
         closest = np.argmin(distances)
         for student in household.students:
             total += 1
             closest_school += schools[closest]==student.school
-    
+
     # Check if at least 80% attends the closest school, due to different schools
     # in the same building this test might fail for some students otherwise
     assert closest_school / total > 0.8
-    
+
 
 def test_utilities(random_params):
     """
@@ -215,8 +218,8 @@ def test_utilities(random_params):
     
     # Initially, no utilities can be zero (theoretically it could be)
     # if they are 0, then it's probably an unfilled initial array.
-    assert np.all(model.res_utilities > 0)
-    assert np.all(model.res_utilities <= 1)
+    assert np.all(Household._household_res_utility > 0)
+    assert np.all(Household._household_res_utility <= 1)
 
     if model.params['case'].lower()=='lattice':
         assert np.all(model.normalized_compositions >= 0)
@@ -228,9 +231,13 @@ def test_utilities(random_params):
         model.simulate(res_steps=0, school_steps=2)
 
     # Now utilities can be 0
-    for array in [model.res_utilities, model.distance_utilities, 
-        model.school_composition_utilities,
-        model.school_utilities, model.distances]:
+    for array in [
+            Household._household_res_utility,
+            model.distance_utilities,
+            Household._household_school_utility_comp,
+            Household._household_school_utility,
+            Household._household_distance
+            ]:
         assert np.all(array >= 0)
         assert np.all(array <= 1)
 

@@ -9,6 +9,7 @@ from .agents_base import BaseAgent
 from .school import School
 from .student import Student
 from .neighbourhood import Neighbourhood
+from .functions import calc_comp_utility
 
 MAX_INITIAL_HOUSEHOLDS = 100
 
@@ -62,9 +63,9 @@ class Household(BaseAgent):
             will be created.
         """
         if cls._total_households > 0:
-            print("Resetting households while there already are Household"
-                  " objects not implemented yet.")
-            sys.exit()
+            print("Warning: resetting households while there already are "
+                  "Household objects.")
+            cls._total_households = 0
 
         dtype = 'float32'
         cls._max_households = max_households
@@ -105,7 +106,6 @@ class Household(BaseAgent):
 
         self.category: int = category
         self.params: dict = params
-        self.shape: tuple[float, float] = pos
         self.attributes: np.ndarray = self.attribute_array()
         self.composition: np.ndarray = self.new_composition_array()
         self.school_id: int = 0
@@ -369,8 +369,14 @@ class Household(BaseAgent):
         utility_at_max = params["utility_at_max"][0][self.category]
         optimal_fraction = params["optimal_fraction"][0][self.category]
 
-        return self.model.calc_comp_utility(actual_fraction, utility_at_max,
-                                            optimal_fraction)
+        result = np.zeros_like(actual_fraction)
+        calc_comp_utility(
+                result,
+                actual_fraction,
+                utility_at_max,
+                optimal_fraction
+                )
+        return result
 
     def get_closest_neighbourhood(self, pos: tuple[float, float]) -> Neighbourhood:
         """
@@ -475,7 +481,14 @@ class Household(BaseAgent):
             summed += utility
             utilities[index] = utility
 
-        utilities = utilities / summed
+        if summed == float('inf'):
+            # we're having overflow issues
+            # FIXME: just create some reasonable weights
+            top = np.argmax(utilities)
+            utilities[:] = 0.0
+            utilities[top] = 1.0
+        else:
+            utilities = np.nan_to_num(utilities / summed, copy=False)
         if ranking_method == 'proportional' or ranking_method:
             new_pos = random.choices(population=positions,
                                      weights=utilities,

@@ -47,7 +47,7 @@ class Neighbourhood(BaseAgent):
         self.total: int  = 0
         self.shape = shape
         self.households: List['Household'] = []
-        self.composition: np.ndarra = self.new_composition_array()
+        self.composition: np.ndarray = self.new_composition_array()
 
     def __repr__(self) -> str:
         """

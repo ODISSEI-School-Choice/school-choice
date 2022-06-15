@@ -61,7 +61,7 @@ def test_residential_utility(random_params):
         household.pos[0], household.pos[1], :]
     utility = household.residential_utility(
         composition=normalized,
-        neighbourhood_composition=[])
+        neighbourhood_composition=None)
     assert utility <= 1
     assert utility >= 0
 

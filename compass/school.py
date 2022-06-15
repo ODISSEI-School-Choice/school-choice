@@ -31,6 +31,13 @@ class School(BaseAgent):
     _total_schools: ClassVar[int] = 0
     __slots__ = ["idx", "total", "capacity", "has_space"]
 
+    @classmethod
+    def reset(cls) -> None:
+        """
+        Resets the school counter.
+        """
+        cls._total_schools = 0
+
     def __init__(
             self,
             unique_id: int,

@@ -20,7 +20,8 @@ from .household import Household
 from .school import School
 from .neighbourhood import Neighbourhood
 from .scheduler import ThreeStagedActivation
-from .utils import Measurements, calc_comp_utility
+from .utils import Measurements
+from .functions import calc_comp_utility
 
 
 @contextlib.contextmanager
@@ -70,7 +71,7 @@ def read_households(path: str) -> pd.DataFrame:
         })
 
 
-def trunc_normal_sample(means: List, scale: float, size: float) -> np.ndarray:
+def trunc_normal_sample(means: List, scale: float, size: int) -> List[np.ndarray]:
     """
     Samples from a set of truncated normal distributions.
 
@@ -86,7 +87,7 @@ def trunc_normal_sample(means: List, scale: float, size: float) -> np.ndarray:
     for index, mu in enumerate(means):
         if scale == 0:
             # All samples are equal if the scale is zero.
-            sample[index] = mu
+            sample[index] = np.ones(size) * mu
         else:
             sample[index] = truncnorm.rvs((0 - mu) / scale,
                                           (1 - mu) / scale,
@@ -373,6 +374,8 @@ class CompassModel(Model):
         Adds the school objects to the environment.
         """
 
+        School.reset()
+
         # Add schools if necessary
         if self.params["n_schools"]:
             locations = self.choose_locations(self.params["n_schools"],
@@ -418,6 +421,9 @@ class CompassModel(Model):
         empties = list(self.grid.empties)
         np.random.shuffle(empties)
 
+        # pre-allocate storage for the Housholds
+        Household.reset(max_households=params["n_households"])
+
         for i, position in enumerate(empties[0:params["n_households"]]):
             household = Household(self.get_agents("amount"), position, self,
                                   params, groups[0][i])
@@ -431,7 +437,6 @@ class CompassModel(Model):
                                  position[1], :] = household.attributes
 
         # Calculate AFTER all agents are placed
-        all_households = self.get_agents('households')
         self.calc_residential_compositions()
         self.set_agent_parameters(params)
         self.calc_res_utilities()
@@ -524,6 +529,9 @@ class CompassModel(Model):
         """
         Given a GeoDataFrame, this creates all the school objects
         """
+
+        School.reset()
+
         if self.verbose:
             print("Creating schools...")
 
@@ -713,7 +721,9 @@ class CompassModel(Model):
             Schools can differ per household if we only want to look at the
             n-closest schools for example?
         """
-        # TODO: remove schools without space?
+        if len(schools) == 0 or len(households) == 0:
+            return
+
         # necessary to allow indexing with the argsort result
         schools = np.array(schools)
 
@@ -750,6 +760,8 @@ class CompassModel(Model):
             differences = utilities - households_utilities[np.newaxis, :]
             exp_utilities = np.exp(self.temperature * differences)
             transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
+        else:
+            transformed = utilities
 
         # instead of reversing the list, sort the negative values in the list
         ranked_indices = -transformed.argsort(axis=0)
@@ -1045,7 +1057,8 @@ class CompassModel(Model):
         for household in self.get_agents('households'):
             self.all_distances[
                 household.idx, :] = school_frame.distance(
-                    household.shape)
+                    Point(household.pos)
+                    )
 
     def get_agents(self, agent_type: str) -> List[object]:
         """
