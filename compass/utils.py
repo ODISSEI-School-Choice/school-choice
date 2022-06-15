@@ -5,10 +5,16 @@ The Utils and Measurements class.
 import sys
 import numpy as np
 import pandas as pd
+from typing import List
 from .agents_household import Household
 
 
-def calc_comp_utility(dest, x, M, f):
+def calc_comp_utility(
+        dest: np.ndarray,
+        x: np.ndarray,
+        M: np.ndarray,
+        f: np.ndarray
+        ) -> None:
     """
     Calculates the utility given a normalised composition (0<=x<=1), an
     optimal fraction (0<=f<=1) and utility at homogeneity (0<=M<=1).
@@ -47,27 +53,29 @@ class Measurements:
 
     def __init__(self, model):
 
-        self.all_measurements = []
-        self.model = model
-        self.params = model.params
-        self.agents = model.agents
-        self.vis_data = dict()
+        self.all_measurements: List[Object] = []
+        self.model: 'CompassModel' = model
+        self.params: dict  = model.params
+        self.agents: dict[str, List[object]] = model.agents
+        self.vis_data: dict = dict()
 
     def headers(self):
         """
         This function creates numpy arrays with the names of the columns for
         the household, neighbourhood and school data.
         """
-        self.household_headers = np.array([
+        self.household_headers: np.ndarray = np.array([
             'loc_x', 'loc_y', 'local_comp_0', 'local_comp_1', 'utility',
             'category', 'id', 'distance', 'unit'
-        ])
-        self.neighbourhood_headers = np.array(
-            ['comp_0', 'comp_1', 'utility', 'satisfied', 'distance', 'unit'])
-        self.school_headers = np.array(
-            ['comp_0', 'comp_1', 'utility', 'satisfied', 'distance', 'unit'])
+            ])
+        self.neighbourhood_headers: np.ndarray = np.array([
+            'comp_0', 'comp_1', 'utility', 'satisfied', 'distance', 'unit'
+            ])
+        self.school_headers: np.ndarray = np.array([
+            'comp_0', 'comp_1', 'utility', 'satisfied', 'distance', 'unit'
+            ])
 
-    def measurement_arrays(self):
+    def measurement_arrays(self) -> None:
         """
         Initialises the measurement arrays.
         """
@@ -76,10 +84,10 @@ class Measurements:
         max_steps = self.params['max_res_steps'] + 1 + \
             self.params['max_school_steps']
         self.headers()
-        self.n_household_attrs = len(self.household_headers)
-        self.n_neighbourhood_attrs = len(self.neighbourhood_headers)
-        self.n_school_attrs = len(self.school_headers)
-        self.temp_household = np.zeros(self.n_household_attrs, dtype=dtype)
+        self.n_household_attrs: int = len(self.household_headers)
+        self.n_neighbourhood_attrs: int = len(self.neighbourhood_headers)
+        self.n_school_attrs: int = len(self.school_headers)
+        self.temp_household: np.ndarray = np.zeros(self.n_household_attrs, dtype=dtype)
 
         # Determine the maximum shape of the arrays
         households_shape = (max_steps, self.params["n_households"],
@@ -91,11 +99,11 @@ class Measurements:
                          self.params["n_schools"], self.n_school_attrs)
 
         # Initialise empty arrays (datatype is important)
-        self.households = np.zeros(shape=households_shape, dtype=dtype)
-        self.neighbourhoods = np.zeros(shape=neighbourhoods_shape, dtype=dtype)
-        self.schools = np.zeros(shape=schools_shape, dtype=dtype)
+        self.households: np.ndarray = np.zeros(shape=households_shape, dtype=dtype)
+        self.neighbourhoods: np.ndarray = np.zeros(shape=neighbourhoods_shape, dtype=dtype)
+        self.schools: np.ndarray = np.zeros(shape=schools_shape, dtype=dtype)
 
-    def household_data(self, residential, time):
+    def household_data(self, residential: bool, time: int) -> None:
         """
         Gets the required data from all the households in the model.
 
@@ -127,7 +135,7 @@ class Measurements:
             self.households[time, :, 4] = Household._household_school_utility[:]
             self.households[time, :, 8] = Household._household_school_id[:]
 
-    def neighbourhood_data(self, time):
+    def neighbourhood_data(self, time: int) -> None:
         """
         Gets the missing data from all the neighbourhoods in the model.
 
@@ -138,7 +146,7 @@ class Measurements:
             self.neighbourhoods[time, idx, :2] = neighbourhood.composition
             self.neighbourhoods[time, idx, 5] = neighbourhood.unique_id
 
-    def school_data(self, time):
+    def school_data(self, time: int) -> None:
         """
         Gets the missing data from all the schools in the model.
 
@@ -153,7 +161,7 @@ class Measurements:
             self.schools[time, idx, :2] = school.composition
             self.schools[time, idx, 5] = school.unique_id
 
-    def end_step(self, residential):
+    def end_step(self, residential: bool) -> None:
         """
         Perform end of cycle data collection. At the end of a cycle, every
         measurement is performed. The current measurements are only for
@@ -170,14 +178,14 @@ class Measurements:
         else:
             self.school_data(self.model.scheduler.get_time('school') - 1)
 
-    def get_last(self):
+    def get_last(self) -> object:
         """
         Returns:
             int: measurements from last performed step.
         """
         return self.all_measurements[-1]
 
-    def get_bokeh_vis_data(self):
+    def get_bokeh_vis_data(self) -> object:
         """
         Stores model data in the correct format for the Bokeh visualisation.
 
@@ -202,7 +210,7 @@ class Measurements:
                                      len(vis_data))
         return vis_data
 
-    def empty_dataframe(self, columns=[], n_rows=0):
+    def empty_dataframe(self, columns: List[str] = None, n_rows: int = 0) -> pd.DataFrame:
         """
         Creates an empty Pandas Dataframe
 
@@ -213,9 +221,14 @@ class Measurements:
         Returns:
             Empty DataFrame for all the Bokeh visualisation data.
         """
+        if columns is None:
+            columns = []
         return pd.DataFrame(index=range(n_rows), columns=columns)
 
-    def vis_composition_data(self, household):
+    def vis_composition_data(
+            self,
+            household: Household
+            ) -> List[np.ndarray]:
         """
         Extracts the composition data from the households.
 
@@ -231,7 +244,7 @@ class Measurements:
             school_comp, household.school_utility_comp
         ]
 
-    def vis_household_data(self):
+    def vis_household_data(self) -> dict[str, object]:
         """
         Transforms the household data to be suitable for the Bokeh visualisation.
 
@@ -283,7 +296,10 @@ class Measurements:
 
         return data
 
-    def vis_school_data(self, household_data):
+    def vis_school_data(
+            self,
+            household_data: pd.DataFrame
+            ):
         """
         Gets the required data from all the schools in the model.
 
@@ -335,7 +351,7 @@ class Measurements:
 
         return data
 
-    def vis_neighbourhood_data(self, household_data):
+    def vis_neighbourhood_data(self, household_data: pd.DataFrame):
         """
         Gets the required data from all the neighbourhood in the model.
 
@@ -382,7 +398,12 @@ class Measurements:
             ]
         return data
 
-    def vis_system_data(self, household_data, school_data, neighbourhood_data):
+    def vis_system_data(
+            self,
+            household_data: pd.DataFrame,
+            school_data: pd.DataFrame,
+            neighbourhood_data: pd.DataFrame
+            ):
         """
         Gets the required data from the whole system.
 
@@ -467,9 +488,10 @@ class Measurements:
             print('Data saved!')
 
     def calculate_segregation(self,
-                              type="school",
-                              index="Theil",
-                              per_location=False):
+            type: str = "school",
+            index: str = "Theil",
+            per_location: bool = False
+            ):
         """
         Calculate segregation index for the whole system.
 
@@ -490,7 +512,11 @@ class Measurements:
             print("Segregation index not supported")
             exit(1)
 
-    def calculate_theil(self, type, per_location=False):
+    def calculate_theil(
+            self,
+            type: str,
+            per_location: bool = False
+            ):
         """
         Calculate Theil's information index.
 
@@ -527,12 +553,13 @@ class Measurements:
 
         local_compositions = np.empty((len(agents), len(pi_m)))
         nr_of_agents = np.empty(len(agents))
-        for i in range(len(agents)):
-            nr_of_agents[i] = np.sum(agents[i].composition)
+        for i, agent in enumerate(agents):
+            nr_of_agents[i] = np.sum(agent.composition)
+            # TODO: is there a way to move the check out of the for loop?
             if nr_of_agents[i] < 1:
-                local_compositions[i] = agents[i].composition
+                local_compositions[i] = agent.composition
             else:
-                local_compositions[i] = agents[i].composition / nr_of_agents[i]
+                local_compositions[i] = agent.composition / nr_of_agents[i]
 
         total_agents = np.sum(nr_of_agents)
 

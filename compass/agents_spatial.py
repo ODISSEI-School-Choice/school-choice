@@ -1,6 +1,8 @@
 """
-The School and Neighbourhood class.
+The School class.
 """
+from typing import Dict, List, ClassVar
+import numpy as np
 from .agents_base import BaseAgent
 
 
@@ -21,34 +23,41 @@ class School(BaseAgent):
         params (Argparser): containing all parameter values.
         capacity (float): the maximum amount of students that can be enrolled.
         total (int): the number of Students at the school
-        students (list): all the Student objects enrolled in the school.
+        students (dict[int, 'Student']): all the Student objects enrolled in the school.
         composition (array): the sum of the attribute arrays of all Households
             enrolled in this school.
     """
 
-    _total_schools = 0
-    __slots__ = ["idx", "total", "capacity"]
+    _total_schools: ClassVar[int] = 0
+    __slots__ = ["idx", "total", "capacity", "has_space"]
 
-    def __init__(self, unique_id, pos, model, params):
+    def __init__(
+            self,
+            unique_id: int,
+            pos: tuple[float, float],
+            model: 'CompassModel',
+            params: dict
+            ):
         super().__init__(unique_id, pos, model, params)
 
-        self.idx = School._total_schools
+        self.idx: int = School._total_schools
         School._total_schools += 1
 
-        self.total = 0
-        self.capacity = 1 + int(self.params["school_capacity"] * \
-                        self.params["n_students"] / self.params["n_schools"])
-        self.students = []
-        self.composition = self.new_composition_array()
+        self.total: int = 0
+        self.has_space: bool = True
+        self.capacity: int = 1 + int(self.params["school_capacity"] * \
+                self.params["n_students"] / self.params["n_schools"])
+        self.students: Dict[int, 'Student'] = {}
+        self.composition: np.ndarray = self.new_composition_array()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Returns:
             str: representing the unique identifier of the agent.
         """
         return f"<School object with unique_id: {self.unique_id}>"
 
-    def add_student(self, student):
+    def add_student(self, student: 'Student') -> None:
         """
         Adds a Student object to the list of enrolled students in the School.
 
@@ -58,9 +67,10 @@ class School(BaseAgent):
         # Add HOUSEHOLD attributes to the schools' composition
         self.total += 1
         self.composition += student.household.attributes
-        self.students.append(student)
+        self.students[student.idx] = student
+        self.has_space = (self.total < self.capacity)
 
-    def remove_student(self, student):
+    def remove_student(self, student: 'Student') -> None:
         """
         Removes a Student object from the list of enrolled students in the
         School.
@@ -71,25 +81,17 @@ class School(BaseAgent):
         # Subtract HOUSEHOLD attributes to the schools' composition
         self.total -= 1
         self.composition -= student.household.attributes  # TODO: zero self.composition?
-        self.students.remove(student)
+        self.students.pop(student.idx)
+        # after removing a Student, there will always be space
+        self.has_space = True
 
-    def has_space(self):
-        """
-        Checks if the school has at least one open spot.
-
-        Returns:
-            bool: equals True if there is at least one open spot at the school.
-        """
-        return len(self.students) < self.capacity
-
-    def get_students(self):
+    def get_students(self) -> List['Student']:
         """
         Returns all the students enrolled in the school.
 
         Returns:
             list: contains all enrolled students.
         """
-        return self.students
 
 
 class Neighbourhood(BaseAgent):
@@ -158,3 +160,4 @@ class Neighbourhood(BaseAgent):
         self.total -= 1
         self.composition -= household.attributes  # TODO: zero self.composition?
         self.households.remove(household)
+        return self.students.values()

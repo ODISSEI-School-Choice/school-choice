@@ -1,28 +1,30 @@
 """
 The Model class which initialises the system and all of its components.
 """
+import contextlib
 from datetime import datetime
 import os
 import sys
 import random
-import contextlib
+from typing import List, Dict, Generator
 import numpy as np
 from mesa import Model
+from mesa.space import ContinuousSpace
 import ijson
 import pandas as pd
 import geopandas as gpd
-from .utils import Measurements, calc_comp_utility
-from scipy.stats import truncnorm
 from scipy.ndimage import convolve
-from .agents_household import Household
-from mesa.space import ContinuousSpace
+from scipy.stats import truncnorm
 from shapely.geometry import Point, box
+from .agents_household import Household
+from .agents_spatial import School
+from .neighbourhood import Neighbourhood
 from .scheduler import ThreeStagedActivation
-from .agents_spatial import School, Neighbourhood
+from .utils import Measurements, calc_comp_utility
 
 
 @contextlib.contextmanager
-def record_time(name):
+def record_time(name: str) -> Generator:
     try:
         start_time = datetime.now()
         yield
@@ -31,7 +33,7 @@ def record_time(name):
                             (datetime.now() - start_time).total_seconds()))
 
 
-def read_households(path):
+def read_households(path: str) -> pd.DataFrame:
     """
     A fast and efficient parser to read household data from a GeoJSON file.
 
@@ -66,6 +68,32 @@ def read_households(path):
         'category': groups,
         'neighbourhood_id': neighbourhood_ids
         })
+
+
+def trunc_normal_sample(means: List, scale: float, size: float) -> np.ndarray:
+    """
+    Samples from a set of truncated normal distributions.
+
+    Arguments:
+        means  [n_means] of float
+        scale  float
+        size   float
+
+    Output:
+        sample [n_means] of np.ndarray [size]
+    """
+    sample = [0] * len(means)
+    for index, mu in enumerate(means):
+        if scale == 0:
+            # All samples are equal if the scale is zero.
+            sample[index] = mu
+        else:
+            sample[index] = truncnorm.rvs((0 - mu) / scale,
+                                          (1 - mu) / scale,
+                                          loc=mu,
+                                          scale=scale,
+                                          size=size)
+    return sample
 
 
 class CompassModel(Model):
@@ -103,7 +131,7 @@ class CompassModel(Model):
         local_compositions (list, ndarray) [n_households, ndarray]
             set: set_agent_parameters, overwritten in load_agents, update_residential
             used: calc_res_utilities
-        normalized_compositions (ndarray) [??]
+        normalized_compositions (ndarray) [width, height, len(params['group_types'][0])]
             set: calc_residential_compositions
             used: set_agent_parameters
         neighbourhood_compositions (list, ndarray) [n_households]
@@ -134,33 +162,32 @@ class CompassModel(Model):
         all_distances:  (ndarray) [n_households, n_schools] FIXME
         household_attrs (ndarray, float) [width, height, len(params['group_types'][0])]
         compositions (ndarray, float32)  as household_attrs
-        normalized_compositions (ndarray, float32)  as compositions 
     """
 
-    def __init__(self, params, export=False):
+    def __init__(self, params: dict, export: bool = False):
 
         super().__init__()
 
         # define various arrays TODO: sort/document those
-        self.local_compositions = []
-        self.neighbourhood_compositions = []
-        self.alpha = np.ndarray([])
-        self.temperature = 0.0
-        self.utility_at_max = np.ndarray([])
-        self.optimal_fraction = np.ndarray([])
-        self.neighbourhood_mixture = np.ndarray([])
-        self.school_compositions = np.ndarray([])
-        self.school_ended = False
-        self.res_ended = False
-        self.distance_utilities = np.ndarray([])
-        self.chosen_indices = np.ndarray([])
+        self.local_compositions: List = []
+        self.neighbourhood_compositions: List = []
+        self.alpha: np.ndarray = np.ndarray([])
+        self.temperature: float = 0.0
+        self.utility_at_max: np.ndarray = np.ndarray([])
+        self.optimal_fraction: np.ndarray = np.ndarray([])
+        self.neighbourhood_mixture: np.ndarray = np.ndarray([])
+        self.school_compositions: np.ndarray = np.ndarray([])
+        self.school_ended: bool = False
+        self.res_ended: bool = False
+        self.distance_utilities: np.ndarray = np.ndarray([])
+        self.chosen_indices: np.ndarray = np.ndarray([])
 
-        self.household_attrs = np.ndarray([])
-        self.compositions = np.ndarray([])
-        self.normalized_compositions = np.ndarray([])
+        self.household_attrs: np.ndarray = np.ndarray([])
+        self.compositions: np.ndarray = np.ndarray([])
+        self.normalized_compositions: np.ndarray = np.ndarray([])
 
-        self.all_distances = np.ndarray([])
-        self.kernel = np.ndarray([])
+        self.all_distances: np.ndarray = np.ndarray([])
+        self.kernel: np.ndarray = np.ndarray([])
 
         # Initialise the model attributes
         self.set_attributes(params=params, export=export)
@@ -186,7 +213,7 @@ class CompassModel(Model):
                 In scheduler: {self.scheduler.get_agent_count()}"""
             print(text)
 
-    def set_attributes(self, params, export=False):
+    def set_attributes(self, params: dict, export=False) -> None:
         """
         Sets or calculates all attributes used in the Compass class.
 
@@ -206,11 +233,12 @@ class CompassModel(Model):
 
         # Set tracking attributes
         self.export = export
-        self.segregation = []  # Track segregation over time
+        # Track segregation over time
+        self.segregation: List[float] = []
         self.res_ended = False
         self.school_ended = False
         self.verbose = self.params['verbose']
-        self.agents = {
+        self.agents: Dict[str, List[object]] = {
             "amount": 0,
             "households": [],
             "schools": [],
@@ -224,7 +252,7 @@ class CompassModel(Model):
                                     self.params["height"],
                                     torus=self.params["torus"])
 
-    def create_agents(self):
+    def create_agents(self) -> None:
         """
         Creates the agents when no case study is provided.
         """
@@ -238,15 +266,13 @@ class CompassModel(Model):
         # Create households
         self.households()
 
-    def set_agent_parameters(self, params):
+    def set_agent_parameters(self, params: dict) -> None:
         """
         Puts the agent parameters in numpy arrays for faster computations.
 
         Args:
             params (dict): Model parameters which could differ from
                 the agent params!
-            households (list): list of Household objects. Students should
-                inherit their parameters from the Household object.
 
         Todo:
             Parameters should be imported from a config file in the future.
@@ -256,42 +282,40 @@ class CompassModel(Model):
 
         dtype = "float32"
         self.alpha = np.zeros(n_households, dtype=dtype)
-        self.temperature = self.params['temperature']
+        self.temperature = self.params['temperature']  # FIXME: different temp per agent?
         self.utility_at_max = np.zeros(n_households, dtype=dtype)
         self.optimal_fraction = np.zeros(n_households, dtype=dtype)
         self.neighbourhood_mixture = np.ones(n_households, dtype=int)
 
-        optimal_fractions = self.trunc_normal_sample(
+        optimal_fractions = trunc_normal_sample(
             params["optimal_fraction"][0],
             scale=params['homophily_std'],
-            size=n_households)
-        alphas = self.trunc_normal_sample([params["alpha"], params['alpha']],
-                                          scale=params['homophily_std'],
-                                          size=n_households)
-        utility_at_maxs = self.trunc_normal_sample(
+            size=n_households
+            )
+        alphas = trunc_normal_sample(
+            [params["alpha"], params['alpha']],
+            scale=params['homophily_std'],
+            size=n_households
+            )
+        utility_at_maxs = trunc_normal_sample(
             params["utility_at_max"][0],
             scale=params['homophily_std'],
-            size=n_households)
-
-        if self.params['case'].lower() == 'lattice':
-            local_compositions = self.normalized_compositions
+            size=n_households
+            )
 
         for household in households:
-            array_index = household.idx
             x, y = household.pos
 
             # Fill arrays with agent parameter values for faster computations
-            self.optimal_fraction[array_index] = optimal_fractions[
-                household.category][array_index]
-            self.alpha[array_index] = alphas[household.category][array_index]
-            self.utility_at_max[array_index] = utility_at_maxs[
-                household.category][array_index]
+            self.optimal_fraction[household.idx] = optimal_fractions[household.category][household.idx]
+            self.alpha[household.idx]            = alphas[household.category][household.idx]
+            self.utility_at_max[household.idx]   = utility_at_maxs[household.category][household.idx]
 
             # Currently only convolution (assumes every household has the same
             # radius) for composition calculations within the lattice case.
             if params['case'].lower() == 'lattice':
                 self.local_compositions.append(
-                    local_compositions[x, y, household.category])
+                    self.normalized_compositions[x, y, household.category])
             else:
                 household.params['neighbourhood_mixture'] = 1
 
@@ -315,7 +339,7 @@ class CompassModel(Model):
             q = self.params['q']
             self.distance_utilities = 1. / (1 + (self.all_distances / p)**q)
 
-    def neighbourhoods(self):
+    def neighbourhoods(self) -> None:
         """
         Adds the neighbourhood objects to the environment.
         """
@@ -344,7 +368,7 @@ class CompassModel(Model):
                 self.scheduler.add(neighbourhood)
                 self.grid.place_agent(neighbourhood, locations[i])
 
-    def schools(self):
+    def schools(self) -> None:
         """
         Adds the school objects to the environment.
         """
@@ -365,7 +389,7 @@ class CompassModel(Model):
                 self.scheduler.add(school)
                 self.grid.place_agent(school, location)
 
-    def households(self):
+    def households(self) -> None:
         """
         Adds the household objects to the environment.
 
@@ -409,10 +433,10 @@ class CompassModel(Model):
         # Calculate AFTER all agents are placed
         all_households = self.get_agents('households')
         self.calc_residential_compositions()
-        self.set_agent_parameters(params, all_households)
+        self.set_agent_parameters(params)
         self.calc_res_utilities()
 
-    def load_agents(self, case='Amsterdam'):
+    def load_agents(self, case='Amsterdam') -> None:
         """
         Load the agents from several files.
 
@@ -477,7 +501,7 @@ class CompassModel(Model):
         if self.verbose:
             print('Model loaded!')
 
-    def create_neighbourhoods(self, neighbourhood_frame):
+    def create_neighbourhoods(self, neighbourhood_frame: pd.DataFrame) -> None:
         """
         Given a GeoDataFrame, this creates all the neighbourhood objects
         """
@@ -496,7 +520,7 @@ class CompassModel(Model):
             self.scheduler.add(neighbourhood)
             self.grid.place_agent(neighbourhood, neighbourhood.pos)
 
-    def create_schools(self, school_frame):
+    def create_schools(self, school_frame: pd.DataFrame) -> None:
         """
         Given a GeoDataFrame, this creates all the school objects
         """
@@ -516,7 +540,7 @@ class CompassModel(Model):
             self.scheduler.add(school)
             self.grid.place_agent(school, school.pos)
 
-    def create_households(self, household_frame, actual_households):
+    def create_households(self, household_frame: pd.DataFrame, actual_households: int) -> None:
         """
         Given a GeoDataFrame, this creates household objects by randomly
         drawing (without replacement) household metadata rows from the frame.
@@ -578,7 +602,7 @@ class CompassModel(Model):
 
         self.location_to_agent()
 
-    def location_to_agent(self):
+    def location_to_agent(self) -> None:
         """
         Creates a dictionary with the location of the neighbourhoods as key and
         the object itself as value. Schools are not included as they can have
@@ -587,25 +611,7 @@ class CompassModel(Model):
         agents = self.get_agents('neighbourhoods')
         self.location_to_agent = {str(agent.pos): agent for agent in agents}
 
-    def trunc_normal_sample(self, means, scale, size):
-        """
-        Samples from a truncated normal distribution.
-        """
-        sample = [0] * len(means)
-        for index, mu in enumerate(means):
-
-            # All samples are equal if the scale is zero.
-            if scale == 0:
-                sample[index] = np.repeat(mu, size)
-            else:
-                sample[index] = truncnorm.rvs((0 - mu) / scale,
-                                              (1 - mu) / scale,
-                                              loc=mu,
-                                              scale=scale,
-                                              size=size)
-        return sample
-
-    def calc_residential_compositions(self):
+    def calc_residential_compositions(self) -> None:
         """
         Updates all local residential compositions assuming all households have
         the SAME RADIUS.
@@ -640,7 +646,7 @@ class CompassModel(Model):
             compositions /
             np.repeat(summed[:, :, np.newaxis], num_attrs, axis=2))
 
-    def calc_school_compositions(self):
+    def calc_school_compositions(self) -> None:
         """
         Calculate the new school compositions for every household and only for
         the first student!
@@ -660,7 +666,7 @@ class CompassModel(Model):
             self.school_compositions[idx] = \
                 school.composition[category] * norm
 
-    def calc_res_utilities(self):
+    def calc_res_utilities(self) -> None:
         """
         Calculates residential utility at a household its current position and
         given its parameter values.
@@ -673,7 +679,7 @@ class CompassModel(Model):
 
         calc_comp_utility(Household._household_res_utility, x, M, f)
 
-    def calc_school_utilities(self):
+    def calc_school_utilities(self) -> None:
         """
         Calculates school utilities at a student its current school, given
         distance and its other parameter values.
@@ -691,7 +697,7 @@ class CompassModel(Model):
             (Household._household_school_utility_comp * alpha) + \
             (Household._household_distance * (1 - alpha))
 
-    def calc_school_rankings(self, households, schools):
+    def calc_school_rankings(self, households: List[Household], schools: List[School]) -> None:
         """
         Ranks the schools according to utility.
 
@@ -756,7 +762,7 @@ class CompassModel(Model):
             for student in household.students:
                 student.set_school_preference(ranking)
 
-    def get_attributes(self, pos):
+    def get_attributes(self, pos: tuple[float, float]) -> np.ndarray:
         """
         Returns the attribute vector of a given position
 
@@ -768,7 +774,7 @@ class CompassModel(Model):
         """
         return self.household_attrs[pos[0], pos[1], :]
 
-    def switch_attrs(self, pos1, pos2):
+    def switch_attrs(self, pos1: tuple[float, float], pos2: tuple[float, float]) -> None:
         """
         Switches two attribute vectors in the attribute grid by making a copy.
 
@@ -780,7 +786,7 @@ class CompassModel(Model):
         self.household_attrs[pos1] = self.household_attrs[pos2]
         self.household_attrs[pos2] = temp
 
-    def step(self, residential=False, initial_schools=False):
+    def step(self, residential: bool = False, initial_schools: bool = False) -> None:
         """
         Perform model steps.
 
@@ -795,7 +801,7 @@ class CompassModel(Model):
         self.scheduler.step(residential=residential,
                             initial_schools=initial_schools)
 
-    def simulate(self, res_steps=None, school_steps=None):
+    def simulate(self, res_steps: int = None, school_steps: int = None) -> None:
         """
         Performs #res_steps of residential steps and #school_steps of school
         steps.
@@ -857,7 +863,7 @@ class CompassModel(Model):
             print("Processes ended")
         self.export_data(self.export)
 
-    def convergence_check(self):
+    def convergence_check(self) -> bool:
         """
         Checks if the processes have converged.
 
@@ -905,7 +911,7 @@ class CompassModel(Model):
 
         return False
 
-    def choose_locations(self, amount, method="evenly_spaced"):
+    def choose_locations(self, amount: int, method: str = "evenly_spaced") -> List[tuple[float, float]]:
         """
         Compute a number of locations to place school and neighbourhood objects.
         Currently, only random and evenly spaced locations are allowed.
@@ -993,7 +999,7 @@ class CompassModel(Model):
 
         return locations
 
-    def compute_closest_neighbourhoods(self):
+    def compute_closest_neighbourhoods(self) -> dict:
         """
         Compute distance from all grid cells to all schools and all
         neighbourhood objects.
@@ -1021,7 +1027,7 @@ class CompassModel(Model):
 
         return closest_neighbourhoods
 
-    def compute_school_distances(self):
+    def compute_school_distances(self) -> None:
         """
         Computes school distances.
         """
@@ -1034,7 +1040,7 @@ class CompassModel(Model):
                 household.idx, :] = school_frame.distance(
                     household.shape)
 
-    def get_agents(self, agent_type):
+    def get_agents(self, agent_type: str) -> List[object]:
         """
         Returns list of agents of given type.
 
@@ -1047,14 +1053,14 @@ class CompassModel(Model):
         """
         return self.agents[agent_type]
 
-    def export_data(self, export=False):
+    def export_data(self, export=False) -> None:
         """
         Export data for visualization.
         """
         if export:
             self.measurements.export_data()
 
-    def increment_agent_count(self):
+    def increment_agent_count(self) -> None:
         """
         Increment agent count by one.
         """

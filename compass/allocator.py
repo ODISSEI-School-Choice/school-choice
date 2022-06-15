@@ -38,7 +38,7 @@ class Allocator:
                         break
 
                     # Check availability and switch
-                    if school.has_space():
+                    if school.has_space:
                         student.new_school(school)
                         # update household
                         if do_household_update:
@@ -72,7 +72,7 @@ class Allocator:
                 for school in student.school_preference:
 
                     # Check availability
-                    if school.has_space():
+                    if school.has_space:
                         student.new_school(school)
                         # update household
                         if do_household_update:
