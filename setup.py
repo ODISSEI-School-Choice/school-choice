@@ -1,7 +1,7 @@
 from distutils.core import setup
-from Cython.Build import cythonize
+# from Cython.Build import cythonize
 
 setup(
     # has to indicate each module one by one
-    ext_modules=cythonize("compass/agents_household.py"), 
+    # ext_modules=cythonize(""),
 )

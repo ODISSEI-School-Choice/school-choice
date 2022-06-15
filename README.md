@@ -31,3 +31,15 @@ The repository consists of:
 
 ### Simulations
 Information on how to run the code here.
+
+### Testing
+
+Make sure the package is installed locally (in your virtual env):
+```bash
+$ pip install -e .
+```
+
+Then run the tests with:
+```bash
+$ pytest
+```

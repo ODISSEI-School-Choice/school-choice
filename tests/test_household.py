@@ -6,12 +6,13 @@ import numpy as np
 
 from test_functional import random_params
 
-sys.path.insert(0, "compass")
-from agents_base import BaseAgent
-from agents_spatial import School, Neighbourhood
-from agents_household import Household, Student
-from model import CompassModel
-from parameters import FLAGS
+from compass.agents_base import BaseAgent
+from compass.school import School
+from compass.neighbourhood import Neighbourhood
+from compass.household import Household
+from compass.student import Student
+from compass.model import CompassModel
+from compass.parameters import FLAGS
 
 
 def test_init_household(random_params):

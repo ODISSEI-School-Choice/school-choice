@@ -7,12 +7,13 @@ from hypothesis import given
 from shapely.geometry import Point
 import hypothesis.strategies as st
 
-sys.path.insert(0, "../compass/")
-from parameters import FLAGS
-from model import CompassModel
-from agents_base import BaseAgent
-from agents_household import Household, Student
-from agents_spatial import School, Neighbourhood
+from compass.parameters import FLAGS
+from compass.model import CompassModel
+from compass.agents_base import BaseAgent
+from compass.household import Household
+from compass.student import Student
+from compass.school import School
+from compass.neighbourhood import Neighbourhood
 
 log = logging.getLogger()
 
