@@ -6,7 +6,7 @@ import random
 import numpy as np
 from typing import List, ClassVar
 from .agents_base import BaseAgent
-from .agents_spatial import School
+from .school import School
 from .student import Student
 from .neighbourhood import Neighbourhood
 

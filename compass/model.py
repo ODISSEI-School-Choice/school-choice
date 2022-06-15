@@ -16,8 +16,8 @@ import geopandas as gpd
 from scipy.ndimage import convolve
 from scipy.stats import truncnorm
 from shapely.geometry import Point, box
-from .agents_household import Household
-from .agents_spatial import School
+from .household import Household
+from .school import School
 from .neighbourhood import Neighbourhood
 from .scheduler import ThreeStagedActivation
 from .utils import Measurements, calc_comp_utility

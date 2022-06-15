@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import pandas as pd
 from typing import List
-from .agents_household import Household
+from .household import Household
 
 
 def calc_comp_utility(
