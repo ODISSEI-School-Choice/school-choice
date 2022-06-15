@@ -27,10 +27,11 @@ class Allocator:
             # we need to update the household with information of the first
             # student only. Keep track if we've done that using this variable:
             do_household_update = True
+            start_at_school = 0
 
             for student in household.students:
                 current_school = student.school
-                for school in student.school_preference:
+                for school in student.school_preference[start_at_school:]:
 
                     # Check if it's the current school
                     if current_school == school:
@@ -44,16 +45,19 @@ class Allocator:
                         if do_household_update:
                             model = household.model
 
-                            # link household and school for the frist student
+                            # link household and school for the first student
                             # in household_data we need household.students[0].school.unique_id
+                            household.school = school
                             household.school_id = school.unique_id
                             household.distance = model.distance_utilities[
                                     household.idx, school.idx
                                     ]
+                            do_household_update = False
                         break
+                    # As student from the same household have the same preference,
+                    # we do not need to check for space in this school anymore
+                    start_at_school += 1
 
-                # at this point, we move to the next student in the household
-                do_household_update = False
 
     def initial_school(self, households):
         """
@@ -68,8 +72,9 @@ class Allocator:
             # we need to update the household with information of the first
             # student only. Keep track if we've done that using this variable:
             do_household_update = True
+            start_at_school = 0
             for student in household.students:
-                for school in student.school_preference:
+                for school in student.school_preference[start_at_school:]:
 
                     # Check availability
                     if school.has_space:
@@ -78,10 +83,15 @@ class Allocator:
                         if do_household_update:
                             model = household.model
 
-                            # link household and school for the frist student
+                            # link household and school for the first student
                             # in household_data we need household.students[0].school.unique_id
+                            household.school = school
                             household.school_id = school.unique_id
                             household.distance = model.distance_utilities[
                                     household.idx, school.idx
                                     ]
+                            do_household_update = False
                         break
+                    # As student from the same household have the same preference,
+                    # we do not need to check for space in this school anymore
+                    start_at_school += 1

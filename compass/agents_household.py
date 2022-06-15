@@ -109,6 +109,7 @@ class Household(BaseAgent):
         self.attributes: np.ndarray = self.attribute_array()
         self.composition: np.ndarray = self.new_composition_array()
         self.school_id: int = 0
+        self.school: School = None
 
         # Create students
         self.students: List[Student] = []

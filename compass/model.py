@@ -655,16 +655,16 @@ class CompassModel(Model):
             Currently only for the first student!!!
         """
 
-        for household in self.get_agents('households'):
+        households = self.get_agents('households')
+        for household in households:
             category = household.category
             idx = household.idx
-            school = household.students[0].school
-            if school.total > 0:
-                norm = 1.0 / school.total
+            school = household.school
+            if school.total:
+                self.school_compositions[idx] = \
+                    school.composition[category] / school.total
             else:
-                norm = 1.0
-            self.school_compositions[idx] = \
-                school.composition[category] * norm
+                self.school_compositions[idx] = 0.0
 
     def calc_res_utilities(self) -> None:
         """
