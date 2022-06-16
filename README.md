@@ -19,8 +19,10 @@ Install pdoc3 if you haven't already done so. Browse to the compassproject folde
 The repository consists of:
 * **run.py:** a script that runs the model interactively with a visualisation (browser)
 * **testrun.py:** a test script (work in progress)
-* **agents_household.py:** the household and student classes
-* **agents_spatial.py:** the neighbourhood and school classses
+* **household.py:** the household class
+* **student.py:** the student class
+* **neighbourhood.py:** the neighbourhood class
+* **school.py** the school class
 * **allocator.py:** allocates the students to their school of choice
 * **agents_base.py:** overarching agent used for inheritance
 * **model.py:** initialises the entire system and all of its components
@@ -28,13 +30,21 @@ The repository consists of:
 * **scheduler.py:** takes care of the activation, sequence and placement of all agents
 * **visualisation.py:** browser based visualisation
 * **utils.py:** containing all measurements
+* **functions.py:** containing some math functions to be used by the classes
 
 ### Simulations
 Information on how to run the code here.
 
-### Testing
+### Testing and development
 
-Make sure the package is installed locally (in your virtual env):
+Setup a virtualenv with the required dependencies.
+```bash
+$ python -m venv env
+$ . env/bin/activate
+$ pip install -r requirements.txt
+```
+
+Install the package locally (in developement, or editing mode):
 ```bash
 $ pip install -e .
 ```
