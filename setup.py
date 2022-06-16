@@ -1,7 +1,12 @@
-from distutils.core import setup
-# from Cython.Build import cythonize
+#!/usr/bin/env python
 
-setup(
-    # has to indicate each module one by one
-    # ext_modules=cythonize(""),
-)
+from distutils.core import setup
+
+setup(name='CompassSchool',
+      version='1.0',
+      description='Compass model for School Choice',
+      author='Eric Digum',
+      author_email='',
+      url='',
+      packages=['compass'],
+      )
