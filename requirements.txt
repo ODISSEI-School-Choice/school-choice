@@ -1,0 +1,14 @@
+  numpy
+  matplotlib
+  pandas
+  tqdm
+  mesa
+  geopandas
+  memory_profiler
+  scipy
+  numba
+  pytest
+  hypothesis
+  tornado
+  shapely
+  ijson
