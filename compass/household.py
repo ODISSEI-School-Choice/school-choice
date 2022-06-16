@@ -4,7 +4,7 @@ The Household class.
 import sys
 import random
 import numpy as np
-from typing import List, ClassVar
+from typing import List, ClassVar, Iterable
 from .agents_base import BaseAgent
 from .school import School
 from .student import Student
@@ -38,6 +38,8 @@ class Household(BaseAgent):
         composition (array): the sum of the attribute arrays of all Households
             in the local composition of this household.
         students (list): the student(s) in the household.
+        school_id: the school.unique_id
+        school: the school the first student attends
     """
 
     _total_households: ClassVar[int] = 0
@@ -415,7 +417,7 @@ class Household(BaseAgent):
         neighbourhood.remove_household(self)
         self.neighbourhood = None
 
-    def school_ranking_initial(self) -> List[School]:
+    def school_ranking_initial(self) -> Iterable[School]:
         """
         Computes a list containing all schools ranked to preference. The initial
         school ranking is random.
@@ -423,13 +425,12 @@ class Household(BaseAgent):
         Returns:
             list: a randomly ordered list of School objects.
         """
-
         schools = self.model.get_agents("schools")
-        # ranking = np.random.choice(schools, len(schools), replace=False)
-        # return ranking
-
-        np.random.shuffle(schools)
-        return schools
+        return np.random.choice(
+                schools,
+                len(schools),
+                replace=False
+                )
 
     def residential_ranking(
             self,

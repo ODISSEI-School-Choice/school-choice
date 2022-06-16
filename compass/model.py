@@ -351,13 +351,10 @@ class CompassModel(Model):
         if n_neighs:
             locations = self.choose_locations(
                 n_neighs, self.params["neighbourhoods_placement"])
-            for i in range(n_neighs):
-
-                x, y = locations[i]
-                location = (x, y)
+            for location in locations:
                 size = self.params['width'] / float(n_neighs**0.5 * 2)
-                minx, miny = x - size, y - size
-                maxx, maxy = x + size, y + size
+                minx, miny = location[0] - size, location[1] - size
+                maxx, maxy = location[0] + size, location[1] + size
                 shape = box(minx, miny, maxx, maxy)
 
                 # Create the Neighbourhood object and place it on the grid and
@@ -367,7 +364,7 @@ class CompassModel(Model):
                                               self.params)
                 self.agents["neighbourhoods"].append(neighbourhood)
                 self.scheduler.add(neighbourhood)
-                self.grid.place_agent(neighbourhood, locations[i])
+                self.grid.place_agent(neighbourhood, location)
 
     def schools(self) -> None:
         """
@@ -380,10 +377,7 @@ class CompassModel(Model):
         if self.params["n_schools"]:
             locations = self.choose_locations(self.params["n_schools"],
                                               self.params["schools_placement"])
-            for i in range(self.params["n_schools"]):
-                x, y = locations[i]
-                location = (x, y)
-
+            for location in locations:
                 # Create the School object and place it on the grid and add it
                 # to the scheduler
                 school = School(self.get_agents("amount"), location, self,
@@ -724,9 +718,6 @@ class CompassModel(Model):
         if len(schools) == 0 or len(households) == 0:
             return
 
-        # necessary to allow indexing with the argsort result
-        schools = np.array(schools)
-
         zeros = np.zeros(len(self.params["group_types"][0]))
         compositions = np.array(
             [school.composition / school.total if school.total > 0 else zeros for school in schools],
@@ -750,21 +741,30 @@ class CompassModel(Model):
                 np.take(self.distance_utilities, households_indices, axis=0) *
                 (1 - self.alpha[households_indices, np.newaxis])
             ).T
+        # utilities.shape = (len(schools), len(households))
 
         # Rank the schools according to the household utilities
         # TODO: is this the right utility? ie. residential=False?
         households_utilities = np.take(Household._household_school_utility, households_indices)
 
-        if self.params['ranking_method'].lower() == 'proportional':
-            # transform = True
+        method = self.params['ranking_method'].lower()
+        if method == 'proportional':
             differences = utilities - households_utilities[np.newaxis, :]
             exp_utilities = np.exp(self.temperature * differences)
             transformed = exp_utilities / exp_utilities.sum(axis=0)[np.newaxis, :]
-        else:
+
+        elif method == 'highest':
             transformed = utilities
+
+        else:
+            print("Method not implementd.")
+            sys.exit()
 
         # instead of reversing the list, sort the negative values in the list
         ranked_indices = -transformed.argsort(axis=0)
+
+        # necessary to allow indexing with the argsort result
+        schools = np.array(schools)
 
         for i, household in enumerate(households):
             ranking = schools[ranked_indices[:, i]]

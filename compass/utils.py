@@ -115,10 +115,12 @@ class Measurements:
         # Dynamic data
         if residential:
             self.households[time, :, 4] = Household._household_res_utility[:]
+            self.households[time, :, 7] = Household._household_distance[:]
             for household in self.agents['households']:
                 self.households[time, household.idx, 8] = household.neighbourhood.unique_id
         else:
             self.households[time, :, 4] = Household._household_school_utility[:]
+            self.households[time, :, 7] = Household._household_distance[:]
             self.households[time, :, 8] = Household._household_school_id[:]
 
     def neighbourhood_data(self, time: int) -> None:
