@@ -65,11 +65,13 @@ class Household(BaseAgent):
             will be created.
         """
         if cls._total_households > 0:
-            print("Warning: resetting households while there already are "
-                  "Household objects.")
+            print(
+                "Warning: resetting households while there already are "
+                "Household objects."
+            )
             cls._total_households = 0
 
-        dtype = 'float32'
+        dtype = "float32"
         cls._max_households = max_households
 
         # was self.utility if residential
@@ -83,13 +85,14 @@ class Household(BaseAgent):
         cls._household_school_id = np.zeros(max_households, dtype=dtype)
 
     def __init__(
-            self,
-            unique_id: int,
-            pos: tuple[float, float],
-            model: 'CompassModel',
-            params: dict,
-            category: int,
-            nhood: Neighbourhood = None):
+        self,
+        unique_id: int,
+        pos: tuple[float, float],
+        model: "CompassModel",
+        params: dict,
+        category: int,
+        nhood: Neighbourhood = None,
+    ):
         # Store parameters
         super().__init__(unique_id, pos, model, params)
 
@@ -116,8 +119,7 @@ class Household(BaseAgent):
         # Create students
         self.students: List[Student] = []
         for i in range(int(self.params["student_density"])):
-            self.students.append(Student(self.model.get_agents("amount"),
-                                         self))
+            self.students.append(Student(self.model.get_agents("amount"), self))
 
         # Join closest neighbourhood if applicable
         if self.params["n_neighbourhoods"]:
@@ -181,7 +183,7 @@ class Household(BaseAgent):
         This function creates the attribute array for the household that is
         used to calculate the local, neighbourhood and school compositions.
         """
-        attributes = np.zeros(len(self.params['group_types'][0]))
+        attributes = np.zeros(len(self.params["group_types"][0]))
         attributes[self.category] += 1
         return attributes
 
@@ -196,28 +198,27 @@ class Household(BaseAgent):
             Only the school of the first student is used!
         """
         data = [
-            self.pos[0], self.pos[1],
-            self.composition[0], self.composition[1],
-
-            self.res_utility if residential
-            else self.school_utility,
-
+            self.pos[0],
+            self.pos[1],
+            self.composition[0],
+            self.composition[1],
+            self.res_utility if residential else self.school_utility,
             self.category,
             self.unique_id,
             self.distance,
-
-            self.neighbourhood.unique_id if residential
+            self.neighbourhood.unique_id
+            if residential
             else self.students[0].school.unique_id,
         ]
 
         return np.array(data, dtype=float)
 
     def move_to_empty(
-            self,
-            empties: List[tuple[float, float]],
-            num_considered: int,
-            ranking_method: str
-            ) -> None:
+        self,
+        empties: List[tuple[float, float]],
+        num_considered: int,
+        ranking_method: str,
+    ) -> None:
         """
         Moves agent to a random empty cell, vacating the agent's old cell.
 
@@ -235,10 +236,8 @@ class Household(BaseAgent):
         self.residential_move(old_pos=self.pos, new_pos=new_pos)
 
     def residential_move(
-            self,
-            old_pos: tuple[float, float] = None,
-            new_pos: tuple[float, float] = None
-            ) -> None:
+        self, old_pos: tuple[float, float] = None, new_pos: tuple[float, float] = None
+    ) -> None:
         """
         Moves a household from old position to its new position.
 
@@ -264,11 +263,11 @@ class Household(BaseAgent):
         self.model.switch_attrs(old_pos, new_pos)
 
     def step(
-            self,
-            residential: bool = False,
-            initial_schools: bool = False,
-            move_allowed: bool = True
-            ) -> int:
+        self,
+        residential: bool = False,
+        initial_schools: bool = False,
+        move_allowed: bool = True,
+    ) -> int:
         """
         Steps the agent in the residential or school choice process.
 
@@ -294,17 +293,18 @@ class Household(BaseAgent):
 
             # Check if there are neighbourhoods to choose from
             if self.params["n_neighbourhoods"] == 0:
-                print('There are no neighbourhoods to choose from!')
+                print("There are no neighbourhoods to choose from!")
                 return 0
 
-            elif self.params['household_density'] < 1:
+            elif self.params["household_density"] < 1:
                 self.move_to_empty(
                     empties=list(self.model.grid.empties),
-                    num_considered=self.params['num_considered'],
-                    ranking_method=self.params['ranking_method'])
+                    num_considered=self.params["num_considered"],
+                    ranking_method=self.params["ranking_method"],
+                )
 
-            elif self.params['household_density'] == 1:
-                print('Future place for switching of agents.')
+            elif self.params["household_density"] == 1:
+                print("Future place for switching of agents.")
                 raise NotImplementedError
 
             return 1
@@ -325,24 +325,24 @@ class Household(BaseAgent):
             norm = 1.0 / self.neighbourhood.total
         else:
             norm = 1.0
-        self.model.neighbourhood_compositions[idx] = \
+        self.model.neighbourhood_compositions[idx] = (
             self.neighbourhood.composition[category] * norm
+        )
 
-        if self.params['neighbourhood_mixture'] == 1:
+        if self.params["neighbourhood_mixture"] == 1:
             # Only neighbourhood composition necessary, for case studies and
             # non-integer locations (then integer indexing is not possible)
             self.composition = self.neighbourhood.composition
         else:
             x, y = self.pos
             self.composition = self.model.compositions[x, y, :]
-            self.model.local_compositions[idx] = \
-                self.model.normalized_compositions[x, y, :][category]
+            self.model.local_compositions[idx] = self.model.normalized_compositions[
+                x, y, :
+            ][category]
 
     def residential_utility(
-            self,
-            composition: np.ndarray,
-            neighbourhood_composition: np.ndarray = None
-            ) -> float:
+        self, composition: np.ndarray, neighbourhood_composition: np.ndarray = None
+    ) -> float:
         """
         Compute residential utility.
 
@@ -362,8 +362,10 @@ class Household(BaseAgent):
         params = self.params
 
         if neighbourhood_composition is not None:
-            combined = composition*(1-params["neighbourhood_mixture"]) + \
-                neighbourhood_composition*params["neighbourhood_mixture"]
+            combined = (
+                composition * (1 - params["neighbourhood_mixture"])
+                + neighbourhood_composition * params["neighbourhood_mixture"]
+            )
         else:
             combined = composition
 
@@ -372,12 +374,7 @@ class Household(BaseAgent):
         optimal_fraction = params["optimal_fraction"][0][self.category]
 
         result = np.zeros_like(actual_fraction)
-        calc_comp_utility(
-                result,
-                actual_fraction,
-                utility_at_max,
-                optimal_fraction
-                )
+        calc_comp_utility(result, actual_fraction, utility_at_max, optimal_fraction)
         return result
 
     def get_closest_neighbourhood(self, pos: tuple[float, float]) -> Neighbourhood:
@@ -426,17 +423,11 @@ class Household(BaseAgent):
             list: a randomly ordered list of School objects.
         """
         schools = self.model.get_agents("schools")
-        return np.random.choice(
-                schools,
-                len(schools),
-                replace=False
-                )
+        return np.random.choice(schools, len(schools), replace=False)
 
     def residential_ranking(
-            self,
-            positions: List[tuple[float, float]],
-            ranking_method: str
-            ) -> tuple[float, float]:
+        self, positions: List[tuple[float, float]], ranking_method: str
+    ) -> tuple[float, float]:
         """
         Computes the ranked location prefences of a household.
 
@@ -453,7 +444,7 @@ class Household(BaseAgent):
         params = self.params
         positions = list(positions) + [self.pos]  # Append own position
         utilities = np.zeros(len(positions))
-        temperature = params['temperature']
+        temperature = params["temperature"]
         compositions = self.model.compositions
         norm_compositions = self.model.normalized_compositions
 
@@ -472,7 +463,8 @@ class Household(BaseAgent):
                 else:
                     norm = 1.0
                 utility = self.residential_utility(
-                    norm_composition, neighbourhood.composition * norm)
+                    norm_composition, neighbourhood.composition * norm
+                )
 
             if utility >= max_utility:
                 max_utility = utility
@@ -482,7 +474,7 @@ class Household(BaseAgent):
             summed += utility
             utilities[index] = utility
 
-        if summed == float('inf'):
+        if summed == float("inf"):
             # we're having overflow issues
             # FIXME: just create some reasonable weights
             top = np.argmax(utilities)
@@ -490,10 +482,8 @@ class Household(BaseAgent):
             utilities[top] = 1.0
         else:
             utilities = np.nan_to_num(utilities / summed, copy=False)
-        if ranking_method == 'proportional' or ranking_method:
-            new_pos = random.choices(population=positions,
-                                     weights=utilities,
-                                     k=1)
+        if ranking_method == "proportional" or ranking_method:
+            new_pos = random.choices(population=positions, weights=utilities, k=1)
         return new_pos[0]
 
     def get_student_count(self) -> int:
@@ -506,7 +496,7 @@ class Household(BaseAgent):
         return len(self.students)
 
     def get_shock(self) -> float:
-        """" Returns a small random float value """
+        """ " Returns a small random float value"""
         return self.model.get_shock()
 
     def get_uniform_shock(self) -> float:

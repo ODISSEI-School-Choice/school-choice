@@ -26,14 +26,14 @@ FLAGS.height = size
 # FLAGS.conv_threshold = 0.01
 FLAGS.conv_threshold = 0
 FLAGS.window_size = 30
-FLAGS.loglevel = 'DEBUG'
-FLAGS.case = 'amsterdam'
+FLAGS.loglevel = "DEBUG"
+FLAGS.case = "amsterdam"
 # FLAGS.case = 'lattice'
 FLAGS.max_move_fraction = 0.05
 FLAGS.verbose = True
 FLAGS.random_residential = False
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # import cProfile, pstats
     # profiler = cProfile.Profile()
     # profiler.enable()
