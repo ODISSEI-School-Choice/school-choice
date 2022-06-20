@@ -1,6 +1,7 @@
 """
 The Household class.
 """
+from ctypes import util
 import sys
 import random
 import numpy as np
@@ -159,7 +160,7 @@ class Household(BaseAgent):
         return Household._household_school_utility[self.idx]
 
     @school_utility.setter
-    def utility(self, value: float) -> None:
+    def school_utility(self, value: float) -> None:
         Household._household_school_utility[self.idx] = value
 
     @property
@@ -375,6 +376,7 @@ class Household(BaseAgent):
 
         result = np.zeros_like(actual_fraction)
         calc_comp_utility(result, actual_fraction, utility_at_max, optimal_fraction)
+
         return result
 
     def get_closest_neighbourhood(self, pos: tuple[float, float]) -> Neighbourhood:
@@ -451,7 +453,7 @@ class Household(BaseAgent):
         for index, pos in enumerate(positions):
 
             if pos == self.pos:
-                utility = self.utility
+                utility = self.res_utility
             else:
                 #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
                 x, y = pos
@@ -484,6 +486,7 @@ class Household(BaseAgent):
             utilities = np.nan_to_num(utilities / summed, copy=False)
         if ranking_method == "proportional" or ranking_method:
             new_pos = random.choices(population=positions, weights=utilities, k=1)
+
         return new_pos[0]
 
     def get_student_count(self) -> int:
