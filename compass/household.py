@@ -1,11 +1,10 @@
 """
 The Household class.
 """
-from ctypes import util
 import sys
 import random
-import numpy as np
 from typing import List, ClassVar, Iterable
+import numpy as np
 from .agents_base import BaseAgent
 from .school import School
 from .student import Student
@@ -423,24 +422,30 @@ class Household(BaseAgent):
 
         Note: when the number of steps is small, this function shows up as a bottleneck.
         the choice() function is very slow, probably because to get sufficient
-        randomness it makes many calls to a real random number generator The
-        shuffle() is much faster (but probably less 'random'), but the in-place
-        shuffling of model.get_agents('schools') leads to other issues.
-        The current solution is roughly as fast and as random as shuffle()
+        randomness it makes many calls to a real random number generator.
+
+        At the moment, there are two implementations, one is faster for the test case,
+        the other one for much larger cases.
 
         Returns:
             list: a randomly ordered list of School objects.
         """
         schools = self.model.get_agents("schools")
 
-        # create a list of indices [0 .. n_schools-1]
-        idxs = list(range(len(schools)))
+        if True:
+            # create a list of indices [0 .. n_schools-1]
+            idxs = list(range(len(schools)))
 
-        # shuffle it in-place
-        np.random.shuffle(idxs)
+            # shuffle it in-place
+            random.shuffle(idxs)
 
-        # create a list with the shuffled school objects
-        return [schools[idx] for idx in idxs]
+            # create a list with the shuffled school objects
+            return [schools[idx] for idx in idxs]
+
+        if False:
+            schools = schools.copy()
+            random.shuffle(schools)
+            return schools
 
     def residential_ranking(
         self, positions: List[tuple[float, float]], ranking_method: str

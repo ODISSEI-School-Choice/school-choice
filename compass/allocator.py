@@ -1,6 +1,7 @@
 """
 The school Allocator class.
 """
+import random
 
 
 class Allocator:
@@ -67,31 +68,38 @@ class Allocator:
             households (list): a list of Household objects.
         """
 
-        # Loop over all students and schools
+        model = households[0].model
+        schools_with_space = model.get_agents('schools').copy()
+
+        steps_before_shuffle = len(schools_with_space) / 3
+        step = 0
+
         for household in households:
             # we need to update the household with information of the first
             # student only. Keep track if we've done that using this variable:
             do_household_update = True
-            start_at_school = 0
             for student in household.students:
-                for school in student.school_preference[start_at_school:]:
+                if step == 0:
+                    random.shuffle(schools_with_space)
+                    step = steps_before_shuffle
+                else:
+                    step -= 1
 
-                    # Check availability
-                    if school.has_space:
-                        student.new_school(school)
-                        # update household
-                        if do_household_update:
-                            model = household.model
+                # assign to the next available school
+                school = schools_with_space.pop(0)
+                student.new_school(school)
 
-                            # link household and school for the first student
-                            # in household_data we need household.students[0].school.unique_id
-                            household.school = school
-                            household.school_id = school.unique_id
-                            household.distance = model.distance_utilities[
-                                    household.idx, school.idx
-                                    ]
-                            do_household_update = False
-                        break
-                    # As student from the same household have the same preference,
-                    # we do not need to check for space in this school anymore
-                    start_at_school += 1
+                # update household
+                if do_household_update:
+                    # link household and school for the first student
+                    # in household_data we need household.students[0].school.unique_id
+                    household.school = school
+                    household.school_id = school.unique_id
+                    household.distance = model.distance_utilities[
+                            household.idx, school.idx
+                            ]
+                    do_household_update = False
+
+                if school.has_space:
+                    # put back on the list
+                    schools_with_space.append(school)

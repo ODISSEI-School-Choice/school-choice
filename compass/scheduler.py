@@ -177,11 +177,13 @@ class ThreeStagedActivation:
                         1 + (self.model.all_distances / p) ** q
                     )
 
-                for household in all_households:
-                    for student in household.students:
-                        student.set_school_preference(
-                            household.school_ranking_initial()
-                        )
+                #TODO: remove commented code
+                #      initialization happens in new allocator
+                #for household in all_households:
+                #    for student in household.students:
+                #        student.set_school_preference(
+                #            household.school_ranking_initial()
+                #        )
 
                 # Allocate students after all initial preferences have been set
                 self.allocate_schools(all_households, initial_schools)
