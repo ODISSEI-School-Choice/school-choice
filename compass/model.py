@@ -770,7 +770,7 @@ class CompassModel(Model):
             sys.exit()
 
         # instead of reversing the list, sort the negative values in the list
-        ranked_indices = transformed.argsort(axis=0)[::-1]
+        ranked_indices = (-transformed).argsort(axis=0, kind='quicksort')
 
         # necessary to allow indexing with the argsort result
         schools = np.array(schools)
