@@ -81,7 +81,10 @@ class Allocator:
             for student in household.students:
                 if step == 0:
                     random.shuffle(schools_with_space)
-                    step = steps_before_shuffle
+                    # reshuffle again when 1/3 of the remaining schools
+                    # got a student assigned.
+                    # Limit the shuffling if there's less than 10 schools remaining
+                    step = max(len(schools_with_space) / 3, 10)
                 else:
                     step -= 1
 
