@@ -113,13 +113,13 @@ class ThreeStagedActivation:
             )
 
         if self.params["scheduling"] == 0 or initial_schools:
-            np.random.shuffle(households)
+            self.model.random.shuffle(households)
             self.lower_index = 0
             self.upper_index = -1
 
         # Determine the new splits as everyone has been stepped
         elif self.split_index % self.n_splits == 0:
-            np.random.shuffle(households)
+            self.model.random.shuffle(households)
             self.split_index = 0
             self.lower_index = 0
             self.upper_index = self.step_size

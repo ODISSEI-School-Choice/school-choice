@@ -6,13 +6,6 @@ import numpy as np
 from compass.model import CompassModel
 from compass.parameters import FLAGS
 
-# import cProfile
-
-# Set seeds for reproducibility
-random.seed(3)
-np.random.seed(3)
-
-
 # Initialize
 size = 70
 FLAGS.n_neighbourhoods = 25
@@ -32,13 +25,9 @@ FLAGS.case = "amsterdam"
 FLAGS.max_move_fraction = 0.05
 FLAGS.verbose = True
 FLAGS.random_residential = False
+FLAGS.seed = 3
 
 if __name__ == "__main__":
-    # import cProfile, pstats
-    # profiler = cProfile.Profile()
-    # profiler.enable()
-    model = CompassModel(vars(FLAGS), export=True)
+    model = CompassModel(**vars(FLAGS), export=True)
     model.simulate()
-    # profiler.disable()
-    # stats = pstats.Stats(profiler).sort_stats('tottime')
-    # stats.print_stats(0.05)
+    print(model.segregation[-1])

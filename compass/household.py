@@ -2,7 +2,6 @@
 The Household class.
 """
 import sys
-import random
 from typing import List, ClassVar, Iterable
 import numpy as np
 from .agents_base import BaseAgent
@@ -231,7 +230,8 @@ class Household(BaseAgent):
             raise Exception("ERROR: No empty cells")
 
         # Pick possible empty locations, rank them and move to the chosen one
-        positions = self.random.choices(empties, k=num_considered)
+        idxs = self.random.choice(range(len(empties)), size=num_considered)
+        positions = [empties[idx] for idx in idxs]
         new_pos = self.residential_ranking(positions, ranking_method)
         self.residential_move(old_pos=self.pos, new_pos=new_pos)
 
@@ -437,14 +437,14 @@ class Household(BaseAgent):
             idxs = list(range(len(schools)))
 
             # shuffle it in-place
-            random.shuffle(idxs)
+            self.model.random.shuffle(idxs)
 
             # create a list with the shuffled school objects
             return [schools[idx] for idx in idxs]
 
         if False:
             schools = schools.copy()
-            random.shuffle(schools)
+            self.model.random.shuffle(schools)
             return schools
 
     def residential_ranking(
@@ -505,7 +505,8 @@ class Household(BaseAgent):
         else:
             utilities = np.nan_to_num(utilities / summed, copy=False)
         if ranking_method == "proportional" or ranking_method:
-            new_pos = random.choices(population=positions, weights=utilities, k=1)
+            idxs = self.random.choice(range(len(positions)), p=utilities, size=1)
+            new_pos = [positions[idxs[0]]]
 
         return new_pos[0]
 

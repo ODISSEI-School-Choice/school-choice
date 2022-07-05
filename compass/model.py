@@ -5,7 +5,6 @@ import contextlib
 from datetime import datetime
 import os
 import sys
-import random
 from typing import List, Dict, Generator
 import numpy as np
 from mesa import Model
@@ -66,7 +65,7 @@ def read_households(path: str) -> pd.DataFrame:
     )
 
 
-def trunc_normal_sample(means: List, scale: float, size: int) -> List[np.ndarray]:
+def trunc_normal_sample(means: List, scale: float, size: int, seed=None) -> List[np.ndarray]:
     """
     Samples from a set of truncated normal distributions.
     Arguments:
@@ -76,6 +75,8 @@ def trunc_normal_sample(means: List, scale: float, size: int) -> List[np.ndarray
     Output:
         sample [n_means] of np.ndarray [size]
     """
+    truncnorm._random_state = seed
+
     sample = [0] * len(means)
     for index, mu in enumerate(means):
         if scale == 0:
@@ -151,9 +152,12 @@ class CompassModel(Model):
         compositions (ndarray, float32)  as household_attrs
     """
 
-    def __init__(self, params: dict, export: bool = False):
+    def __init__(self, export: bool = False, **params: dict):
 
         super().__init__()
+
+        # Use random from the numpy package for extra functionality
+        self.random = np.random.RandomState(self._seed)
 
         # define various arrays TODO: sort/document those
         self.local_compositions: List = []
@@ -279,16 +283,19 @@ class CompassModel(Model):
             params["optimal_fraction"][0],
             scale=params["homophily_std"],
             size=n_households,
+            seed=self.random
         )
         alphas = trunc_normal_sample(
             [params["alpha"], params["alpha"]],
             scale=params["homophily_std"],
             size=n_households,
+            seed=self.random
         )
         utility_at_maxs = trunc_normal_sample(
             params["utility_at_max"][0],
             scale=params["homophily_std"],
             size=n_households,
+            seed=self.random
         )
 
         for household in households:
@@ -396,7 +403,7 @@ class CompassModel(Model):
         # Create group types, empty spots and shuffle them both
         n_groups = len(params["group_categories"])
         groups = [
-            np.random.choice(
+            self.random.choice(
                 list(range(0, len(params["group_types"][i]))),
                 size=params["n_households"],
                 p=params["group_dist"][i],
@@ -408,7 +415,7 @@ class CompassModel(Model):
             [(x, y) for x in range(params["width"]) for y in range(params["height"])]
         )
         empties = list(self.grid.empties)
-        np.random.shuffle(empties)
+        self.random.shuffle(empties)
 
         # pre-allocate storage for the Housholds
         Household.reset(max_households=params["n_households"])
@@ -559,7 +566,7 @@ class CompassModel(Model):
         if self.verbose:
             print("Creating households...")
 
-        self.chosen_indices = np.random.choice(
+        self.chosen_indices = self.random.choice(
             len(household_frame), size=actual_households, replace=False
         )
         households_sample = household_frame.iloc[self.chosen_indices]
@@ -567,7 +574,7 @@ class CompassModel(Model):
         if self.params["random_residential"]:
             # Randomly shuffle the group of the household
             shuffled = households_sample["group"].values
-            np.random.shuffle(shuffled)
+            self.random.shuffle(shuffled)
             households_sample["group"] = shuffled
 
         self.params["n_households"] = actual_households
@@ -968,8 +975,8 @@ class CompassModel(Model):
             locations = []
             i = 0
             while i < amount:
-                x_coord = np.random.randint(low=0, high=self.params["width"])
-                y_coord = np.random.randint(low=0, high=self.params["height"])
+                x_coord = self.random.randint(low=0, high=self.params["width"])
+                y_coord = self.random.randint(low=0, high=self.params["height"])
                 if (x_coord, y_coord) not in locations:
                     locations.append((x_coord, y_coord))
                     i += 1
@@ -1002,13 +1009,13 @@ class CompassModel(Model):
                         elif y_high >= height:
                             y_high = height - 1
 
-                        x_coord = np.random.randint(low=x_low, high=x_high)
-                        y_coord = np.random.randint(low=y_low, high=y_high)
+                        x_coord = self.random.randint(low=x_low, high=x_high)
+                        y_coord = self.random.randint(low=y_low, high=y_high)
 
                         # Check if the coordinates haven't already been sampled
                         while (x_coord, y_coord) in locations:
-                            x_coord = np.random.randint(low=x_low, high=x_high)
-                            y_coord = np.random.randint(low=y_low, high=y_high)
+                            x_coord = self.random.randint(low=x_low, high=x_high)
+                            y_coord = self.random.randint(low=y_low, high=y_high)
 
                         locations.append((x_coord, y_coord))
                         x_low = x_high + 1
@@ -1018,13 +1025,13 @@ class CompassModel(Model):
             # Shuffle all locations if n_schools <= n_neighbourhoods, otherwise
             # shuffle only the remainder
             if n_schools <= n_neighbourhoods:
-                random.shuffle(locations)
+                self.random.shuffle(locations)
             else:
                 divider = int(n_schools / n_neighbourhoods)
                 remainder = n_schools % n_neighbourhoods
                 first_locations = locations[: n_neighbourhoods * divider]
                 rest_locations = locations[n_neighbourhoods * divider :]
-                random.shuffle(rest_locations)
+                self.random.shuffle(rest_locations)
                 locations = first_locations + rest_locations[:remainder]
 
             return locations

@@ -1,7 +1,6 @@
 """
 The school Allocator class.
 """
-import random
 
 
 class Allocator:
@@ -80,7 +79,7 @@ class Allocator:
             do_household_update = True
             for student in household.students:
                 if step == 0:
-                    random.shuffle(schools_with_space)
+                    model.random.shuffle(schools_with_space)
                     # reshuffle again when 1/3 of the remaining schools
                     # got a student assigned.
                     # Limit the shuffling if there's less than 10 schools remaining
