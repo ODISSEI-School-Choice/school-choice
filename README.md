@@ -12,6 +12,8 @@ This project uses `Anaconda` for package handling. Use the following commands to
 
 After running this command, a new conda environment called `mesa` will be installed, and you can open it by using `conda activate mesa`. After this, you will be able to use python as usual with the correct packages and dependencies.
 
+A list of direct dependencies can be found [here](https://github.com/ODISSEI-School-Choice/school-choice/blob/jisk-v2/compass/requirements.txt).
+
 ### Update Documentation
 Install pdoc3 if you haven't already done so. Browse to the compassproject folder in your terminal and run `pdoc3 --html --force --output-dir docs compass`. The documentation should be updated now.
 
@@ -53,3 +55,7 @@ Then run the tests with:
 ```bash
 $ pytest
 ```
+
+### Profiling
+
+Some profiling result can be found in this [notebook](https://github.com/ODISSEI-School-Choice/school-choice/blob/jisk-v2/profile.ipynb). Also, some scaling graphs can be found in this [notebook](https://github.com/ODISSEI-School-Choice/school-choice/blob/jisk-v2/scaling_graph.ipynb).
