@@ -124,3 +124,6 @@ plots/*
 
 # avoid uploading agent data files by pushing
 compass/maps/amsterdam
+
+# VSCode files
+.vscode
