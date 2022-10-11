@@ -8,7 +8,7 @@ This Python implementation tries to model school choice and resulting school seg
 ### Packages
 This project uses `Anaconda` for package handling. Use the following commands to create an environment with the correct packages.
 
-* `conda env create -f conda_env.yml`
+* `conda env create -f requirements.txt`
 
 After running this command, a new conda environment called `mesa` will be installed, and you can open it by using `conda activate mesa`. After this, you will be able to use python as usual with the correct packages and dependencies.
 
