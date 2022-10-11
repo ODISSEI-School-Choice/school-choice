@@ -1,19 +1,9 @@
 # Computational Modelling of Primary School Segregation (COMPASS)
 This Python implementation tries to model school choice and resulting school segregation based on the work of Schelling (1971) and Stoica & Flache (2014).
 
-**This is the folk of the master branch of the [original GitLab repo](https://gitlab.computationalscience.nl/edignum/school-choice---understanding-segregation), the dataset used can be found [here](https://surfdrive.surf.nl/files/index.php/s/MN7DfAWklDgtoYG).**
-
+**NB: This repo is folked from the [original GitLab repo](https://gitlab.computationalscience.nl/edignum/school-choice---understanding-segregation), where the dataset used can be found [here](https://surfdrive.surf.nl/files/index.php/s/MN7DfAWklDgtoYG).**
 
 ## Usage
-### Packages
-This project uses `Anaconda` for package handling. Use the following commands to create an environment with the correct packages.
-
-* `conda env create -f requirements.txt`
-
-After running this command, a new conda environment called `mesa` will be installed, and you can open it by using `conda activate mesa`. After this, you will be able to use python as usual with the correct packages and dependencies.
-
-A list of direct dependencies can be found [here](https://github.com/ODISSEI-School-Choice/school-choice/blob/jisk-v2/compass/requirements.txt).
-
 ### Update Documentation
 Install pdoc3 if you haven't already done so. Browse to the compassproject folder in your terminal and run `pdoc3 --html --force --output-dir docs compass`. The documentation should be updated now.
 
