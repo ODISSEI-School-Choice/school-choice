@@ -22,7 +22,7 @@ def model():
     '''
     params = vars(FLAGS)
     params['case'] = 'Lattice'
-    model = CompassModel(params)
+    model = CompassModel(**params)
     return model
 
 
@@ -66,7 +66,7 @@ def test_school_rankings(random_params):
     total number of schools for 20 random students.    
     """
     print(random_params)
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     model.simulate(res_steps=10, school_steps=10)
     households = model.get_agents('households')
     np.random.shuffle(households)

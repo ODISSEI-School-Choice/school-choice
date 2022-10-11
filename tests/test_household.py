@@ -20,7 +20,7 @@ def test_init_household(random_params):
     Tests if the household is assigned a neighbourhood and the student
     no school.
     '''
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     household = np.random.choice(model.get_agents('households'))
 
     # At least one student is in the household
@@ -37,7 +37,7 @@ def test_move_to_empty(random_params):
     '''
     Tests if the household really moves to a spot that was empty before.
     '''
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     household = np.random.choice(model.get_agents('households'))
 
     if household.model.params['household_density'] < 1:
@@ -55,7 +55,7 @@ def test_residential_utility(random_params):
     '''
     Tests if the utility of the residential composition is bounded between 0 and 1.
     '''
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     household = np.random.choice(model.get_agents('households'))
     normalized = household.model.normalized_compositions[
         household.pos[0], household.pos[1], :]
@@ -70,7 +70,7 @@ def test_school_ranking_initial(random_params):
     '''
     Tests if the INITIAL ranking contains all schools and no duplicates.
     '''
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     household = np.random.choice(model.get_agents('households'))
 
     ranking = household.school_ranking_initial()
@@ -83,7 +83,7 @@ def test_get_student_count(random_params):
     '''
     Tests if every household has at least one student
     '''
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     for agent in model.get_agents('households'):
         student_count = agent.get_student_count()
         assert student_count >= 1

@@ -1,3 +1,4 @@
+from re import I
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -45,7 +46,7 @@ class BokehServer():
         self.doc = doc
 
         # Initialise a CompassModel model with the default setting.
-        self.model = CompassModel(vars(FLAGS))
+        self.model = CompassModel(**vars(FLAGS))
         self.params = self.model.params
         self.res_ended = False
         self.school_ended = False

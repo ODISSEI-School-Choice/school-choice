@@ -102,7 +102,7 @@ def test_distance_only(random_params):
     random_params["case"] = "lattice"
 
     log_params(random_params)
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     model.simulate(
         res_steps=random_params["max_res_steps"],
         school_steps=random_params["max_school_steps"],
@@ -126,7 +126,7 @@ def test_composition_only(random_params):
     random_params["n_schools"] = random_params["n_neighbourhoods"]
     random_params["case"] = "lattice"
     log_params(random_params)
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     model.simulate(
         res_steps=random_params["max_res_steps"],
         school_steps=random_params["max_school_steps"],
@@ -156,7 +156,7 @@ def test_bounded_racist(random_params):
     random_params["case"] = "lattice"
     random_params["n_schools"] = random_params["n_neighbourhoods"]
     log_params(random_params)
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     model.simulate(
         res_steps=random_params["max_res_steps"],
         school_steps=random_params["max_school_steps"],
@@ -186,7 +186,7 @@ def test_closest_school(random_params):
     random_params["max_move_fraction"] = 1
     random_params["case"] = "Amsterdam"
     log_params(random_params)
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
     model.simulate(res_steps=0, school_steps=2)
 
     # Pick 20 random households and check if they attend their closest school
@@ -219,7 +219,7 @@ def test_utilities(random_params):
     logging.warning("\n\n\nDISTANCE ONLY, AMSTERDAM CASE")
     random_params["case"] = np.random.choice(["Amsterdam", "Lattice"])
     log_params(random_params)
-    model = CompassModel(random_params)
+    model = CompassModel(**random_params)
 
     # Initially, no utilities can be zero (theoretically it could be)
     # if they are 0, then it's probably an unfilled initial array.
