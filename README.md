@@ -4,6 +4,22 @@ This Python implementation tries to model school choice and resulting school seg
 **NB: This repo is folked from the [original GitLab repo](https://gitlab.computationalscience.nl/edignum/school-choice---understanding-segregation), where the dataset used can be found [here](https://surfdrive.surf.nl/files/index.php/s/MN7DfAWklDgtoYG).**
 
 ## Usage
+
+### Install and Run
+In a terminal, navigate to the project folder, install all the dependencies by running
+
+```shell
+pip install -r requirements
+```
+
+and run the program within a GUI by running
+
+```shell
+python run.py
+```
+
+This will start a local server to automatically open your web browser and show the program as a webpage. If not seeing the webpage open, manually input `http://localhost:5004/` in the link bar.
+
 ### Update Documentation
 Install pdoc3 if you haven't already done so. Browse to the compassproject folder in your terminal and run `pdoc3 --html --force --output-dir docs compass`. The documentation should be updated now.
 
