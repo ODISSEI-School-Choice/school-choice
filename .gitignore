@@ -126,4 +126,4 @@ plots/*
 compass/maps/amsterdam
 
 # VSCode files
-.vscode
+.vscode/
