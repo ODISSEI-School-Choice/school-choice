@@ -36,116 +36,225 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # General system parameters
-parser.add_argument(&#34;--width&#34;, type=int, default=70,
+parser.add_argument(&#34;--width&#34;,
+                    type=int,
+                    default=70,
                     help=&#34;Integer value representing the number of grid cells&#34;)
-parser.add_argument(&#34;--height&#34;, type=int, default=70,
+parser.add_argument(&#34;--height&#34;,
+                    type=int,
+                    default=70,
                     help=&#34;Integer value representing the number of grid cells&#34;)
-parser.add_argument(&#34;--torus&#34;, action=&#34;store_true&#34;, default=False,
-                    help=&#34;Create grid as torus if passed, bounded if not specified&#34;)
-parser.add_argument(&#34;--household_density&#34;, type=float, default=0.9,
+parser.add_argument(
+    &#34;--torus&#34;,
+    action=&#34;store_true&#34;,
+    default=False,
+    help=&#34;Create grid as torus if passed, bounded if not specified&#34;)
+parser.add_argument(&#34;--household_density&#34;,
+                    type=float,
+                    default=0.9,
                     help=&#34;Total fraction of grid cells occupied by households&#34;)
-parser.add_argument(&#34;--student_density&#34;, type=float, default=1,
+parser.add_argument(&#34;--student_density&#34;,
+                    type=float,
+                    default=1,
                     help=&#34;Average amount of students per household&#34;)
-parser.add_argument(&#34;--max_move_fraction&#34;, type=float, default=0.25,
-                    help=&#34;Maximum fraction of agents allowed to move during a full step&#34;)
-parser.add_argument(&#34;--max_res_steps&#34;, type=int, default=10,
+parser.add_argument(
+    &#34;--max_move_fraction&#34;,
+    type=float,
+    default=0.125,
+    help=&#34;Maximum fraction of agents allowed to move during a full step&#34;)
+parser.add_argument(&#34;--max_res_steps&#34;,
+                    type=int,
+                    default=0,
                     help=&#34;Maximum amount of steps during residential process&#34;)
-parser.add_argument(&#34;--max_school_steps&#34;, type=int, default=100,
+parser.add_argument(&#34;--max_school_steps&#34;,
+                    type=int,
+                    default=200,
                     help=&#34;Maximum amount of steps during school process&#34;)
-parser.add_argument(&#34;--conv_threshold&#34;, type=float, default=0.0,
-                    help=&#34;Convergence threshold for the residential and school processes&#34;)
+parser.add_argument(
+    &#34;--conv_threshold&#34;,
+    type=float,
+    default=0.01,
+    help=&#34;Convergence threshold for the residential and school processes&#34;)
 
 # Spatial object parameters
-parser.add_argument(&#34;--n_neighbourhoods&#34;, type=int, default=16,
+parser.add_argument(&#34;--n_neighbourhoods&#34;,
+                    type=int,
+                    default=49,
                     help=&#34;Number of neighbourhood objects to be placed&#34;)
-parser.add_argument(&#34;--neighbourhoods_placement&#34;, type=str, default=&#34;evenly_spaced&#34;,
-                    help=&#34;Placement method of neighbourhoods: random, evenly_spaced&#34;)
-parser.add_argument(&#34;--bounded_neighbourhood&#34;, action=&#34;store_true&#34;, default=False,
-                    help=&#34;Use bounded neighbourhood model if true, unbounded if omitted&#34;)
-parser.add_argument(&#34;--n_schools&#34;, type=int, default=16,
+parser.add_argument(
+    &#34;--neighbourhoods_placement&#34;,
+    type=str,
+    default=&#34;evenly_spaced&#34;,
+    help=&#34;Placement method of neighbourhoods: random, evenly_spaced&#34;)
+parser.add_argument(&#34;--n_schools&#34;,
+                    type=int,
+                    default=49,
                     help=&#34;Amount of schools to be place in grid&#34;)
-parser.add_argument(&#34;--schools_placement&#34;, type=str, default=&#34;evenly_spaced&#34;,
-                    help=&#34;Placement method of schools: random, evenly_spaced, random_per_neighbourhood&#34;)
+parser.add_argument(
+    &#34;--schools_placement&#34;,
+    type=str,
+    default=&#34;evenly_spaced&#34;,
+    help=
+    &#34;Placement method of schools: random, evenly_spaced, random_per_neighbourhood&#34;
+)
 
 # Household parameters
-parser.add_argument(&#34;--group_categories&#34;, type=str, nargs=&#34;+&#34;, default=[&#34;etnicity&#34;],
+parser.add_argument(&#34;--group_categories&#34;,
+                    type=str,
+                    nargs=&#34;+&#34;,
+                    default=[&#34;etnicity&#34;],
                     help=&#34;Space seperated list of categories&#34;)
-parser.add_argument(&#34;--group_types&#34;, type=str, nargs=&#34;+&#34;, default=[[&#34;a&#34;, &#34;b&#34;]],
-                    help=&#34;Space seperated list of strings containing comma seperated list of types within each group&#34;)
-parser.add_argument(&#34;--group_dist&#34;, type=str, nargs=&#34;+&#34;, default=[[0.5, 0.5]],
-                    help=&#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;)
-parser.add_argument(&#34;--category_thresholds&#34;, type=str, nargs=&#34;+&#34;, default=[[1, 1]],
-                    help=&#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;)
-parser.add_argument(&#34;--utility_at_max&#34;, type=str, nargs=&#34;+&#34;, default=[[0.6, 0.6]],
-                    help=&#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;)
-parser.add_argument(&#34;--optimal_fraction&#34;, type=str, nargs=&#34;+&#34;, default=[[0.5, 0.5]],
-                    help=&#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;)
+parser.add_argument(
+    &#34;--group_types&#34;,
+    type=str,
+    nargs=&#34;+&#34;,
+    default=[[&#34;a&#34;, &#34;b&#34;]],
+    help=
+    &#34;Space seperated list of strings containing comma seperated list of types within each group&#34;
+)
+parser.add_argument(
+    &#34;--group_dist&#34;,
+    type=str,
+    nargs=&#34;+&#34;,
+    default=[[0.5, 0.5]],
+    help=
+    &#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;
+)
+parser.add_argument(
+    &#34;--utility_at_max&#34;,
+    type=str,
+    nargs=&#34;+&#34;,
+    default=[[0.6, 0.6]],
+    help=
+    &#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;
+)
+parser.add_argument(
+    &#34;--optimal_fraction&#34;,
+    type=str,
+    nargs=&#34;+&#34;,
+    default=[[0.5, 0.5]],
+    help=
+    &#34;Space seperated list of strings containing comma seperated list of density of subtype&#34;
+)
 
 # School parameters
-parser.add_argument(&#34;--school_capacity&#34;, type=float, default=2,
-                    help=&#34;Capacity of school as fraction of students in encatchment area&#34;)
+parser.add_argument(
+    &#34;--school_capacity&#34;,
+    type=float,
+    default=2,
+    help=&#34;Capacity of school as fraction of students in encatchment area&#34;)
 
 # Parameters determining which neighbours are used
-parser.add_argument(&#34;--radius&#34;, type=int, default=3,
-                    help=&#34;Radius of circle over which neighbours are taken into account. &#34;)
-parser.add_argument(&#34;--moore&#34;, dest=&#34;moore&#34;, action=&#34;store_true&#34;,
+parser.add_argument(
+    &#34;--radius&#34;,
+    type=int,
+    default=3,
+    help=&#34;Radius of circle over which neighbours are taken into account. &#34;)
+parser.add_argument(&#34;--moore&#34;,
+                    dest=&#34;moore&#34;,
+                    action=&#34;store_true&#34;,
                     help=&#34;Use Moore neighbours when finding neighbours&#34;)
-parser.add_argument(&#34;--no-moore&#34;, dest=&#34;moore&#34;, action=&#34;store_false&#34;,
+parser.add_argument(&#34;--no-moore&#34;,
+                    dest=&#34;moore&#34;,
+                    action=&#34;store_false&#34;,
                     help=&#34;Do not use Moore neighbours when finding neighbours&#34;)
 parser.set_defaults(moore=True)
-parser.add_argument(&#34;--neighbourhood_mixture&#34;, type=float, default=0.2,
-                    help=&#34;Ratio bounded neighbourhood to local neighbourhood used in Shelling model. \
-                            Zero equals fully local, one fully bounded neighbourhood.&#34;)
+parser.add_argument(
+    &#34;--neighbourhood_mixture&#34;,
+    type=float,
+    default=0.2,
+    help=
+    &#34;Ratio bounded neighbourhood to local neighbourhood used in Schelling model. \
+                            Zero equals fully local, one fully bounded neighbourhood.&#34;
+)
 
 # Other parameters
-parser.add_argument(&#34;--alpha&#34;, type=float, default=0.2,
-                    help=&#34;School utility parameter in Cobb-Douglas utility function&#34;)
-parser.add_argument(&#34;--filename&#34;, type=str, default=&#39;data/data&#39;,
+parser.add_argument(&#34;--alpha&#34;,
+                    type=float,
+                    default=0.25,
+                    help=&#34;Weight for composition and distance utility&#34;)
+parser.add_argument(&#34;--filename&#34;,
+                    type=str,
+                    default=&#39;data/data&#39;,
                     help=&#34;Filename to save the data.&#34;)
-parser.add_argument(&#34;--loglevel&#34;, type=str, default=&#39;ERROR&#39;,
-                    help=&#34;Level for the logger to use.&#34;)
-parser.add_argument(&#34;--temperature&#34;, type=float, default=100,
-                    help=&#34;Controls the random versus deterministic part in the \
+parser.add_argument(
+    &#34;--temperature&#34;,
+    type=float,
+    default=50,
+    help=&#34;Controls the random versus deterministic part in the \
                         behavioural logit rule.&#34;)
-parser.add_argument(&#34;--homophily_std&#34;, type=float, default=0.0,
+parser.add_argument(&#34;--homophily_std&#34;,
+                    type=float,
+                    default=0.02,
                     help=&#34;Standard deviation of the truncated normal \
                     distribution used in sampling the homphily thresholds.&#34;)
-parser.add_argument(&#34;--num_considered&#34;, type=int, default=1,
+parser.add_argument(&#34;--num_considered&#34;,
+                    type=int,
+                    default=1,
                     help=&#34;How many empty spots an agent considers every \
                         residential move.&#34;)
-parser.add_argument(&#34;--window_size&#34;, type=int, default=30,
+parser.add_argument(&#34;--window_size&#34;,
+                    type=int,
+                    default=30,
                     help=&#34;How many time steps one looks back for convergence.&#34;)
-parser.add_argument(&#34;--ranking_method&#34;, type=str, default=&#39;highest&#39;,
+parser.add_argument(&#34;--ranking_method&#34;,
+                    type=str,
+                    default=&#39;proportional&#39;,
                     help=&#34;The ranking method of the empty residential spots, \
                     one of &#39;highest&#39; or &#39;proportional&#39;&#34;)
-parser.add_argument(&#34;--scheduling&#34;, type=str, default=1,
+parser.add_argument(&#34;--scheduling&#34;,
+                    type=str,
+                    default=1,
                     help=&#34;Does not replace the agent if the value is \
                     1 (&#39;without_replacement&#39;), 0 is with replacement. \
                     Agents are randomly shuffled again \
                     after all have had a chance to move.&#34;)
-parser.add_argument(&#34;--case&#34;, type=str, default=&#39;Lattice&#39;,
-                    help=&#34;To implement case studies. Lattice, Amsterdam or IJburg are \
+parser.add_argument(
+    &#34;--case&#34;,
+    type=str,
+    default=&#39;Amsterdam&#39;,
+    help=&#34;To implement case studies. Only lattice and Amsterdam \
                         available for now.&#34;)
-parser.add_argument(&#34;--logging_enabled&#34;, type=bool, default=False,
-                    help=&#34;To enable logging or not.&#34;)
+parser.add_argument(&#34;--random_residential&#34;,
+                    type=int,
+                    default=0,
+                    help=&#34;To generate random residential patterns.&#34;)
+parser.add_argument(&#34;--verbose&#34;,
+                    type=bool,
+                    default=False,
+                    help=&#34;To enable print statements or not.&#34;)
+parser.add_argument(&#34;--save_last_only&#34;,
+                    type=bool,
+                    default=False,
+                    help=&#34;Only save last time step to save space on disk.&#34;)
+parser.add_argument(
+    &#34;--p&#34;,
+    type=int,
+    default=4000,
+    help=&#34;Controls the location of the 0.5 utility for the distance sigmoid&#34;)
+parser.add_argument(&#34;--q&#34;,
+                    type=int,
+                    default=2,
+                    help=&#34;Controls the slope of the distance sigmoid&#34;)
 
-                        
 # Parse and reformat if necessary (multiple group categories)
 FLAGS, unparsed = parser.parse_known_args()
 if type(FLAGS.group_types[0]) == str:
     FLAGS.group_types = [elem.split(&#34;,&#34;) for elem in FLAGS.group_types]
     FLAGS.group_dist = [elem.split(&#34;,&#34;) for elem in FLAGS.group_dist]
-    FLAGS.group_dist = [[float(element) for element in sublist] 
-        for sublist in FLAGS.group_dist]
+    FLAGS.group_dist = [[float(element) for element in sublist]
+                        for sublist in FLAGS.group_dist]
     FLAGS.homophilies = [elem.split(&#34;,&#34;) for elem in FLAGS.homophilies]
-    FLAGS.homophilies = [[float(element) for element in sublist] 
-        for sublist in FLAGS.homophilies]
+    FLAGS.homophilies = [[float(element) for element in sublist]
+                         for sublist in FLAGS.homophilies]
     FLAGS.utility_at_max = [elem.split(&#34;,&#34;) for elem in FLAGS.utility_at_max]
-    FLAGS.utility_at_max = [[float(element) for element in sublist] 
-        for sublist in FLAGS.utility_at_max]
-    FLAGS.optimal_fraction = [elem.split(&#34;,&#34;) for elem in FLAGS.optimal_fraction]
-    FLAGS.optimal_fraction = [[float(element) for element in sublist] 
-        for sublist in FLAGS.optimal_fraction]</code></pre>
+    FLAGS.utility_at_max = [[float(element) for element in sublist]
+                            for sublist in FLAGS.utility_at_max]
+    FLAGS.optimal_fraction = [
+        elem.split(&#34;,&#34;) for elem in FLAGS.optimal_fraction
+    ]
+    FLAGS.optimal_fraction = [[float(element) for element in sublist]
+                              for sublist in FLAGS.optimal_fraction]</code></pre>
 </details>
 </section>
 <section>

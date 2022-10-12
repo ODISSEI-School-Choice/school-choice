@@ -41,9 +41,9 @@ parallelization over cores. The execution of the step() and advance() parts in
 the agents used, result in a system that is not entirely simultaneous.
 &#34;&#34;&#34;
 
-import numpy as np
-from allocator import Allocator
 from collections import OrderedDict
+import numpy as np
+from .allocator import Allocator
 
 
 class ThreeStagedActivation:
@@ -65,21 +65,27 @@ class ThreeStagedActivation:
     Todo:
         * Parallelization if needed.
     &#34;&#34;&#34;
+
     def __init__(self, model):
 
         self.model = model
         self.params = model.params
-        self.time, self.split_index, self.moved_agents, self.school_steps, \
-            self.residential_steps = 0, 0, 0, 0, 0
+        (
+            self.time,
+            self.split_index,
+            self.moved_agents,
+            self.school_steps,
+            self.residential_steps,
+        ) = (0, 0, 0, 0, 0)
 
         # A fraction of 0.40 means three splits as does 0.35 for example.
-        self.n_splits = np.ceil(1 / self.params[&#39;max_move_fraction&#39;])
-        self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits) 
-        self.max_movements = 1 + int(self.model.params[&#34;max_move_fraction&#34;] * \
-            self.model.params[&#34;n_students&#34;])
+        self.n_splits = np.ceil(1 / self.params[&#34;max_move_fraction&#34;])
+        self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits)
+        self.max_movements = 1 + int(
+            self.model.params[&#34;max_move_fraction&#34;] * self.model.params[&#34;n_students&#34;]
+        )
         self._agents = dict()
         self.allocator = Allocator()
-
 
     def add(self, agent):
         &#34;&#34;&#34;
@@ -91,10 +97,9 @@ class ThreeStagedActivation:
         Note:
             The agent must have a step() method.
         &#34;&#34;&#34;
-        if not agent.__class__.__name__ in list(self._agents.keys()):
+        if agent.__class__.__name__ not in self._agents:
             self._agents[agent.__class__.__name__] = OrderedDict()
         self._agents[agent.__class__.__name__][agent.unique_id] = agent
-
 
     def remove(self, agent):
         &#34;&#34;&#34;
@@ -105,7 +110,6 @@ class ThreeStagedActivation:
         &#34;&#34;&#34;
         del self._agents[agent.__class__.__name__][agent.unique_id]
 
-
     def get_agent_count(self):
         &#34;&#34;&#34;
         Returns:
@@ -113,20 +117,20 @@ class ThreeStagedActivation:
         &#34;&#34;&#34;
         return sum([len(agents) for agents in self._agents.values()])
 
-
-    def get_time(self, time_type=&#39;time&#39;):
+    def get_time(self, time_type=&#34;time&#34;):
         &#34;&#34;&#34;
         Returns:
             int: current time step (total, residential or school)
         &#34;&#34;&#34;
 
-        if time_type == &#39;time&#39;:
+        if time_type == &#34;time&#34;:
             return self.time
-        elif time_type == &#39;residential&#39;:
+        if time_type == &#34;residential&#34;:
             return self.residential_steps
-        elif time_type == &#39;school&#39;:
+        if time_type == &#34;school&#34;:
             return self.school_steps
 
+        return None
 
     def agents_to_move(self, households, initial_schools):
         &#34;&#34;&#34;
@@ -135,21 +139,22 @@ class ThreeStagedActivation:
 
         # Necessary because of the reset button in the visualisation, it&#39;s too
         # early in the init()
-        if self.get_time()==0:
+        if self.get_time() == 0:
             # A fraction of 0.40 means three splits as does 0.35 for example.
-            self.n_splits = np.ceil(1 / self.params[&#39;max_move_fraction&#39;])
-            self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits) 
-            self.max_movements = 1 + int(self.model.params[&#34;max_move_fraction&#34;] * \
-                self.model.params[&#34;n_students&#34;])
-        
-        if self.params[&#39;scheduling&#39;]==0 or initial_schools:
-            np.random.shuffle(households)
+            self.n_splits = np.ceil(1 / self.params[&#34;max_move_fraction&#34;])
+            self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits)
+            self.max_movements = 1 + int(
+                self.model.params[&#34;max_move_fraction&#34;] * self.model.params[&#34;n_students&#34;]
+            )
+
+        if self.params[&#34;scheduling&#34;] == 0 or initial_schools:
+            self.model.random.shuffle(households)
             self.lower_index = 0
             self.upper_index = -1
 
         # Determine the new splits as everyone has been stepped
         elif self.split_index % self.n_splits == 0:
-            np.random.shuffle(households)
+            self.model.random.shuffle(households)
             self.split_index = 0
             self.lower_index = 0
             self.upper_index = self.step_size
@@ -160,72 +165,98 @@ class ThreeStagedActivation:
             self.upper_index = (1 + self.split_index) * self.step_size
             self.split_index += 1
 
-        return households[self.lower_index:self.upper_index]
-
+        return households[self.lower_index : self.upper_index]
 
     def step(self, residential=False, initial_schools=False):
         &#34;&#34;&#34;
         Steps all agents and then advances them.
 
         Args:
-            residential (bool): True if a residential step needs to be 
+            residential (bool): True if a residential step needs to be
                 performed, False (default) means a school step.
             initial_schools (bool): True if an initial school step needs to be
                 performed, False (default) means a school step.
         &#34;&#34;&#34;
 
-        all_households = self.model.get_agents(&#39;households&#39;)
+        all_households = self.model.get_agents(&#34;households&#34;)
         households_to_move = self.agents_to_move(all_households, initial_schools)
-        self.households_to_move = households_to_move # For testing purposes
+
+        # FIXME: we shouldnt store this, but is needed for a test
+        self.households_to_move = households_to_move  # For testing purposes
 
         if residential:
 
             # Rankings are still calculated in the Household object instead of
             # model wide as for the schools.
-            [household.step(residential=residential, 
-                initial_schools=initial_schools) for household in \
-                    households_to_move]
-            
+            for household in households_to_move:
+                household.step(residential=residential, initial_schools=initial_schools)
+
             # UPDATE COMPOSITIONS OF ALL AGENTS AFTER ALL THE MOVES
             self.model.calc_residential_compositions()
-            [household.update(residential) for household in all_households]
+            for household in all_households:
+                household.update_residential()
             self.model.calc_res_utilities()
             self.residential_steps += 1
 
         else:
 
             if initial_schools:
-                
+
                 # Initial allocation for EVERY household
                 # Set initial preferences
-                for household in all_households:
-                    [student.set_school_preference(
-                        household.school_ranking_initial(student)) \
-                            for student in household.students]
+                if self.params[&#34;case&#34;].lower() == &#34;lattice&#34;:
+                    self.model.compute_school_distances()  # execute only in lattice case
+                    p = self.params[&#34;p&#34;]
+                    q = self.params[&#34;q&#34;]
+                    self.model.distance_utilities = 1.0 / (
+                        1 + (self.model.all_distances / p) ** q
+                    )
+
+                #TODO: remove commented code
+                #      initialization happens in new allocator
+                #for household in all_households:
+                #    for student in household.students:
+                #        student.set_school_preference(
+                #            household.school_ranking_initial()
+                #        )
 
                 # Allocate students after all initial preferences have been set
                 self.allocate_schools(all_households, initial_schools)
 
             else:
                 # Normal school step
-                self.model.calc_school_rankings(households_to_move, 
-                    self.model.get_agents(&#39;schools&#39;))
+                self.model.calc_school_rankings(
+                    households_to_move, self.model.get_agents(&#34;schools&#34;)
+                )
                 self.allocate_schools(households_to_move, initial_schools)
 
-            # Populate schools after rankings have been calculated
+            # Calculate the new school compositions:
+            #  * Compass.school_compositions
+            #  TODO: should this move to in the &#39;residential&#39; below?
             self.model.calc_school_compositions()
-            [household.update(residential) for household in all_households]
-            self.model.calc_school_utilities()
-            self.school_steps += 1       
 
-         # Update the utilities of ALL agents
-        [household.update_utilities(residential) for household in all_households]     
-        
+            if residential:
+                # Set:
+                #  * Compass.neighbourhodd_compositions
+                #  * Compass.local_compositions
+                #  * Household.composition
+                for household in all_households:
+                    household.update_residential()
+            # updating the household.distance is done when moving the student
+
+            # Set:
+            #  * Household.school_utility_comp
+            #  * Household.school_utility
+            self.model.calc_school_utilities()
+            self.school_steps += 1
+
+        # Updating of the utilities of ALL agents was done in
+        # self.model.calc_school_utilities()
+
         self.time += 1
         self.model.measurements.end_step(residential)
 
-
-    def allocate_schools(self, households, initial_schools=False):
+    def allocate_schools(self, households, initial_schools):
         &#34;&#34;&#34;
         Allocates students to schools.
 
@@ -235,11 +266,10 @@ class ThreeStagedActivation:
             initial_schools (bool): True if an initial school step needs to be
                 performed, False (default) means a school step.
         &#34;&#34;&#34;
-        if self.model.params[&#34;n_schools&#34;]:
-            if initial_schools:
-                self.allocator.initial_school(households)
-            else:
-                self.allocator.optimal_school(households)</code></pre>
+        if initial_schools:
+            self.allocator.initial_school(households)
+        else:
+            self.allocator.optimal_school(households)</code></pre>
 </details>
 </section>
 <section>
@@ -306,21 +336,27 @@ class ThreeStagedActivation:
     Todo:
         * Parallelization if needed.
     &#34;&#34;&#34;
+
     def __init__(self, model):
 
         self.model = model
         self.params = model.params
-        self.time, self.split_index, self.moved_agents, self.school_steps, \
-            self.residential_steps = 0, 0, 0, 0, 0
+        (
+            self.time,
+            self.split_index,
+            self.moved_agents,
+            self.school_steps,
+            self.residential_steps,
+        ) = (0, 0, 0, 0, 0)
 
         # A fraction of 0.40 means three splits as does 0.35 for example.
-        self.n_splits = np.ceil(1 / self.params[&#39;max_move_fraction&#39;])
-        self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits) 
-        self.max_movements = 1 + int(self.model.params[&#34;max_move_fraction&#34;] * \
-            self.model.params[&#34;n_students&#34;])
+        self.n_splits = np.ceil(1 / self.params[&#34;max_move_fraction&#34;])
+        self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits)
+        self.max_movements = 1 + int(
+            self.model.params[&#34;max_move_fraction&#34;] * self.model.params[&#34;n_students&#34;]
+        )
         self._agents = dict()
         self.allocator = Allocator()
-
 
     def add(self, agent):
         &#34;&#34;&#34;
@@ -332,10 +368,9 @@ class ThreeStagedActivation:
         Note:
             The agent must have a step() method.
         &#34;&#34;&#34;
-        if not agent.__class__.__name__ in list(self._agents.keys()):
+        if agent.__class__.__name__ not in self._agents:
             self._agents[agent.__class__.__name__] = OrderedDict()
         self._agents[agent.__class__.__name__][agent.unique_id] = agent
-
 
     def remove(self, agent):
         &#34;&#34;&#34;
@@ -346,7 +381,6 @@ class ThreeStagedActivation:
         &#34;&#34;&#34;
         del self._agents[agent.__class__.__name__][agent.unique_id]
 
-
     def get_agent_count(self):
         &#34;&#34;&#34;
         Returns:
@@ -354,20 +388,20 @@ class ThreeStagedActivation:
         &#34;&#34;&#34;
         return sum([len(agents) for agents in self._agents.values()])
 
-
-    def get_time(self, time_type=&#39;time&#39;):
+    def get_time(self, time_type=&#34;time&#34;):
         &#34;&#34;&#34;
         Returns:
             int: current time step (total, residential or school)
         &#34;&#34;&#34;
 
-        if time_type == &#39;time&#39;:
+        if time_type == &#34;time&#34;:
             return self.time
-        elif time_type == &#39;residential&#39;:
+        if time_type == &#34;residential&#34;:
             return self.residential_steps
-        elif time_type == &#39;school&#39;:
+        if time_type == &#34;school&#34;:
             return self.school_steps
 
+        return None
 
     def agents_to_move(self, households, initial_schools):
         &#34;&#34;&#34;
@@ -376,21 +410,22 @@ class ThreeStagedActivation:
 
         # Necessary because of the reset button in the visualisation, it&#39;s too
         # early in the init()
-        if self.get_time()==0:
+        if self.get_time() == 0:
             # A fraction of 0.40 means three splits as does 0.35 for example.
-            self.n_splits = np.ceil(1 / self.params[&#39;max_move_fraction&#39;])
-            self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits) 
-            self.max_movements = 1 + int(self.model.params[&#34;max_move_fraction&#34;] * \
-                self.model.params[&#34;n_students&#34;])
-        
-        if self.params[&#39;scheduling&#39;]==0 or initial_schools:
-            np.random.shuffle(households)
+            self.n_splits = np.ceil(1 / self.params[&#34;max_move_fraction&#34;])
+            self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits)
+            self.max_movements = 1 + int(
+                self.model.params[&#34;max_move_fraction&#34;] * self.model.params[&#34;n_students&#34;]
+            )
+
+        if self.params[&#34;scheduling&#34;] == 0 or initial_schools:
+            self.model.random.shuffle(households)
             self.lower_index = 0
             self.upper_index = -1
 
         # Determine the new splits as everyone has been stepped
         elif self.split_index % self.n_splits == 0:
-            np.random.shuffle(households)
+            self.model.random.shuffle(households)
             self.split_index = 0
             self.lower_index = 0
             self.upper_index = self.step_size
@@ -401,72 +436,98 @@ class ThreeStagedActivation:
             self.upper_index = (1 + self.split_index) * self.step_size
             self.split_index += 1
 
-        return households[self.lower_index:self.upper_index]
-
+        return households[self.lower_index : self.upper_index]
 
     def step(self, residential=False, initial_schools=False):
         &#34;&#34;&#34;
         Steps all agents and then advances them.
 
         Args:
-            residential (bool): True if a residential step needs to be 
+            residential (bool): True if a residential step needs to be
                 performed, False (default) means a school step.
             initial_schools (bool): True if an initial school step needs to be
                 performed, False (default) means a school step.
         &#34;&#34;&#34;
 
-        all_households = self.model.get_agents(&#39;households&#39;)
+        all_households = self.model.get_agents(&#34;households&#34;)
         households_to_move = self.agents_to_move(all_households, initial_schools)
-        self.households_to_move = households_to_move # For testing purposes
+
+        # FIXME: we shouldnt store this, but is needed for a test
+        self.households_to_move = households_to_move  # For testing purposes
 
         if residential:
 
             # Rankings are still calculated in the Household object instead of
             # model wide as for the schools.
-            [household.step(residential=residential, 
-                initial_schools=initial_schools) for household in \
-                    households_to_move]
-            
+            for household in households_to_move:
+                household.step(residential=residential, initial_schools=initial_schools)
+
             # UPDATE COMPOSITIONS OF ALL AGENTS AFTER ALL THE MOVES
             self.model.calc_residential_compositions()
-            [household.update(residential) for household in all_households]
+            for household in all_households:
+                household.update_residential()
             self.model.calc_res_utilities()
             self.residential_steps += 1
 
         else:
 
             if initial_schools:
-                
+
                 # Initial allocation for EVERY household
                 # Set initial preferences
-                for household in all_households:
-                    [student.set_school_preference(
-                        household.school_ranking_initial(student)) \
-                            for student in household.students]
+                if self.params[&#34;case&#34;].lower() == &#34;lattice&#34;:
+                    self.model.compute_school_distances()  # execute only in lattice case
+                    p = self.params[&#34;p&#34;]
+                    q = self.params[&#34;q&#34;]
+                    self.model.distance_utilities = 1.0 / (
+                        1 + (self.model.all_distances / p) ** q
+                    )
+
+                #TODO: remove commented code
+                #      initialization happens in new allocator
+                #for household in all_households:
+                #    for student in household.students:
+                #        student.set_school_preference(
+                #            household.school_ranking_initial()
+                #        )
 
                 # Allocate students after all initial preferences have been set
                 self.allocate_schools(all_households, initial_schools)
 
             else:
                 # Normal school step
-                self.model.calc_school_rankings(households_to_move, 
-                    self.model.get_agents(&#39;schools&#39;))
+                self.model.calc_school_rankings(
+                    households_to_move, self.model.get_agents(&#34;schools&#34;)
+                )
                 self.allocate_schools(households_to_move, initial_schools)
 
-            # Populate schools after rankings have been calculated
+            # Calculate the new school compositions:
+            #  * Compass.school_compositions
+            #  TODO: should this move to in the &#39;residential&#39; below?
             self.model.calc_school_compositions()
-            [household.update(residential) for household in all_households]
-            self.model.calc_school_utilities()
-            self.school_steps += 1       
 
-         # Update the utilities of ALL agents
-        [household.update_utilities(residential) for household in all_households]     
-        
+            if residential:
+                # Set:
+                #  * Compass.neighbourhodd_compositions
+                #  * Compass.local_compositions
+                #  * Household.composition
+                for household in all_households:
+                    household.update_residential()
+            # updating the household.distance is done when moving the student
+
+            # Set:
+            #  * Household.school_utility_comp
+            #  * Household.school_utility
+            self.model.calc_school_utilities()
+            self.school_steps += 1
+
+        # Updating of the utilities of ALL agents was done in
+        # self.model.calc_school_utilities()
+
         self.time += 1
         self.model.measurements.end_step(residential)
 
-
-    def allocate_schools(self, households, initial_schools=False):
+    def allocate_schools(self, households, initial_schools):
         &#34;&#34;&#34;
         Allocates students to schools.
 
@@ -476,11 +537,10 @@ class ThreeStagedActivation:
             initial_schools (bool): True if an initial school step needs to be
                 performed, False (default) means a school step.
         &#34;&#34;&#34;
-        if self.model.params[&#34;n_schools&#34;]:
-            if initial_schools:
-                self.allocator.initial_school(households)
-            else:
-                self.allocator.optimal_school(households)</code></pre>
+        if initial_schools:
+            self.allocator.initial_school(households)
+        else:
+            self.allocator.optimal_school(households)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -510,7 +570,7 @@ class ThreeStagedActivation:
     Note:
         The agent must have a step() method.
     &#34;&#34;&#34;
-    if not agent.__class__.__name__ in list(self._agents.keys()):
+    if agent.__class__.__name__ not in self._agents:
         self._agents[agent.__class__.__name__] = OrderedDict()
     self._agents[agent.__class__.__name__][agent.unique_id] = agent</code></pre>
 </details>
@@ -531,21 +591,22 @@ class ThreeStagedActivation:
 
     # Necessary because of the reset button in the visualisation, it&#39;s too
     # early in the init()
-    if self.get_time()==0:
+    if self.get_time() == 0:
         # A fraction of 0.40 means three splits as does 0.35 for example.
-        self.n_splits = np.ceil(1 / self.params[&#39;max_move_fraction&#39;])
-        self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits) 
-        self.max_movements = 1 + int(self.model.params[&#34;max_move_fraction&#34;] * \
-            self.model.params[&#34;n_students&#34;])
-    
-    if self.params[&#39;scheduling&#39;]==0 or initial_schools:
-        np.random.shuffle(households)
+        self.n_splits = np.ceil(1 / self.params[&#34;max_move_fraction&#34;])
+        self.step_size = 1 + int(self.model.params[&#34;n_households&#34;] // self.n_splits)
+        self.max_movements = 1 + int(
+            self.model.params[&#34;max_move_fraction&#34;] * self.model.params[&#34;n_students&#34;]
+        )
+
+    if self.params[&#34;scheduling&#34;] == 0 or initial_schools:
+        self.model.random.shuffle(households)
         self.lower_index = 0
         self.upper_index = -1
 
     # Determine the new splits as everyone has been stepped
     elif self.split_index % self.n_splits == 0:
-        np.random.shuffle(households)
+        self.model.random.shuffle(households)
         self.split_index = 0
         self.lower_index = 0
         self.upper_index = self.step_size
@@ -556,11 +617,11 @@ class ThreeStagedActivation:
         self.upper_index = (1 + self.split_index) * self.step_size
         self.split_index += 1
 
-    return households[self.lower_index:self.upper_index]</code></pre>
+    return households[self.lower_index : self.upper_index]</code></pre>
 </details>
 </dd>
 <dt id="compass.scheduler.ThreeStagedActivation.allocate_schools"><code class="name flex">
-<span>def <span class="ident">allocate_schools</span></span>(<span>self, households, initial_schools=False)</span>
+<span>def <span class="ident">allocate_schools</span></span>(<span>self, households, initial_schools)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Allocates students to schools.</p>
@@ -577,7 +638,7 @@ performed, False (default) means a school step.</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def allocate_schools(self, households, initial_schools=False):
+<pre><code class="python">def allocate_schools(self, households, initial_schools):
     &#34;&#34;&#34;
     Allocates students to schools.
 
@@ -587,11 +648,10 @@ performed, False (default) means a school step.</dd>
         initial_schools (bool): True if an initial school step needs to be
             performed, False (default) means a school step.
     &#34;&#34;&#34;
-    if self.model.params[&#34;n_schools&#34;]:
-        if initial_schools:
-            self.allocator.initial_school(households)
-        else:
-            self.allocator.optimal_school(households)</code></pre>
+    if initial_schools:
+        self.allocator.initial_school(households)
+    else:
+        self.allocator.optimal_school(households)</code></pre>
 </details>
 </dd>
 <dt id="compass.scheduler.ThreeStagedActivation.get_agent_count"><code class="name flex">
@@ -628,18 +688,20 @@ performed, False (default) means a school step.</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_time(self, time_type=&#39;time&#39;):
+<pre><code class="python">def get_time(self, time_type=&#34;time&#34;):
     &#34;&#34;&#34;
     Returns:
         int: current time step (total, residential or school)
     &#34;&#34;&#34;
 
-    if time_type == &#39;time&#39;:
+    if time_type == &#34;time&#34;:
         return self.time
-    elif time_type == &#39;residential&#39;:
+    if time_type == &#34;residential&#34;:
         return self.residential_steps
-    elif time_type == &#39;school&#39;:
-        return self.school_steps</code></pre>
+    if time_type == &#34;school&#34;:
+        return self.school_steps
+
+    return None</code></pre>
 </details>
 </dd>
 <dt id="compass.scheduler.ThreeStagedActivation.remove"><code class="name flex">
@@ -689,59 +751,87 @@ performed, False (default) means a school step.</dd>
     Steps all agents and then advances them.
 
     Args:
-        residential (bool): True if a residential step needs to be 
+        residential (bool): True if a residential step needs to be
             performed, False (default) means a school step.
         initial_schools (bool): True if an initial school step needs to be
             performed, False (default) means a school step.
     &#34;&#34;&#34;
 
-    all_households = self.model.get_agents(&#39;households&#39;)
+    all_households = self.model.get_agents(&#34;households&#34;)
     households_to_move = self.agents_to_move(all_households, initial_schools)
-    self.households_to_move = households_to_move # For testing purposes
+
+    # FIXME: we shouldnt store this, but is needed for a test
+    self.households_to_move = households_to_move  # For testing purposes
 
     if residential:
 
         # Rankings are still calculated in the Household object instead of
         # model wide as for the schools.
-        [household.step(residential=residential, 
-            initial_schools=initial_schools) for household in \
-                households_to_move]
-        
+        for household in households_to_move:
+            household.step(residential=residential, initial_schools=initial_schools)
+
         # UPDATE COMPOSITIONS OF ALL AGENTS AFTER ALL THE MOVES
         self.model.calc_residential_compositions()
-        [household.update(residential) for household in all_households]
+        for household in all_households:
+            household.update_residential()
         self.model.calc_res_utilities()
         self.residential_steps += 1
 
     else:
 
         if initial_schools:
-            
+
             # Initial allocation for EVERY household
             # Set initial preferences
-            for household in all_households:
-                [student.set_school_preference(
-                    household.school_ranking_initial(student)) \
-                        for student in household.students]
+            if self.params[&#34;case&#34;].lower() == &#34;lattice&#34;:
+                self.model.compute_school_distances()  # execute only in lattice case
+                p = self.params[&#34;p&#34;]
+                q = self.params[&#34;q&#34;]
+                self.model.distance_utilities = 1.0 / (
+                    1 + (self.model.all_distances / p) ** q
+                )
+
+            #TODO: remove commented code
+            #      initialization happens in new allocator
+            #for household in all_households:
+            #    for student in household.students:
+            #        student.set_school_preference(
+            #            household.school_ranking_initial()
+            #        )
 
             # Allocate students after all initial preferences have been set
             self.allocate_schools(all_households, initial_schools)
 
         else:
             # Normal school step
-            self.model.calc_school_rankings(households_to_move, 
-                self.model.get_agents(&#39;schools&#39;))
+            self.model.calc_school_rankings(
+                households_to_move, self.model.get_agents(&#34;schools&#34;)
+            )
             self.allocate_schools(households_to_move, initial_schools)
 
-        # Populate schools after rankings have been calculated
+        # Calculate the new school compositions:
+        #  * Compass.school_compositions
+        #  TODO: should this move to in the &#39;residential&#39; below?
         self.model.calc_school_compositions()
-        [household.update(residential) for household in all_households]
-        self.model.calc_school_utilities()
-        self.school_steps += 1       
 
-     # Update the utilities of ALL agents
-    [household.update_utilities(residential) for household in all_households]     
-    
+        if residential:
+            # Set:
+            #  * Compass.neighbourhodd_compositions
+            #  * Compass.local_compositions
+            #  * Household.composition
+            for household in all_households:
+                household.update_residential()
+        # updating the household.distance is done when moving the student
+
+        # Set:
+        #  * Household.school_utility_comp
+        #  * Household.school_utility
+        self.model.calc_school_utilities()
+        self.school_steps += 1
+
+    # Updating of the utilities of ALL agents was done in
+    # self.model.calc_school_utilities()
+
     self.time += 1
     self.model.measurements.end_step(residential)</code></pre>
 </details>

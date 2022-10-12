@@ -4,8 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>compass API documentation</title>
-<meta name="description" content="Compass package." />
+<title>compass.functions API documentation</title>
+<meta name="description" content="Some utility functions that cannot be in utils.py due
+to circular dependencies." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,78 +20,87 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>compass</code></h1>
+<h1 class="title">Module <code>compass.functions</code></h1>
 </header>
 <section id="section-intro">
-<p>Compass package.</p>
+<p>Some utility functions that cannot be in utils.py due
+to circular dependencies.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Compass package.
-&#34;&#34;&#34;</code></pre>
+Some utility functions that cannot be in utils.py due
+to circular dependencies.
+&#34;&#34;&#34;
+
+import numpy as np
+
+
+def calc_comp_utility(
+        dest: np.ndarray,
+        x: np.ndarray,
+        M: np.ndarray,
+        f: np.ndarray
+        ) -&gt; None:
+    &#34;&#34;&#34;
+    Calculates the utility given a normalised composition (0&lt;=x&lt;=1), an
+    optimal fraction (0&lt;=f&lt;=1) and utility at homogeneity (0&lt;=M&lt;=1).
+
+    Arguments
+        dest  np.ndarray to hold the output
+        x
+        M
+        f
+    &#34;&#34;&#34;
+    dest[x &lt;= f] = (x / f)[x &lt;= f]
+    dest[x &gt; f] = (M + (1 - x) * (1 - M) / (1 - f))[x &gt; f]</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="compass.agents_base" href="agents_base.html">compass.agents_base</a></code></dt>
+<dt id="compass.functions.calc_comp_utility"><code class="name flex">
+<span>def <span class="ident">calc_comp_utility</span></span>(<span>dest: numpy.ndarray, x: numpy.ndarray, M: numpy.ndarray, f: numpy.ndarray) ‑> None</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Implementation of the BaseAgent class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.allocator" href="allocator.html">compass.allocator</a></code></dt>
-<dd>
-<div class="desc"><p>The school Allocator class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.functions" href="functions.html">compass.functions</a></code></dt>
-<dd>
-<div class="desc"><p>Some utility functions that cannot be in utils.py due
-to circular dependencies.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.household" href="household.html">compass.household</a></code></dt>
-<dd>
-<div class="desc"><p>The Household class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.model" href="model.html">compass.model</a></code></dt>
-<dd>
-<div class="desc"><p>The Model class which initialises the system and all of its components.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.neighbourhood" href="neighbourhood.html">compass.neighbourhood</a></code></dt>
-<dd>
-<div class="desc"><p>The Neighbourhood class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.parameters" href="parameters.html">compass.parameters</a></code></dt>
-<dd>
-<div class="desc"><p>Contains all the parameter values for one simulation.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.scheduler" href="scheduler.html">compass.scheduler</a></code></dt>
-<dd>
-<div class="desc"><p>The time handler. The scheduler defined in this file is equivalent to the
-SimultaneousActivation scheduler from MESA v0.8.6, with the addition of
-…</p></div>
-</dd>
-<dt><code class="name"><a title="compass.school" href="school.html">compass.school</a></code></dt>
-<dd>
-<div class="desc"><p>The School class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.student" href="student.html">compass.student</a></code></dt>
-<dd>
-<div class="desc"><p>The Student class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.utils" href="utils.html">compass.utils</a></code></dt>
-<dd>
-<div class="desc"><p>The Utils and Measurements class.</p></div>
-</dd>
-<dt><code class="name"><a title="compass.visualisation" href="visualisation.html">compass.visualisation</a></code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>Calculates the utility given a normalised composition (0&lt;=x&lt;=1), an
+optimal fraction (0&lt;=f&lt;=1) and utility at homogeneity (0&lt;=M&lt;=1).</p>
+<p>Arguments
+dest
+np.ndarray to hold the output
+x
+M
+f</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_comp_utility(
+        dest: np.ndarray,
+        x: np.ndarray,
+        M: np.ndarray,
+        f: np.ndarray
+        ) -&gt; None:
+    &#34;&#34;&#34;
+    Calculates the utility given a normalised composition (0&lt;=x&lt;=1), an
+    optimal fraction (0&lt;=f&lt;=1) and utility at homogeneity (0&lt;=M&lt;=1).
+
+    Arguments
+        dest  np.ndarray to hold the output
+        x
+        M
+        f
+    &#34;&#34;&#34;
+    dest[x &lt;= f] = (x / f)[x &lt;= f]
+    dest[x &gt; f] = (M + (1 - x) * (1 - M) / (1 - f))[x &gt; f]</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -101,20 +111,14 @@ SimultaneousActivation scheduler from MESA v0.8.6, with the addition of
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="compass.agents_base" href="agents_base.html">compass.agents_base</a></code></li>
-<li><code><a title="compass.allocator" href="allocator.html">compass.allocator</a></code></li>
-<li><code><a title="compass.functions" href="functions.html">compass.functions</a></code></li>
-<li><code><a title="compass.household" href="household.html">compass.household</a></code></li>
-<li><code><a title="compass.model" href="model.html">compass.model</a></code></li>
-<li><code><a title="compass.neighbourhood" href="neighbourhood.html">compass.neighbourhood</a></code></li>
-<li><code><a title="compass.parameters" href="parameters.html">compass.parameters</a></code></li>
-<li><code><a title="compass.scheduler" href="scheduler.html">compass.scheduler</a></code></li>
-<li><code><a title="compass.school" href="school.html">compass.school</a></code></li>
-<li><code><a title="compass.student" href="student.html">compass.student</a></code></li>
-<li><code><a title="compass.utils" href="utils.html">compass.utils</a></code></li>
-<li><code><a title="compass.visualisation" href="visualisation.html">compass.visualisation</a></code></li>
+<li><code><a title="compass" href="index.html">compass</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="compass.functions.calc_comp_utility" href="#compass.functions.calc_comp_utility">calc_comp_utility</a></code></li>
 </ul>
 </li>
 </ul>
