@@ -1,0 +1,35 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Computational Modelling of Primary School
+  Segregation (COMPASS)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Eric
+    family-names: Dignum
+    email: e.p.n.dignum@uva.nl
+    affiliation: University of Amsterdam
+    orcid: 'https://orcid.org/0000-0002-9560-8005'
+  - given-names: Jisk
+    family-names: Attema
+    email: j.attema@esciencecenter.nl
+    affiliation: Netherlands eScience Center
+    orcid: 'https://orcid.org/0000-0002-0948-1176'
+  - given-names: Ji
+    family-names: Qi
+    email: j.qi@esciencecenter.nl
+    affiliation: Netherlands eScience Center
+    orcid: 'https://orcid.org/0000-0001-8074-2730'
+  - given-names: Nigel
+    family-names: 'van Herwijnen '
+    affiliation: University of Amsterdam
+    orcid: 'https://orcid.org/0000-0002-6690-6177'
+  - given-names: Efi
+    family-names: Athieniti
+    affiliation: University of Amsterdam
+    orcid: 'https://orcid.org/0000-0002-0091-5986'
