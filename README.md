@@ -1,4 +1,7 @@
 # Computational Modelling of Primary School Segregation (COMPASS)
+
+[![DOI](https://zenodo.org/badge/483226861.svg)](https://zenodo.org/badge/latestdoi/483226861)
+
 This Python implementation tries to model school choice and resulting school segregation based on the work of Schelling (1971) and Stoica & Flache (2014).
 
 **NB: This repo is folked from and improved based on the [original GitLab repo](https://gitlab.computationalscience.nl/edignum/school-choice---understanding-segregation), where the dataset used can be found [here](https://surfdrive.surf.nl/files/index.php/s/MN7DfAWklDgtoYG).**

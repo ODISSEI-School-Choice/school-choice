@@ -127,3 +127,6 @@ compass/maps/amsterdam
 
 # VSCode files
 .vscode/
+
+# pypi account configuration
+.pypirc
