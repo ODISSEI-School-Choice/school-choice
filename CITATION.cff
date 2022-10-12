@@ -9,6 +9,9 @@ message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
+doi: 10.5281/zenodo.7188622
+url: "https://github.com/ODISSEI-School-Choice/school-choice"
+date-released: 2022-10-12
 authors:
   - given-names: Eric
     family-names: Dignum
