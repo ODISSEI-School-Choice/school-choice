@@ -1,11 +1,9 @@
-from re import I
-import time
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from functools import partial
-from os.path import dirname, join
-from tornado import gen
 import numpy as np
+from tornado import gen
+from functools import partial
+import ast, math, time, logging
+from os.path import dirname, join, sys
+from concurrent.futures import ThreadPoolExecutor
 
 # Bokeh imports
 from bokeh.plotting import figure
@@ -18,10 +16,11 @@ from bokeh.document import without_document_lock
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.models import (ColumnDataSource, Button, Select, Slider, CDSView,
                           BooleanFilter, HoverTool, Dropdown, Div, Band,
-                          WheelZoomTool)
+                          WheelZoomTool, TextInput)
 
-from .parameters import FLAGS
-from .model import CompassModel
+sys.path.insert(0, "compass")
+from parameters import FLAGS
+from model import CompassModel
 
 
 class BokehServer():
@@ -40,13 +39,13 @@ class BokehServer():
     """
 
     def __init__(self, doc):
-
+        
         # This is important! Save curdoc() to make sure all threads
         # see the same document.
         self.doc = doc
 
         # Initialise a CompassModel model with the default setting.
-        self.model = CompassModel(**vars(FLAGS))
+        self.model = CompassModel(**vars(FLAGS), export=False)
         self.params = self.model.params
         self.res_ended = False
         self.school_ended = False
@@ -56,6 +55,7 @@ class BokehServer():
         # configuration
         self.reset_data()
         self.layout()
+        
         print('Visualisation running...')
 
     def agent_filter(self, source, agent_type):
@@ -86,10 +86,10 @@ class BokehServer():
         """
 
         # Agent colours, agent tooltips and grid initialisation
-        mapper = linear_cmap(field_name='group1',
-                             palette=['blue', 'red'],
+        mapper = linear_cmap(field_name='category',
+                             palette=['blue', 'red', 'green', 'orange', 'purple'] ,
                              low=0,
-                             high=1)
+                             high=4)
         TOOLTIPS = [("Residential utility", "@res_utility"),
                     ('Local composition', '@local_comp'),
                     ('Neighbourhood composition', '@n_comp'),
@@ -104,7 +104,7 @@ class BokehServer():
                                     self.model.grid.y_max),
                            tools=[hover, 'tap', 'pan',
                                   WheelZoomTool()],
-                           tooltips=TOOLTIPS)
+                           tooltips=TOOLTIPS, output_backend="webgl")
 
         # Set WheelZoomTool active by default if not lattice
         if self.params['case'].lower() != 'lattice':
@@ -223,7 +223,8 @@ class BokehServer():
                            y_range=(0, 1),
                            plot_width=width,
                            sizing_mode=mode,
-                           title="Neighbourhood/school utility/segregation")
+                           title="Neighbourhood/school utility/segregation",
+                           output_backend="webgl")
 
         plot_pars = {
             'Residential utility': {
@@ -320,7 +321,8 @@ class BokehServer():
         self.school_composition_plot = figure(title="School composition",
                                               x_range=(0, 1),
                                               plot_width=width,
-                                              sizing_mode=mode)
+                                              sizing_mode=mode,
+                                              output_backend="webgl")
 
         fractions = self.composition_data(agent_type='school')
         for group in fractions.keys():
@@ -349,7 +351,8 @@ class BokehServer():
             title="Neighbourhood composition",
             x_range=(0, 1),
             plot_width=width,
-            sizing_mode=mode)
+            sizing_mode=mode,
+            output_backend="webgl")
 
         fractions = self.composition_data(agent_type='neighbourhood')
         for group in fractions.keys():
@@ -369,7 +372,8 @@ class BokehServer():
         self.distribution_plot = figure(title="Utility distributions",
                                         x_range=(0, 1),
                                         plot_width=width,
-                                        sizing_mode=mode)
+                                        sizing_mode=mode,
+                                        output_backend="webgl")
 
         hist_data = self.data[self.data.agent_type == 'household'][[
             'res_utility', 'school_utility'
@@ -417,7 +421,8 @@ class BokehServer():
         self.distance_plot = figure(title="Distance utility",
                                     x_range=(0, 1),
                                     plot_width=width,
-                                    sizing_mode=mode)
+                                    sizing_mode=mode,
+                                    output_backend="webgl")
 
         fractions = self.composition_data(agent_type='household')
         for group in fractions.keys():
@@ -491,10 +496,10 @@ class BokehServer():
         self.update_histograms()
 
         # Update the composition histograms
-        for quads in [
-                self.neighbourhood_composition_quads,
-                self.school_composition_quads, self.distance_quads
-        ]:
+        to_update = [self.neighbourhood_composition_quads, 
+            self.school_composition_quads, self.distance_quads]
+
+        for quads in to_update:
 
             # Grab the new data
             if quads == self.neighbourhood_composition_quads:
@@ -543,7 +548,7 @@ class BokehServer():
         self.school_quads.data_source.data['right'] = edges[1:]
 
     def blocking_task(self):
-        time.sleep(0.1)
+        time.sleep(0.5)
 
     @without_document_lock
     @gen.coroutine
@@ -562,55 +567,55 @@ class BokehServer():
         if self.run.label == 'Run':
             self.run.label = 'Stop'
             self.run.button_type = 'danger'
-            self.callback_obj = self.doc.add_periodic_callback(
-                self.unlocked_task, 500)
+            self.callback_obj = self.doc.add_periodic_callback(self.unlocked_task, 1000)
 
         else:
             self.run.label = 'Run'
             self.run.button_type = 'success'
             self.doc.remove_periodic_callback(self.callback_obj)
-
+            
     def step_button(self):
         """
         Checks which process need to be stepped and execute the step. The
         simulate function of the Model instance cannot be used as we need to
         visualise every step.
         """
+        if self.run_button=='Stop':
+            return
 
-        # Plus 1 because the first time step is already plotted
         max_res_steps = self.params['max_res_steps']
         max_school_steps = self.params['max_school_steps']
         school_time = self.model.scheduler.get_time('school')
-        residential_time = self.model.scheduler.get_time('residential') + 1
+        residential_time = self.model.scheduler.get_time('residential')
 
         # If residential is not converged yet or below max steps, do a step
-        if (residential_time <= max_res_steps and not self.res_ended):
-            self.res_ended = self.model.convergence_check()
-            if not self.res_ended:
-                self.model.step(residential=True)
-            else:
-                print('Residential process ended.')
+        if (residential_time < max_res_steps and not self.model.res_ended):
+            self.model.step(residential=True)
+            self.model.res_ended = self.model.convergence_check()
+        else:
+            self.model.res_ended = True
 
         # Initial school step needs to be executed
-        elif school_time == 0:
+        if (school_time == 0 and self.model.res_ended):
             self.residential = False
             self.model.step(residential=False, initial_schools=True)
+            self.model.convergence_check()
 
         # Normal school steps
-        elif (school_time < max_school_steps and not self.school_ended):
-            self.school_ended = self.model.convergence_check()
-            if not self.school_ended:
-                self.model.step(residential=False, initial_schools=False)
-            else:
-                print('School process ended.')
+        elif (school_time < max_school_steps and self.model.res_ended and not self.model.school_ended):
+            self.model.step(residential=False, initial_schools=False)
+
+        if self.model.convergence_check():
+            self.model.school_ended = True
+            print('School process ended.')
 
         # Both processes are done/converged
-        else:
+        if (self.model.res_ended and self.model.school_ended):
             self.run_button()
             return
 
         self.update_data()
-
+        
     def reset_button(self):
         """
         Resets the model and takes the (possible) new parameter values into
@@ -621,7 +626,8 @@ class BokehServer():
         self.time_series = []
         self.res_ended = False
         self.school_ended = False
-        self.model = CompassModel(self.update_pars())
+        self.params = self.update_pars()
+        self.model = CompassModel(**self.params)
 
         # Stop the model when it is still running while reset is clicked.
         if self.run.label == 'Stop' and self.callback_obj is not None:
@@ -683,8 +689,6 @@ class BokehServer():
             self.school_composition_plot, self.neighbourhood_composition_plot
         ])
 
-        # second_third = row([second_col, third_col], sizing_mode='scale_width')
-
         vis_layout = gridplot([[first_col, second_col, third_col]],
                               toolbar_location=None)
 
@@ -737,9 +741,9 @@ class BokehServer():
                                 options=['0.001', '0.005', '0.01', '0.02'],
                                 value=str(self.params['conv_threshold']),
                                 width=width)
-        self.homophily_std = Select(title="Std. of optimal fraction",
+        self.stdev = Select(title="Standard deviation of parameters",
                                     options=[str(x / 100.) for x in range(11)],
-                                    value=str(self.params['homophily_std']),
+                                    value=str(self.params['stdev']),
                                     width=width)
         self.temperature = Slider(start=0,
                                   end=500,
@@ -756,7 +760,9 @@ class BokehServer():
         self.case = Select(title='Case',
                            options=[
                                'Lattice',
-                               'Amsterdam',
+                               'Amsterdam-ethnicity',
+                               'Amsterdam-ses',
+                               'Amsterdam-income',
                            ],
                            value=str(self.params['case']),
                            width=width)
@@ -774,7 +780,7 @@ class BokehServer():
         simulation_div = Div(text=text, width=width)
         simulation = [
             simulation_div, self.max_move_fraction, self.max_res_steps,
-            self.max_school_steps, self.threshold, self.homophily_std,
+            self.max_school_steps, self.threshold, self.stdev,
             self.window_size, self.temperature, self.case,
             self.random_residential
         ]
@@ -784,7 +790,7 @@ class BokehServer():
             parameter_div = Div(text=text, width=width)
             simulation = [
                 parameter_div, self.max_move_fraction, self.max_school_steps,
-                self.threshold, self.homophily_std, self.window_size,
+                self.threshold, self.stdev, self.window_size,
                 self.temperature, self.case, self.random_residential
             ]
 
@@ -850,36 +856,38 @@ class BokehServer():
                                       end=3,
                                       value=self.params['school_capacity'],
                                       step=.1,
-                                      title="School capacity",
+                                      title="Maximum school capacity",
+                                      width=width)
+        self.min_capacity = Slider(start=1,
+                                      end=200,
+                                      value=self.params['min_capacity'],
+                                      step=1,
+                                      title="Minimum school capacity",
                                       width=width)
         self.school_dropdown_func(width=width)
         text = header_size + 'Schools' + header_size
         school_div = Div(text=text, width=width)
-        school = [school_div, self.school_capacity, self.school_dropdown]
+        school = [school_div, self.school_capacity, self.min_capacity, self.school_dropdown]
 
         if self.params['case'].lower() != 'lattice':
-            school = [self.school_capacity, self.school_dropdown]
+            school = [self.school_capacity, self.min_capacity] #, self.school_dropdown]
 
         # Household
-        self.alpha = Slider(start=0,
-                            end=1,
-                            value=self.params['alpha'],
-                            step=.05,
+        self.alpha = TextInput(value=str(self.params['alpha']),
                             title="Alpha",
                             width=width)
-        self.utility_at_max = Slider(start=0,
-                                     end=1,
-                                     value=self.params['utility_at_max'][0][0],
-                                     step=.05,
-                                     title="Utility at homogeneity",
-                                     width=width)
-        self.optimal_fraction = Slider(
-            start=0,
-            end=1,
-            value=self.params['optimal_fraction'][0][0],
-            step=.05,
-            title="Optimal fraction",
-            width=width)
+        self.utility_at_max = TextInput(value=str(self.params['utility_at_max']),
+                            title="Utility at homogeneity",
+                            width=width)
+        self.optimal_fraction = TextInput(value=str(self.params['optimal_fraction']),
+                            title="Optimal fraction",
+                            width=width)
+        self.p = TextInput(value=str(self.params['p']),
+                            title="Location of sigmoid",
+                            width=width)
+        self.q = TextInput(value=str(self.params['q']),
+                            title="Slope of sigmoid",
+                            width=width)
         self.radius = Select(title="Radius",
                              options=[str(x) for x in range(1, 11)],
                              value=str(self.params['radius']),
@@ -901,31 +909,20 @@ class BokehServer():
                                      options=['highest', 'proportional'],
                                      value=self.params['ranking_method'],
                                      width=width)
-        self.p = Slider(start=500,
-                        end=10000,
-                        value=self.params['p'],
-                        step=500,
-                        title="Location of sigmoid",
-                        width=width)
-        self.q = Slider(start=1,
-                        end=10,
-                        value=self.params['q'],
-                        step=1,
-                        title="Slope of sigmoid",
-                        width=width)
 
         text = header_size + 'Households' + header_size
         household_div = Div(text=text, width=width)
         household = [
             household_div, self.alpha, self.utility_at_max,
-            self.optimal_fraction, self.radius, self.neighbourhood_mixture,
-            self.num_considered, self.ranking_method, self.p, self.q
+            self.optimal_fraction, self.p, self.q, self.radius, 
+            self.neighbourhood_mixture,
+            self.num_considered, self.ranking_method, 
         ]
 
         if self.params['case'].lower() != 'lattice':
             household = [
                 self.alpha, self.utility_at_max, self.optimal_fraction,
-                self.ranking_method, self.p, self.q
+                self.p, self.q, self.ranking_method
             ]
 
         widgets = simulation + grid + school + household
@@ -936,64 +933,75 @@ class BokehServer():
         """
         Updates the parameters.
         """
-
-        self.params['alpha'] = self.alpha.value
-        self.params['max_move_fraction'] = self.max_move_fraction.value
-        self.params['max_school_steps'] = self.max_school_steps.value
-        self.params['conv_threshold'] = float(self.threshold.value)
-        self.params['utility_at_max'] = [[
-            self.utility_at_max.value, self.utility_at_max.value
-        ]]
-        self.params['optimal_fraction'] = [[
-            self.optimal_fraction.value, self.optimal_fraction.value
-        ]]
-        self.params['school_capacity'] = self.school_capacity.value
-        self.params['neighbourhood_mixture'] = self.neighbourhood_mixture.value
-        self.params['temperature'] = self.temperature.value
-        self.params['homophily_std'] = float(self.homophily_std.value)
-        self.params['window_size'] = int(self.window_size.value)
-        self.params['num_considered'] = int(self.num_considered.value)
-        self.params['ranking_method'] = self.ranking_method.value
-        self.params['case'] = self.case.value
-        self.params['p'] = self.p.value
-        self.params['q'] = self.q.value
+        new_params = self.params.copy()
+        new_params['alpha'] = ast.literal_eval(self.alpha.value)
+        new_params['max_move_fraction'] = self.max_move_fraction.value
+        new_params['max_school_steps'] = self.max_school_steps.value
+        new_params['conv_threshold'] = float(self.threshold.value)
+        new_params['utility_at_max'] = ast.literal_eval(self.utility_at_max.value)
+        new_params['optimal_fraction'] = ast.literal_eval(self.optimal_fraction.value)
+        new_params['school_capacity'] = self.school_capacity.value
+        new_params['min_capacity'] = self.min_capacity.value
+        new_params['neighbourhood_mixture'] = self.neighbourhood_mixture.value
+        new_params['temperature'] = self.temperature.value
+        new_params['stdev'] = float(self.stdev.value)
+        new_params['window_size'] = int(self.window_size.value)
+        new_params['num_considered'] = int(self.num_considered.value)
+        new_params['ranking_method'] = self.ranking_method.value
+        new_params['p'] = ast.literal_eval(self.p.value)
+        new_params['q'] = ast.literal_eval(self.q.value)
 
         if self.random_residential.value == 'False':
-            self.params['random_residential'] = 0
+            new_params['random_residential'] = 0
         else:
-            self.params['random_residential'] = 1
+            new_params['random_residential'] = 1
 
         if self.scheduling.value == 'replacement':
-            self.params['scheduling'] = 0
+            new_params['scheduling'] = 0
         else:
-            self.params['scheduling'] = 1
+            new_params['scheduling'] = 1
 
-        if self.params['case'].lower() != 'lattice':
-            self.params['max_res_steps'] = 0
-            return self.params
+        # If coming from another case than lattice, the 
+        # n_neighbourhoods and n_schools can be arbitrary nrs.
+        new_params['case'] = self.case.value
+        if self.case.value.lower()=='lattice':
+            
+            number = int(self.n_neighbourhoods.value)
+            root = math.sqrt(number)
+            if int(root + 0.5) ** 2 == number:
+                new_params['n_neighbourhoods'] = int(self.n_neighbourhoods.value)
+                new_params['n_schools'] = int(self.n_schools.value)
+                new_params['max_res_steps'] = self.max_res_steps.value
+            else:
+                new_params['n_neighbourhoods'] = 25
+                new_params['n_schools'] = 25
+                new_params['max_res_steps'] = 100
 
-        self.params['width'] = int(self.size.value)
-        self.params['height'] = int(self.size.value)
-        self.grid.x_range.end = self.params['width']
-        self.grid.y_range.end = self.params['height']
-        self.params['torus'] = eval(self.torus.value)
-        self.params['household_density'] = self.household_density.value
-        self.params['max_res_steps'] = self.max_res_steps.value
-        self.params['n_neighbourhoods'] = int(self.n_neighbourhoods.value)
-        self.params['n_schools'] = int(self.n_schools.value)
-        self.params['schools_placement'] = self.schools_placement.value
-        self.params['group_dist'] = [[
-            self.group_dist.value, 1 - self.group_dist.value
-        ]]
+            new_params['width'] = int(self.size.value)
+            new_params['height'] = int(self.size.value)
+            self.grid.x_range.end = new_params['width']
+            self.grid.y_range.end = new_params['height']
+            new_params['torus'] = eval(self.torus.value)
+            new_params['household_density'] = self.household_density.value
+            
+            new_params['schools_placement'] = self.schools_placement.value
+            new_params['group_dist'] = [[
+                self.group_dist.value, 1 - self.group_dist.value
+            ]]
+        else:
+            new_params['max_res_steps'] = 0
 
-        return self.params
+        return new_params
 
     def run_visualisation(self):
-
+        
         apps = {'/': Application(FunctionHandler(BokehServer))}
         server = Server(apps, port=5004)
         # To avoid bokeh's logger spamming
         log = logging.getLogger('bokeh')
-        log.setLevel('ERROR')
+        log.setLevel('CRITICAL')
+        import warnings
+        warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
         server.io_loop.add_callback(server.show, "/")
         server.io_loop.start()
+

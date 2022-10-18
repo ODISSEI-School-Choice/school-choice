@@ -1,9 +1,9 @@
 """
 The School class.
 """
-from typing import Dict, List, ClassVar
 import numpy as np
-from .agents_base import BaseAgent
+from agents_base import BaseAgent
+from typing import Dict, List, ClassVar
 
 
 class School(BaseAgent):
@@ -29,7 +29,7 @@ class School(BaseAgent):
     """
 
     _total_schools: ClassVar[int] = 0
-    __slots__ = ["idx", "total", "capacity", "has_space"]
+    __slots__ = ["idx", "total", "capacity", "min_capacity", "has_space"]
 
     @classmethod
     def reset(cls) -> None:
@@ -54,6 +54,7 @@ class School(BaseAgent):
         self.has_space: bool = True
         self.capacity: int = 1 + int(self.params["school_capacity"] * \
                 self.params["n_students"] / self.params["n_schools"])
+        self.min_capacity = self.params['min_capacity']
         self.students: Dict[int, 'Student'] = {}
         self.composition: np.ndarray = self.new_composition_array()
 

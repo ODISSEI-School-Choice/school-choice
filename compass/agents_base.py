@@ -14,7 +14,6 @@ class BaseAgent(Agent):
         pos (tuple): (x,y) coordinates of the agent in the 2D-grid.
         model (CompassModel): CompassModel object.
         params (Argparser): containing all parameter values.
-
     """
 
     def __init__(self, unique_id, pos, model, params):

@@ -2,7 +2,6 @@
 The school Allocator class.
 """
 
-
 class Allocator:
     """
     Class that allocates students across schools given their preferences.
@@ -31,6 +30,11 @@ class Allocator:
 
             for student in household.students:
                 current_school = student.school
+
+                # Cannot leave the school if it falls below min_capacity
+                if current_school.total <= current_school.min_capacity:
+                    break
+
                 for school in student.school_preference[start_at_school:]:
 
                     # Check if it's the current school

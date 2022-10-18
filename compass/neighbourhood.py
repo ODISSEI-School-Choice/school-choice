@@ -3,7 +3,7 @@ The Neighbourhood class.
 """
 import numpy as np
 from typing import List, ClassVar
-from .agents_base import BaseAgent
+from agents_base import BaseAgent
 
 
 class Neighbourhood(BaseAgent):
