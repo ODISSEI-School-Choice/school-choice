@@ -5,10 +5,9 @@ randomization within the step and advance phase plus the possibility of
 parallelization over cores. The execution of the step() and advance() parts in
 the agents used, result in a system that is not entirely simultaneous.
 """
-
-from collections import OrderedDict
 import numpy as np
-from .allocator import Allocator
+from allocator import Allocator
+from collections import OrderedDict
 
 
 class ThreeStagedActivation:
@@ -152,9 +151,9 @@ class ThreeStagedActivation:
         if residential:
 
             # Rankings are still calculated in the Household object instead of
-            # model wide as for the schools.
+            # model wide as for the schools
             for household in households_to_move:
-                household.step(residential=residential, initial_schools=initial_schools)
+                household.step(residential=residential, initial_schools=False)
 
             # UPDATE COMPOSITIONS OF ALL AGENTS AFTER ALL THE MOVES
             self.model.calc_residential_compositions()
@@ -170,20 +169,11 @@ class ThreeStagedActivation:
                 # Initial allocation for EVERY household
                 # Set initial preferences
                 if self.params["case"].lower() == "lattice":
-                    self.model.compute_school_distances()  # execute only in lattice case
-                    p = self.params["p"]
-                    q = self.params["q"]
-                    self.model.distance_utilities = 1.0 / (
-                        1 + (self.model.all_distances / p) ** q
-                    )
-
-                #TODO: remove commented code
-                #      initialization happens in new allocator
-                #for household in all_households:
-                #    for student in household.students:
-                #        student.set_school_preference(
-                #            household.school_ranking_initial()
-                #        )
+                    # execute only in lattice case (otherwise precalculated)
+                    self.model.compute_school_distances()  
+                    self.model.distance_utilities = 1.0 / (1 + (
+                        self.model.all_distances / self.model.p[:,np.newaxis]
+                        ) ** self.model.q[:,np.newaxis])
 
                 # Allocate students after all initial preferences have been set
                 self.allocate_schools(all_households, initial_schools)
@@ -196,27 +186,11 @@ class ThreeStagedActivation:
                 self.allocate_schools(households_to_move, initial_schools)
 
             # Calculate the new school compositions:
-            #  * Compass.school_compositions
-            #  TODO: should this move to in the 'residential' below?
             self.model.calc_school_compositions()
 
-            if residential:
-                # Set:
-                #  * Compass.neighbourhodd_compositions
-                #  * Compass.local_compositions
-                #  * Household.composition
-                for household in all_households:
-                    household.update_residential()
-            # updating the household.distance is done when moving the student
-
-            # Set:
-            #  * Household.school_utility_comp
-            #  * Household.school_utility
+            # Update all utilities of the agents.
             self.model.calc_school_utilities()
             self.school_steps += 1
-
-        # Updating of the utilities of ALL agents was done in
-        # self.model.calc_school_utilities()
 
         self.time += 1
         self.model.measurements.end_step(residential)

@@ -2,13 +2,13 @@
 The Household class.
 """
 import sys
-from typing import List, ClassVar, Iterable
 import numpy as np
-from .agents_base import BaseAgent
-from .school import School
-from .student import Student
-from .neighbourhood import Neighbourhood
-from .functions import calc_comp_utility
+from school import School
+from student import Student
+from agents_base import BaseAgent
+from neighbourhood import Neighbourhood
+from functions import calc_comp_utility
+from typing import List, ClassVar, Iterable
 
 MAX_INITIAL_HOUSEHOLDS = 100
 
@@ -64,21 +64,16 @@ class Household(BaseAgent):
             will be created.
         """
         if cls._total_households > 0:
-            print(
-                "Warning: resetting households while there already are "
-                "Household objects."
-            )
+            # print(
+            #     "Warning: resetting households while there already are "
+            #     "Household objects."
+            # )
             cls._total_households = 0
 
         dtype = "float32"
         cls._max_households = max_households
-
-        # was self.utility if residential
         cls._household_res_utility = np.zeros(max_households, dtype=dtype)
-
-        # was self.utility if not residential
         cls._household_school_utility = np.zeros(max_households, dtype=dtype)
-
         cls._household_distance = np.zeros(max_households, dtype=dtype)
         cls._household_school_utility_comp = np.zeros(max_households, dtype=dtype)
         cls._household_school_id = np.zeros(max_households, dtype=dtype)
@@ -91,7 +86,7 @@ class Household(BaseAgent):
         params: dict,
         category: int,
         nhood: Neighbourhood = None,
-    ):
+        ):
         # Store parameters
         super().__init__(unique_id, pos, model, params)
 
@@ -432,20 +427,14 @@ class Household(BaseAgent):
         """
         schools = self.model.get_agents("schools")
 
-        if True:
-            # create a list of indices [0 .. n_schools-1]
-            idxs = list(range(len(schools)))
+        # create a list of indices [0 .. n_schools-1]
+        idxs = list(range(len(schools)))
 
-            # shuffle it in-place
-            self.model.random.shuffle(idxs)
+        # shuffle it in-place
+        self.model.random.shuffle(idxs)
 
-            # create a list with the shuffled school objects
-            return [schools[idx] for idx in idxs]
-
-        if False:
-            schools = schools.copy()
-            self.model.random.shuffle(schools)
-            return schools
+        # create a list with the shuffled school objects
+        return [schools[idx] for idx in idxs]
 
     def residential_ranking(
         self, positions: List[tuple[float, float]], ranking_method: str
@@ -467,7 +456,7 @@ class Household(BaseAgent):
         positions = list(positions) + [self.pos]  # Append own position
         utilities = np.zeros(len(positions))
         temperature = params["temperature"]
-        compositions = self.model.compositions
+        # compositions = self.model.compositions
         norm_compositions = self.model.normalized_compositions
 
         for index, pos in enumerate(positions):
@@ -477,7 +466,7 @@ class Household(BaseAgent):
             else:
                 #  ASSUMING AGENTS HAVE THE SAME RADIUS HERE
                 x, y = pos
-                composition = compositions[x, y, :]
+                # composition = compositions[x, y, :]
                 norm_composition = norm_compositions[x, y, :]
                 neighbourhood = self.get_closest_neighbourhood(pos)
                 if neighbourhood.total > 0:
@@ -518,13 +507,3 @@ class Household(BaseAgent):
             int: the amount of students in the household.
         """
         return len(self.students)
-
-    def get_shock(self) -> float:
-        """ " Returns a small random float value"""
-        return self.model.get_shock()
-
-    def get_uniform_shock(self) -> float:
-        """
-        Returns a random value between 0 and 1.
-        """
-        return self.model.get_uniform_shock()

@@ -6,14 +6,14 @@ import hypothesis.strategies as st
 
 from test_functional import random_params
 
-from compass.parameters import FLAGS
-from compass.model import CompassModel
-from compass.agents_base import BaseAgent
-from compass.school import School
-from compass.neighbourhood import Neighbourhood
-from compass.household import Household
-from compass.student import Student
-
+sys.path.insert(0, "compass")
+from school import School
+from student import Student
+from parameters import FLAGS
+from household import Household
+from model import CompassModel
+from agents_base import BaseAgent
+from neighbourhood import Neighbourhood
 
 @pytest.fixture(scope="function")
 def model():

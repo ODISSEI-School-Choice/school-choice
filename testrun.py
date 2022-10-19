@@ -20,14 +20,14 @@ FLAGS.height = size
 FLAGS.conv_threshold = 0
 FLAGS.window_size = 30
 FLAGS.loglevel = "DEBUG"
-FLAGS.case = "amsterdam"
-# FLAGS.case = 'lattice'
+# FLAGS.case = "amsterdam"
+FLAGS.case = 'lattice'
 FLAGS.max_move_fraction = 0.05
 FLAGS.verbose = True
 FLAGS.random_residential = False
 FLAGS.seed = 3
 
 if __name__ == "__main__":
-    model = CompassModel(**vars(FLAGS), export=True)
+    model = CompassModel(**vars(FLAGS), export=False)
     model.simulate()
     print(model.segregation[-1])

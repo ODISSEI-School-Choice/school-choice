@@ -34,10 +34,25 @@ p {
 
 <p>
 Interact with the widgets to change the parameter values of the model. Clicking
-the reset button will update the changed values. The residential process only 
-runs for the 'lattice' case and will run first until convergence or until the 
-maximum amount of steps is reached. After this, schools are chosen, taking the 
-residential location as given. For more information please visit the
-<a href="https://www.compass-project.nl/">COMPASS website</a> or contact
-e.p.n.dignum@uva.nl.
+the reset button will update the changed values. Parameter explanations can be 
+found in (Dignum et al., 2022a) and (Dignum et al. 2022b). Take special care in 
+setting the 'p' parameter, this resembles at how many meters the utility for distance
+becomes 0.5. For the Amsterdam case between 500 and 4000 meters are reasonable values, 
+but for the lattice case with size 50 for example, between 10 and 40 might be more suitable. 
+Note that not all households are shown (keeps the visualisation fast) and that several 
+parameters are enclosed in DOUBLE parentheses, where the first value is for group 1 and the 
+next for group 2, otherwise the model will not work. The residential process only runs for 
+the 'lattice' case and will run first until convergence or until the maximum amount of steps 
+is reached. After this, schools are chosen, taking the residential location as given. For 
+more information please contact e.p.n.dignum@uva.nl or check out the 
+<a href="https://github.com/ODISSEI-School-Choice/school-choice" target="_blank">GitHub</a>.
+
+<br><br>
+<strong>References</strong><br>
+<a href="https://doi.org/10.1016/j.compenvurbsys.2022.101772" target="_blank">Dignum, E., Athieniti, E., 
+Boterman, W., Flache, A., & Lees, M. (2022a). Mechanisms for increased school segregation 
+relative to residential segregation: A model-based analysis. Computers, Environment and 
+Urban Systems, 93, 101772.</a> <br>
+Dignum, E., Boterman, W., Flache, A., & Lees, M. (2022b). Modelling Amsterdam primary 
+school segregation: an empirically calibrated agent-based model. Working paper. 
 </p>

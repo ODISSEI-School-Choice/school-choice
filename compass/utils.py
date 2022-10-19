@@ -6,19 +6,7 @@ import sys
 import numpy as np
 import pandas as pd
 from typing import List
-from .household import Household
-
-
-class Utilities:
-    """
-    Class containing a number of measurement functions.
-
-    Todo:
-        * Maybe remove this class?
-    """
-
-    def __init__(self):
-        pass
+from household import Household
 
 
 class Measurements:
@@ -54,8 +42,6 @@ class Measurements:
             [
                 "loc_x",
                 "loc_y",
-                "local_comp_0",
-                "local_comp_1",
                 "utility",
                 "category",
                 "id",
@@ -63,11 +49,12 @@ class Measurements:
                 "unit",
             ]
         )
+        group_names = ['group' + str(i) for i in range(len(self.params['group_types'][0]))]
         self.neighbourhood_headers: np.ndarray = np.array(
-            ["comp_0", "comp_1", "utility", "satisfied", "distance", "unit"]
+            ["unit"] + group_names
         )
         self.school_headers: np.ndarray = np.array(
-            ["comp_0", "comp_1", "utility", "satisfied", "distance", "unit"]
+            ["unit"] + group_names
         )
 
     def measurement_arrays(self) -> None:
@@ -125,23 +112,24 @@ class Measurements:
             for household in self.agents["households"]:
                 self.households[:, household.idx, 0] = household.pos[0]
                 self.households[:, household.idx, 1] = household.pos[1]
-                self.households[:, household.idx, 2] = household.composition[0]
-                self.households[:, household.idx, 3] = household.composition[1]
-                self.households[:, household.idx, 5] = household.category
-                self.households[:, household.idx, 6] = household.unique_id
+                self.households[:, household.idx, 3] = household.category
+                self.households[:, household.idx, 4] = household.unique_id
 
         # Dynamic data
         if residential:
-            self.households[time, :, 4] = Household._household_res_utility[:]
-            self.households[time, :, 7] = Household._household_distance[:]
+            self.households[time, :, 2] = Household._household_res_utility[:]
+            self.households[time, :, 5] = Household._household_distance[:]
             for household in self.agents["households"]:
                 self.households[
-                    time, household.idx, 8
+                    time, household.idx, :2
+                ] = household.pos
+                self.households[
+                    time, household.idx, 6
                 ] = household.neighbourhood.unique_id
         else:
-            self.households[time, :, 4] = Household._household_school_utility[:]
-            self.households[time, :, 7] = Household._household_distance[:]
-            self.households[time, :, 8] = Household._household_school_id[:]
+            self.households[time, :, 2] = Household._household_school_utility[:]
+            self.households[time, :, 5] = Household._household_distance[:]
+            self.households[time, :, 6] = Household._household_school_id[:]
 
     def neighbourhood_data(self, time: int) -> None:
         """
@@ -151,8 +139,8 @@ class Measurements:
             time (int): time step we are at
         """
         for idx, neighbourhood in enumerate(self.agents["neighbourhoods"]):
-            self.neighbourhoods[time, idx, :2] = neighbourhood.composition
-            self.neighbourhoods[time, idx, 5] = neighbourhood.unique_id
+            self.neighbourhoods[time, idx, 0] = neighbourhood.unique_id
+            self.neighbourhoods[time, idx, 1:] = neighbourhood.composition
 
     def school_data(self, time: int) -> None:
         """
@@ -166,8 +154,8 @@ class Measurements:
         """
 
         for idx, school in enumerate(self.agents["schools"]):
-            self.schools[time, idx, :2] = school.composition
-            self.schools[time, idx, 5] = school.unique_id
+            self.schools[time, idx, 0] = school.unique_id
+            self.schools[time, idx, 1:] = school.composition
 
     def end_step(self, residential: bool) -> None:
         """
@@ -266,20 +254,26 @@ class Measurements:
         time = self.model.scheduler.get_time()
         res_time = self.model.scheduler.get_time("residential")
 
-        households = self.agents["households"]
+        if time==0:
+            households = self.agents["households"]
+            size = int(len(households))
+            if size>5000: size=5000
+            self.plotted_households = np.random.choice(households, size=size, replace=False)
+            self.idx = [household.idx for household in self.plotted_households]
+        households = self.plotted_households
+
         columns = [
             "agent_type",
             "x",
             "y",
+            'category',
             "group0",
             "group1",
             "res_id",
             "res_utility",
-            "res_happy",
             "school_id",
             "dist_school",
             "school_utility",
-            "school_happy",
             "res_q5",
             "res_q95",
             "school_q5",
@@ -291,19 +285,19 @@ class Measurements:
             "s_comp",
             "school_comp_utility",
         ]
-        data = self.empty_dataframe(columns=columns, n_rows=len(households))
+        data = self.empty_dataframe(columns=columns, n_rows=len(self.idx))
 
         # Save location and local composition per group type
         data["agent_type"] = "household"
-        data["x"] = self.households[time, :, 0]
-        data["y"] = self.households[time, :, 1]
-        data["group0"] = (self.households[time, :, 5] == 0).astype(int)
-        data["group1"] = (self.households[time, :, 5] == 1).astype(int)
+        data["x"] = self.households[time, self.idx, 0]
+        data["y"] = self.households[time, self.idx, 1]
+        data["category"] = self.households[time, self.idx, 3]
+        data["group0"] = (self.households[time, self.idx, 3] == 0).astype(int)
+        data["group1"] = (self.households[time, self.idx, 3] == 1).astype(int)
 
         # Neighbourhood ID, current residential utility
-        data["res_id"] = self.households[res_time, :, 8]
-        data["res_utility"] = self.households[res_time, :, 4]
-        data["res_happy"] = None
+        data["res_id"] = self.households[res_time, self.idx, 6]
+        data["res_utility"] = self.households[res_time, self.idx, 2]
 
         composition_data = pd.DataFrame(
             [self.vis_composition_data(household) for household in households]
@@ -315,27 +309,24 @@ class Measurements:
         # Fill school data if applicable, set them to zero otherwise
         if not self.residential:
             data["school_id"] = (
-                self.households[time, :, 8] - self.params["n_neighbourhoods"]
+                self.households[time, self.idx, 6] - self.params["n_neighbourhoods"]
             ).astype(int)
-            data["dist_school"] = self.households[time, :, 7]
-            data["school_utility"] = self.households[time, :, 4]
-            data["school_happy"] = None
+            data["dist_school"] = self.households[time, self.idx, 5]
+            data["school_utility"] = self.households[time, self.idx, 2]
+            
         else:
             data["school_utility"] = 0
             data["dist_school"] = 0
 
         return data
-
+    
     def vis_school_data(self, household_data: pd.DataFrame):
         """
         Gets the required data from all the schools in the model.
-
         Args:
             household_data (DataFrame): all the household data already gathered.
-
         Returns:
             DataFrame of all the school data.
-
         Note:
             School data is still calculated per household and not per student
         """
@@ -345,10 +336,9 @@ class Measurements:
         for index, school in enumerate(schools):
             agent_type = "school"
             x, y = school.pos
-            group0, group1 = school.composition.astype(int)
+            group0, group1 = school.composition.astype(int)[:2]
             res_id = None
             res_utility = None
-            res_happy = None
 
             # School attributes
 
@@ -358,11 +348,10 @@ class Measurements:
             pupils = household_data[household_data.school_id == school_id]
             dist_school = pupils.dist_school.mean()
             school_utility = pupils.school_utility.mean()
-            school_happy = pupils.school_happy.mean()
             school_comp_utility = pupils.school_comp_utility.mean()
 
             res_q5, res_q95, school_q5, school_q95, res_seg, school_seg = [None] * 6
-            local_comp, n_comp, s_comp = [None] * 3
+            local_comp, n_comp, s_comp, category = [None] * 4
             s_comp = school.composition.astype(int)
 
             # Add data to the DataFrame
@@ -370,15 +359,14 @@ class Measurements:
                 agent_type,
                 x,
                 y,
+                category,
                 group0,
                 group1,
                 res_id,
                 res_utility,
-                res_happy,
                 school_id,
                 dist_school,
                 school_utility,
-                school_happy,
                 res_q5,
                 res_q95,
                 school_q5,
@@ -410,13 +398,12 @@ class Measurements:
 
         for index, neighbourhood in enumerate(neighbourhoods):
             agent_type = "neighbourhood"
-            group0, group1 = neighbourhood.composition.astype(int)
+            group0, group1 = neighbourhood.composition.astype(int)[:2]
             res_id = index
             households = household_data[
                 household_data.res_id == neighbourhood.unique_id
             ]
             res_utility = households.res_utility.mean()
-            res_happy = households.res_happy.mean()
             x, y = neighbourhood.pos
 
             if neighbourhood.shape.type == "Polygon":
@@ -427,24 +414,23 @@ class Measurements:
             x, y = list(x), list(y)
 
             # School attributes
-            school_id, dist_school, school_utility, school_happy = [None] * 4
+            school_id, dist_school, school_utility = [None] * 3
             res_q5, res_q95, school_q5, school_q95, res_seg, school_seg = [None] * 6
-            local_comp, n_comp, s_comp, school_comp_utility = [None] * 4
+            local_comp, n_comp, s_comp, school_comp_utility, category = [None] * 5
 
             # Add data to the DataFrame
             data.iloc[index] = [
                 agent_type,
                 x,
                 y,
+                category,
                 group0,
                 group1,
                 res_id,
                 res_utility,
-                res_happy,
                 school_id,
                 dist_school,
                 school_utility,
-                school_happy,
                 res_q5,
                 res_q95,
                 school_q5,
@@ -480,10 +466,8 @@ class Measurements:
         agent_type = "system"
         x, y, group0, group1, res_id, school = 6 * [None]
         res_utility = household_data.res_utility.mean()
-        res_happy = household_data.res_happy.mean()
         dist_school = household_data.dist_school.mean()
         school_utility = household_data.school_utility.mean()
-        school_happy = household_data.school_happy.mean()
 
         res_q5 = household_data.res_utility.quantile(q=0.05)
         res_q95 = household_data.res_utility.quantile(q=0.95)
@@ -497,7 +481,7 @@ class Measurements:
         else:
             school_seg = self.calculate_segregation(type="school", index="Theil")
 
-        local_comp, n_comp, s_comp = [None] * 3
+        local_comp, n_comp, s_comp, category = [None] * 4
         school_comp_utility = household_data.school_comp_utility.mean()
 
         # Add data to the DataFrame
@@ -505,15 +489,14 @@ class Measurements:
             agent_type,
             x,
             y,
+            category,
             group0,
             group1,
             res_id,
             res_utility,
-            res_happy,
             school,
             dist_school,
             school_utility,
-            school_happy,
             res_q5,
             res_q95,
             school_q5,
@@ -643,7 +626,8 @@ class Measurements:
 
         global_entropy = -np.sum(pi_m * np.log(pi_m))
         E = global_entropy
-        log_r_jm = np.nan_to_num(np.log(r_jm))
+        with np.errstate(divide = 'ignore'):
+            log_r_jm = np.nan_to_num(np.log(r_jm))
 
         # Full sum if combined, leave as array if per location
         if per_location:
