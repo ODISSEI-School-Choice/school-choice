@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="compass-school",
-    version="v1.0.1",
+    version="v1.1.0",
     description="This Python implementation tries to model school choice and resulting school segregation based on the work of Schelling (1971) and Stoica & Flache (2014).",
     author="Eric Digum, Jisk Attenma, Ji Qi",
     author_email="e.p.n.dignum@uva.nl, j.attema@esciencecenter.nl, j.qi@esciencecenter.nl",
