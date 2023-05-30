@@ -212,7 +212,7 @@ def test_utilities(random_params):
     step are bounded between 0 and 1.
     """
     logging.warning('\n\n\nDISTANCE ONLY, AMSTERDAM CASE')
-    random_params['case'] = np.random.choice(['Amsterdam', 'Lattice'])
+    random_params['case'] = np.random.choice(['amsterdam-income', 'amsterdam-ses'])
     log_params(random_params)
     model = CompassModel(**random_params)
     

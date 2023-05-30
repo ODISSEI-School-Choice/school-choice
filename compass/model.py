@@ -16,13 +16,13 @@ from mesa.space import ContinuousSpace
 from shapely.geometry import Point, box
 from typing import List, Dict, Generator
 
-sys.path.insert(0, "compass")
-from school import School
-from utils import Measurements
-from household import Household
-from neighbourhood import Neighbourhood
-from functions import calc_comp_utility
-from scheduler import ThreeStagedActivation
+# sys.path.insert(0, "compass")
+from .school import School
+from .utils import Measurements
+from .household import Household
+from .neighbourhood import Neighbourhood
+from .functions import calc_comp_utility
+from .scheduler import ThreeStagedActivation
 
 
 @contextlib.contextmanager
@@ -482,6 +482,8 @@ class CompassModel(Model):
             path = dirname + "/maps/amsterdam-ses"
         elif case.lower() == "amsterdam-income":
             path = dirname + "/maps/amsterdam-income"
+        else:
+            raise ValueError(f"unknown case: {case}")
 
         # Load GeoDataFrames
         school_frame = gpd.read_file(path + "/schools.geojson")

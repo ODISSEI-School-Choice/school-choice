@@ -18,9 +18,8 @@ from bokeh.models import (ColumnDataSource, Button, Select, Slider, CDSView,
                           BooleanFilter, HoverTool, Dropdown, Div, Band,
                           WheelZoomTool, TextInput)
 
-sys.path.insert(0, "compass")
-from parameters import FLAGS
-from model import CompassModel
+from .parameters import FLAGS
+from .model import CompassModel
 
 
 class BokehServer():

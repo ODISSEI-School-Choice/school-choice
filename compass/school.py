@@ -2,7 +2,7 @@
 The School class.
 """
 import numpy as np
-from agents_base import BaseAgent
+from .agents_base import BaseAgent
 from typing import Dict, List, ClassVar
 
 

@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "school-choice"
+version = "1.1.1"
+description = "This Python implementation tries to model school choice and resulting school segregation based on the work of Schelling (1971) and Stoica & Flache (2014)."
+authors = ["Eric Digum <e.p.n.dignum@uva.nl>", "Jisk Attenma <j.attema@esciencecenter.nl>", "Ji Qi <j.qi@esciencecenter.nl>"]
+repository = "https://github.com/ODISSEI-School-Choice/school-choice"
+license = "Apache 2"
+readme = "README.md"
+packages = [{include = "compass"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.12"
+scikit-learn = "^1.2.2"
+scipy = "^1.10.1"
+dask = "^2023.5.1"
+distributed = "^2023.5.1"
+geopandas = "^0.13.0"
+shapely = "^2.0.1"
+mesa = "^1.2.1"
+ijson = "^3.2.0.post0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+hypothesis = "^6.75.6"
+pdoc = "^13.1.1"
+
+
+[tool.poetry.group.viz.dependencies]
+bokeh = "^3.1.1"
+seaborn = "^0.12.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -3,11 +3,11 @@ The Household class.
 """
 import sys
 import numpy as np
-from school import School
-from student import Student
-from agents_base import BaseAgent
-from neighbourhood import Neighbourhood
-from functions import calc_comp_utility
+from .school import School
+from .student import Student
+from .agents_base import BaseAgent
+from .neighbourhood import Neighbourhood
+from .functions import calc_comp_utility
 from typing import List, ClassVar, Iterable
 
 MAX_INITIAL_HOUSEHOLDS = 100
